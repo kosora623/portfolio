@@ -32,6 +32,3 @@ https://youtu.be/yC73phm9VSs?si=E4cLwDe4CINX4J8a
 ニコニコ動画
 
 
-
-https://www.nicovideo.jp/watch/sm44678345
-

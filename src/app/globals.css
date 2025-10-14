@@ -18,6 +18,10 @@
     --foreground: #ededed;
   }
 }
+:root {
+  --background: #0a0a0a;  /* ほぼ黒に近い濃い色に設定 */
+  --foreground: #ededed;
+}
 
 body {
   background: var(--background);
