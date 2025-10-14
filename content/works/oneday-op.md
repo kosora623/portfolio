@@ -10,11 +10,4 @@ thumbnailUrl: /works-images/02/onedayOP.png
 ---
 
 
-
-https://www.instagram.com/reel/C7erh39s0cu/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==
-
-![OP video image](/works-images/02/onedayOP.png)
-
-　 　 
-
-[text](https://www.instagram.com/reel/C7erh39s0cu/?utm_source=ig_web_copy_link)
+準備中...

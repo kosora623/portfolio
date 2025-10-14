@@ -30,12 +30,12 @@ export default function HomePage() {
 
   const skills = ['Aviutl', 'Adobe After Effects', 'Blender','Cakewalk', 'Cubase','GarageBand','HTML/CSS', 'JavaScript', 'TypeScript', 'React', 'Next.js', 'Three.js', 'Python', 'Processing', 'C++', 'OpenCV', 'C#', 'Unity', 'Flutter', 'Dart', 'Git/GitHub'];
   const interests = [
-    { title: 'モーショングラフィックス - Motion Graphics', description: '映像表現 / VFX / ロジカルな動的表現' },
-    { title: 'ジェネラティブアート - Generative Art',  description: '規則性と偶然性 / 視覚表現の自動化 / クリエイティブコーディング' },
-    { title: 'インタラクティブアート - Interactive Art', description:'AR/VR / センサー技術 / ユーザー参加型表現' },
-    { title: 'Webフロントエンド - WebFrontend', description: 'UI/UX設計 / パフォーマンス最適化 / アクセシビリティ' },
-    { title: '画像処理 - Image Processing', description: 'OpenCV / フィルタリング / 画像解析' },
-    { title: 'サウンドデザイン - Sound Design', description: '音響効果 / 音楽制作 / オーディオ編集' },
+    { title: 'モーショングラフィックス - Motion Graphics', description: '' },
+    { title: 'ジェネラティブアート - Generative Art',  description: '' },
+    { title: 'インタラクティブアート - Interactive Art', description:'' },
+    { title: 'Webフロントエンド - WebFrontend', description: '' },
+    { title: '画像処理 - Image Processing', description: '' },
+    { title: 'サウンドデザイン - Sound Design', description: '' },
   ];
   
   const hobbies = [
