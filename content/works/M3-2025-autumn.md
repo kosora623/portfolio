@@ -1,6 +1,6 @@
 ---
 slug: M3-2025-autumn
-title: "準備中"
+title: "M3-2025-秋"
 year: 2025
 month: 10
 tags:

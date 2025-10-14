@@ -9,6 +9,18 @@ summary: このポートフォリオサイトについて。
 thumbnailUrl: /works-images/05/05thumbnail.png
 ---
 
-このプロジェクトは`Next.js`で作成されています。
+今までの制作物、そしてこれからの制作物をまとめたいなと思い作成しました。
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
+![siteimage](/works-images/05/05thumbnail.png)
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
+フレームワーク: Next.js                                                            
+言語: TypeScript                                                                
+アニメーション: FramerMotion                                           　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
+ホスティング: Cloudflare Pages　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
 
-ソースコード: [GitHub](https://github.com/your/repo)
+
+
+
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
+ソースコード: [GitHub](https://github.com/kosora623/portfolio)
