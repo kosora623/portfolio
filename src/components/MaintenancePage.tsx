@@ -2,7 +2,7 @@ export default function MaintenancePage() {
   return (
     <div className="min-h-screen flex items-center justify-center px-6">
       <div className="max-w-md w-full">
-        <h1 className="text-xl text-neutral-200 mb-4">KSR</h1>
+        <h1 className="text-xl text-neutral-200 mb-4">小空の部屋</h1>
         <p className="text-neutral-400 leading-loose text-sm">
           ただいまサイトを改修しています。
           <br />
