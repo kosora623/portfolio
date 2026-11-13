@@ -2,7 +2,7 @@
 
 import React from 'react';
 import dynamic from 'next/dynamic';
-import type { WorkFromMd } from '@/lib/works';
+import type { WorkFromMd } from '@/lib/work-model';
 
 const ParticleBackground = dynamic(() => import('./ParticleBackground'), { ssr: false });
 const WorksListClient = dynamic(() => import('@/app/works/WorksListClient'), { ssr: false });

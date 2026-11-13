@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, Variants } from 'framer-motion';
-import type { WorkFromMd } from '@/lib/works';
+import type { WorkFromMd } from '@/lib/work-model';
 
 const tagInfo: Record<string, { name: string; color: string }> = {
   video: { name: 'Video', color: 'text-red-400' },

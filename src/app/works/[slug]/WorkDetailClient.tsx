@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { motion, Variants } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import type { WorkFromMd } from '@/lib/works';
+import type { WorkFromMd } from '@/lib/work-model';
 import dynamic from 'next/dynamic';
 
 type MdNode = { type?: string; tagName?: string; children?: MdNode[] };
