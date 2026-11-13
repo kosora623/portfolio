@@ -177,7 +177,7 @@ Astro 移行（[MIGRATION_PLAN.md](./MIGRATION_PLAN.md) Phase 3）と同時に U
 **タイポグラフィ**
 - 見出し（日本語のディスプレイ書体）: **Dela Gothic One**（hero・作品名だけに使う。太く印象的に）
 - 本文: **Noto Sans JP**
-- 欧文・数値: **Inter**（`font-variant-numeric: tabular-nums` で再生時間・年を揃える）
+- 欧文・数値: **Inter**（等幅数字の `font-variant-numeric` 指定で再生時間・年の桁を揃える）
 
 **レイアウト**
 - hero: 代表作の**ループ映像**（無音、自動再生、静止画のポスター付き。reduced-motion とデータセーバーのときはポスターだけ）＋ 名前・肩書き・「作品を見る」

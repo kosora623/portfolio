@@ -96,7 +96,7 @@ UI リニューアルの提案は別ファイル [UI_PROPOSAL.md](./UI_PROPOSAL.
 | # | 問題 | 影響 | 対応方針 |
 |---|---|---|---|
 | B-1 | `navy` / `teal` / `slate` / `light-slate` などのカスタム色が **Tailwind v4 の `@theme` に定義されていない**。ビルド後の CSS にもこれらのクラスが存在しない | 想定していた配色が一切効いていない。実際の表示は `#0a0a0a` 背景に `#ededed` 文字の白黒と、タグの赤・緑・黄だけ | UI リニューアルで色トークンを定義し直す（UI_PROPOSAL.md） |
-| B-2 | YouTube 埋め込みの `aspect-w-16 aspect-h-9` は Tailwind v3 のプラグイン用クラスで、v4 では無効 | iframe が既定の高さ（150px）になり、潰れて見える可能性が高い | `aspect-video` に変更（見た目が変わるので移行時に対応） |
+| B-2 | YouTube 埋め込みの `aspect-w-16 aspect-h-9` は Tailwind v3 のプラグイン用クラスで、v4 では無効 | iframe が既定の高さ（150px）になり、潰れて見える可能性が高い | Tailwind v4 標準の 16:9 アスペクト比ユーティリティ（`aspect-ratio: 16 / 9`）に変更（見た目が変わるので移行時に対応） |
 | B-3 | `prose` クラスも `@tailwindcss/typography` が無いため無効 | Markdown 本文の見出し・リストなどにスタイルが当たっていない | リニューアル時に本文用のタイポグラフィを設計する |
 | B-4 | `EmbedFetcher` が、削除済みの `/api/oembed` を呼んでいる | 「リンク 1 つだけの段落」のリンク先が X / Instagram / ニコニコ / bilibili のとき「Embed error」になる。現在のコンテンツでは `oneday-op.md` の Instagram リンクが該当すると推定 | 移行時にビルド時処理へ置き換える（§2.1） |
 | B-5 | `/works` と `/works/[slug]` の本体が `ssr:false` のため、**HTML に中身が入っていない**（CSR bailout） | SEO・初期表示・JS を切った環境に弱い | Astro で静的 HTML にすれば自然に解決する |
@@ -222,6 +222,7 @@ UI リニューアルの提案は別ファイル [UI_PROPOSAL.md](./UI_PROPOSAL.
 | D-8 | アニメーションの variants（framer-motion）は UI 側に残した | UI リニューアルで作り直す前提で、見た目に関わる部分には触れないという指示に従った |
 | D-9 | `src/app/` はルーティング専用にし、クライアントコンポーネントを `src/components/works/` に移した | Astro の `src/pages`（ルーティング）と `src/components`（UI）の分け方に合わせておくと、移行時の対応が分かりやすい。ファイルの移動だけで出力は同一 |
 | D-10 | ユニットテスト基盤（vitest など）は追加しなかった | 依存の追加になるため。純粋関数（`work-model.ts`、`embed.ts`）は分離したので、Phase 1 でテストを追加しやすい状態になっている |
+| D-12 | ドキュメントには Tailwind のクラス名と同じ単語を書かないようにした | Tailwind v4 の自動ソース検出がリポジトリ直下の `.md` も読み取るため。最初の版では、文中のクラス名が原因で未使用の CSS ルールが追加されてしまった（比較検証で検出）。表示への影響はないが、`globals.css` に `@source not "../../*.md";` のような除外を書くのが根本的な対策。これは CSS の変更になるので、Astro 移行時に実施する |
 | D-11 | `git` の `core.autocrlf=true` で、作業ツリーに LF/CRLF の警告が出るが、そのままにした | リポジトリ内部は LF で、既存の運用どおり。`.gitattributes` の追加は今回の範囲外 |
 
 ---
@@ -238,6 +239,7 @@ UI リニューアルの提案は別ファイル [UI_PROPOSAL.md](./UI_PROPOSAL.
 | 4 | `refactor: move works client components out of app/ into components/works` | `WorksListClient` / `WorkDetailClient` を `src/components/works/` に移動 |
 | 5 | `refactor: route next/link and next/image through framework adapters` | `src/components/framework/{Link,Image}.ts`。Next.js 固有の import はこの 2 つと `next/dynamic`（2 か所）、`next/navigation`（1 か所）だけになった |
 | 6 | `docs: add Astro migration plan and UI renewal proposal` | このファイルと UI_PROPOSAL.md |
+| 7 | `docs: avoid Tailwind class tokens in docs` | ドキュメント中のクラス名が CSS 生成に拾われた問題の修正（D-12） |
 
 ### 4.2 リファクタリング後のディレクトリ構成
 
