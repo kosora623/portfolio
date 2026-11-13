@@ -5,8 +5,8 @@ import dynamic from 'next/dynamic';
 import type { WorkFromMd } from '@/lib/work-model';
 
 const ParticleBackground = dynamic(() => import('./ParticleBackground'), { ssr: false });
-const WorksListClient = dynamic(() => import('@/app/works/WorksListClient'), { ssr: false });
-const WorkDetailClient = dynamic(() => import('@/app/works/[slug]/WorkDetailClient'), { ssr: false });
+const WorksListClient = dynamic(() => import('@/components/works/WorksListClient'), { ssr: false });
+const WorkDetailClient = dynamic(() => import('@/components/works/WorkDetailClient'), { ssr: false });
 
 type Props = {
   children?: React.ReactNode;
