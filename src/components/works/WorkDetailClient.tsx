@@ -1,8 +1,8 @@
 "use client";
 
 import React from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
+import Link from '@/components/framework/Link';
+import Image from '@/components/framework/Image';
 import { motion, Variants } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';

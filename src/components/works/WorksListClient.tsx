@@ -1,7 +1,7 @@
 "use client";
 
-import Link from 'next/link';
-import Image from 'next/image';
+import Link from '@/components/framework/Link';
+import Image from '@/components/framework/Image';
 import { motion, Variants } from 'framer-motion';
 import type { WorkFromMd } from '@/lib/work-model';
 import { tagInfo } from '@/data/tags';
