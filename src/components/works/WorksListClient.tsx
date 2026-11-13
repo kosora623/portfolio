@@ -1,15 +1,10 @@
 "use client";
 
-import Link from 'next/link';
-import Image from 'next/image';
+import Link from '@/components/framework/Link';
+import Image from '@/components/framework/Image';
 import { motion, Variants } from 'framer-motion';
-import type { WorkFromMd } from '@/lib/works';
-
-const tagInfo: Record<string, { name: string; color: string }> = {
-  video: { name: 'Video', color: 'text-red-400' },
-  code: { name: 'Code', color: 'text-green-400' },
-  music: { name: 'Music', color: 'text-yellow-400' },
-};
+import type { WorkFromMd } from '@/lib/work-model';
+import { tagInfo } from '@/data/tags';
 
 export default function WorksListClient({ works }: { works: WorkFromMd[] }) {
 

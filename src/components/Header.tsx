@@ -1,6 +1,7 @@
 'use client';
-import Link from 'next/link';
+import Link from '@/components/framework/Link';
 import { useState, useEffect } from 'react';
+import { navItems, site } from '@/data/site';
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -13,11 +14,6 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navItems = [
-    { name: 'HOME', href: '/' },
-    { name: 'WORKS', href: '/works' },
-  ];
-
   return (
     <header
       className={`fixed top-0 left-0 w-full z-50 pointer-events-auto transition-all duration-300 ${isScrolled ? 'bg-navy/80 backdrop-blur-sm shadow-lg' : 'bg-transparent'}`}
@@ -25,7 +21,7 @@ export default function Header() {
     >
       <nav className="container mx-auto p-4 flex justify-between items-center">
         <Link href="/" className="text-2xl font-bold text-teal tracking-wider z-50 pointer-events-auto">
-          KSR
+          {site.shortName}
         </Link>
         <div className="space-x-6 flex items-center">
           {navItems.map((item) => (
