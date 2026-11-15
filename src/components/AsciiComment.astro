@@ -1,0 +1,16 @@
+---
+/**
+ * DevTools の Elements パネルを開いた人へのおまけ（public/ASCII.txt の AA）。
+ * Next.js 時代は実行時に /ASCII.txt を fetch して、<html> の先頭に HTML コメントとして差し込んでいた。
+ * 同じ位置（<head> より前）は Astro のテンプレートでは直接出力できないため、
+ * AA の文字列をビルド時に埋め込み、fetch なしで同じ DOM 操作だけを行う。
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+
+const ascii = fs.readFileSync(path.join(process.cwd(), 'public', 'ASCII.txt'), 'utf8');
+---
+
+<script is:inline define:vars={{ ascii }}>
+  document.documentElement.insertBefore(document.createComment(ascii), document.documentElement.firstChild);
+</script>

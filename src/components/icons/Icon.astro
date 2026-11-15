@@ -1,0 +1,24 @@
+---
+/** react-icons と同じ属性の SVG を出力するアイコン */
+import type { SocialIconKey } from '@/data/site';
+import { iconData } from './iconData';
+
+interface Props {
+  name: SocialIconKey;
+  class?: string;
+}
+
+const { name, class: className } = Astro.props;
+const icon = iconData[name];
+---
+
+<svg
+  stroke="currentColor"
+  fill="currentColor"
+  stroke-width="0"
+  viewBox={icon.viewBox}
+  class={className}
+  height="1em"
+  width="1em"
+  xmlns="http://www.w3.org/2000/svg">{icon.paths.map(d => <path d={d} />)}</svg
+>

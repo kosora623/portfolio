@@ -1,0 +1,26 @@
+---
+import { footerSocialLinks } from '@/data/site';
+import Icon from '@/components/icons/Icon.astro';
+---
+
+<footer class="py-8 text-center text-slate">
+  <div class="container mx-auto px-6">
+    <div class="flex justify-center space-x-6 mb-4">
+      {
+        footerSocialLinks.map(link => (
+          <a
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Link to ${link.href}`}
+            class="text-2xl transition-all duration-200 transform hover:scale-110 hover:-translate-y-1 hover:text-teal"
+          >
+            <Icon name={link.icon} />
+          </a>
+        ))
+      }
+    </div>
+
+    <p class="text-sm font-mono">2025 Built by kosora</p>
+  </div>
+</footer>
