@@ -1,7 +1,7 @@
 ---
 import '@/styles/global.css';
 import '@/styles/motion.css';
-import Header from '@/components/Header';
+import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import AsciiComment from '@/components/AsciiComment.astro';
 import MaintenancePage from '@/components/MaintenancePage.astro';
@@ -46,7 +46,7 @@ const { title, robots } = Astro.props;
       </body>
     ) : (
       <body class="bg-navy text-slate antialiased">
-        <Header client:load />
+        <Header />
         <main class="container mx-auto px-6 md:px-12 lg:px-24">
           <slot />
         </main>

@@ -32,3 +32,8 @@ html.motion [data-motion-inview]:not(.is-inview) [data-motion] {
   opacity: 0;
   transform: translate(var(--motion-x, 0), var(--motion-y, 0));
 }
+
+/* ホバーで少し浮き上がる（framer-motion の whileHover={{ scale: 1.05, y: -4 }} の置き換え） */
+[data-hover-lift]:hover {
+  transform: translateY(-4px) scale(1.05);
+}

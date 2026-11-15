@@ -1,0 +1,108 @@
+---
+import Particles from '@/components/Particles.astro';
+import Icon from '@/components/icons/Icon.astro';
+import { socialLinks } from '@/data/site';
+import { hero, about, skills, interests, hobbies } from '@/data/profile';
+
+// framer-motion 版と同じタイミング
+const heroItem = (i: number) => `--motion-y:20px;--motion-duration:.8s;--motion-delay:${i * 0.2}s`;
+const section = '--motion-y:30px;--motion-duration:.8s';
+---
+
+<div class="relative h-screen flex flex-col justify-center">
+  <Particles />
+  <div class="relative z-10" data-motion>
+    <p class="text-teal mb-4 text-lg" data-motion style={heroItem(0)}>{hero.greeting}</p>
+    <h1 class="text-5xl md:text-7xl font-extrabold text-light-slate mb-2" data-motion style={heroItem(1)}>{hero.title}</h1>
+    <h2 class="text-4xl md:text-6xl font-bold text-slate mb-8" data-motion style={heroItem(2)}>{hero.subtitle}</h2>
+    <p class="max-w-xl text-lg mb-10" data-motion style={heroItem(3)}>{hero.roles}</p>
+    <div data-motion style={heroItem(4)}>
+      <a
+        href="/works"
+        class="px-8 py-3 border border-teal text-teal font-bold rounded transition-all duration-200 transform hover:bg-teal/10 inline-block"
+        data-hover-lift>Works</a
+      >
+    </div>
+  </div>
+</div>
+<section class="py-24" id="about" data-motion data-motion-inview style={section}>
+  <h2 class="text-3xl font-bold text-light-slate mb-8 flex items-center"><span class="text-teal font-mono mr-3">01.</span>About Me<span class="flex-grow ml-4 h-px bg-slate/30"></span></h2>
+  <div class="grid grid-cols-1 md:grid-cols-5 gap-12">
+    <div class="md:col-span-3 text-slate text-lg space-y-4">
+      <p>{about.intro}</p>
+      <p class="font-mono text-light-slate mt-6">{about.skillsLabel}</p>
+      <div class="flex flex-wrap gap-3 pt-4">
+        {skills.map(skill => <div class="px-4 py-2 bg-slate/10 border border-slate/20 rounded-full text-sm font-mono text-teal">{skill}</div>)}
+      </div>
+    </div>
+    <div class="md:col-span-2 relative w-full max-w-xs mx-auto">
+      <div class="relative group">
+        <div class="absolute -inset-0.5 bg-gradient-to-r from-teal to-blue-500 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+        <div class="relative bg-navy rounded-lg p-1">
+          <img
+            alt={about.profileImage.alt}
+            loading="lazy"
+            width={about.profileImage.width}
+            height={about.profileImage.height}
+            decoding="async"
+            class="rounded-md w-full"
+            style="color: transparent;"
+            src={about.profileImage.src}
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-24" id="interests" data-motion data-motion-inview style={section}>
+  <h2 class="text-3xl font-bold text-light-slate mb-12 flex items-center"><span class="text-teal font-mono mr-3">02.</span>Interests<span class="flex-grow ml-4 h-px bg-slate/30"></span></h2>
+  <div class="max-w-2xl space-y-8">
+    {
+      interests.map(interest => (
+        <div>
+          <h3 class="text-xl font-bold text-light-slate mb-1 flex items-center"><span class="text-teal mr-3">・</span>{interest.title}</h3>
+          <p class="text-slate pl-7">{interest.description}</p>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<section class="py-24" id="hobbies" data-motion data-motion-inview style={section}>
+  <h2 class="text-3xl font-bold text-light-slate mb-12 flex items-center"><span class="text-teal font-mono mr-3">03.</span>Hobbies<span class="flex-grow ml-4 h-px bg-slate/30"></span></h2>
+  <div class="max-w-2xl space-y-8">
+    {
+      hobbies.map(hobby => (
+        <div>
+          <h3 class="text-xl font-bold text-light-slate mb-1 flex items-center"><span class="text-teal mr-3">・</span>{hobby.title}</h3>
+          <p class="text-slate pl-7">{hobby.description}</p>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<section class="py-24 text-center" id="socials" data-motion data-motion-inview style={section}>
+  <h2 class="text-3xl font-bold text-light-slate mb-12"><span class="text-teal font-mono text-2xl block mb-3">04.</span>各種SNS</h2>
+  <div class="max-w-sm mx-auto" data-motion>
+    {
+      socialLinks.map((link, i) => (
+        <a
+          href={link.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group flex items-center p-4 border-b border-slate/20 transition-all duration-200 hover:bg-slate/5 hover:scale-105"
+          data-motion
+          style={heroItem(i)}
+        >
+          <Icon name={link.icon} class="text-3xl text-slate group-hover:text-teal transition-all duration-200" />
+          <div class="ml-5 text-left">
+            <p class="text-sm text-slate">{link.name}</p>
+            <p class="text-lg font-mono text-light-slate">{link.handle}</p>
+          </div>
+        </a>
+      ))
+    }
+  </div>
+</section>
