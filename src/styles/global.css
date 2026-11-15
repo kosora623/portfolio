@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* クラス名は src/ から生成する。ドキュメントや記事本文の単語から余計な CSS が生成されないようにする */
+@source not "../../*.md";
+@source not "../../content";
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
