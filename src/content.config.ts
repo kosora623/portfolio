@@ -24,4 +24,25 @@ const works = defineCollection({
   }),
 });
 
-export const collections = { works };
+/**
+ * ブログ記事（content/blog/*.md）。ファイル名が URL（/blog/<ファイル名>）になる。
+ * "_" で始まるファイル（テンプレートなど）は読み込まない。
+ */
+const blog = defineCollection({
+  loader: glob({
+    pattern: '[!_]*.md',
+    base: './content/blog',
+    generateId: ({ entry }) => entry.replace(/.md$/, ''),
+  }),
+  schema: z.object({
+    title: z.string(),
+    // YAML の日付（2026-11-15）や日時（2026-11-15T10:00:00+09:00）を受け付ける
+    date: z.coerce.date(),
+    description: z.string(),
+    tags: z.array(z.string()).default([]),
+    // true の記事は npm run build に含めない（npm run dev では確認用に表示する）
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { works, blog };
