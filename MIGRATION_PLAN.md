@@ -425,7 +425,7 @@ JS の転送量（gzip、HTML 内のインラインスクリプトを含む）:
 
 - Cloudflare Pages: ビルドコマンド `npm run build`、出力ディレクトリ `out` は**そのままでよい**
 - **Node 22.23.4 以上**でビルドされること（`.node-version` を追加。効かない場合は環境変数 `NODE_VERSION`）
-- 改修中モード: 未設定なら本番ビルドは改修中ページ（従来どおり）。公開するときは `PUBLIC_MAINTENANCE_MODE=false`（旧名 `NEXT_PUBLIC_MAINTENANCE_MODE=false` でも可）
+- 改修中モード: 未設定なら通常のサイト（2026-11-15 に既定値を変更）。改修中ページにするときは `PUBLIC_MAINTENANCE_MODE=true`（旧名 `NEXT_PUBLIC_MAINTENANCE_MODE=true` でも可）
 - プレビューデプロイで、`/works/ATMclicker` などが 200 になり、末尾スラッシュ付きにリダイレクトされないこと
 
 ### 6.6 残タスク

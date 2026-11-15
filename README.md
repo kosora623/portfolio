@@ -25,10 +25,10 @@ npm run check    # 型チェック（astro check）
 |---|---|
 | `true` | 全ページを改修中ページにする（`noindex, nofollow`） |
 | `false` | 通常のサイト |
-| 未設定 | `npm run build` では改修中ページ、`npm run dev` では通常のサイト |
+| 未設定 | 通常のサイト |
 
 ```bash
-PUBLIC_MAINTENANCE_MODE=false npm run build
+PUBLIC_MAINTENANCE_MODE=true npm run build   # 改修中ページでビルドする
 ```
 
 ## コンテンツ
