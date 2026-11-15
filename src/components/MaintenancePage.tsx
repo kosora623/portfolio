@@ -1,3 +1,5 @@
+import { site } from '@/data/site';
+
 export default function MaintenancePage() {
   return (
     <div className="min-h-screen flex items-center justify-center px-6">
@@ -11,10 +13,10 @@ export default function MaintenancePage() {
         <p className="mt-8 text-neutral-500 text-sm">
           ご連絡は{' '}
           <a
-            href="mailto:contact@kosora623.com"
+            href={`mailto:${site.contactEmail}`}
             className="text-neutral-300 underline underline-offset-4 decoration-neutral-600 hover:decoration-neutral-300"
           >
-            contact@kosora623.com
+            {site.contactEmail}
           </a>{' '}
           まで。
         </p>
