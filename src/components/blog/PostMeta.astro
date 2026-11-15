@@ -1,0 +1,17 @@
+---
+import { formatDate, type BlogPost } from '@/lib/blog-model';
+
+interface Props {
+  post: BlogPost;
+  size?: 'sm' | 'xs';
+}
+
+const { post, size = 'xs' } = Astro.props;
+const text = size === 'sm' ? 'text-sm' : 'text-xs';
+---
+
+<div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+  <time datetime={formatDate(post.date)} class={`font-mono ${text} text-teal`}>{formatDate(post.date)}</time>
+  {post.tags.map(tag => <span class={`font-mono ${text}`}>#{tag}</span>)}
+  {post.draft && <span class={`font-mono ${text} text-yellow-400`}>下書き</span>}
+</div>

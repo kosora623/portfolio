@@ -1,0 +1,22 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import BlogPostView from '@/components/blog/BlogPostView.astro';
+import { getPostEntries } from '@/lib/blog';
+import { renderEntryBody } from '@/lib/markdown/render';
+
+export const getStaticPaths = (async () => {
+  const entries = await getPostEntries();
+  return entries.map(({ entry, post }) => ({ params: { slug: post.slug }, props: { entry, post } }));
+}) satisfies GetStaticPaths;
+
+const { entry, post } = Astro.props;
+// 作品ページと同じ Markdown の描画（src/lib/markdown）
+const html = await renderEntryBody(entry);
+---
+
+<BaseLayout meta={{ title: post.title, description: post.description, type: 'article', publishedTime: post.date }}>
+  <BlogPostView post={post}>
+    <Fragment set:html={html} />
+  </BlogPostView>
+</BaseLayout>

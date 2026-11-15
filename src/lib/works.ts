@@ -1,37 +1,21 @@
 /**
- * content/works/*.md を読み込むローダー（ビルド時・サーバー側専用）。
- *
+ * works コレクション（content/works/*.md）を読み込むローダー（ビルド時専用）。
  * データの形や並び順は ./work-model.ts に分離している。
- * Astro 移行時はこのファイルを Content Collections（getCollection）に置き換える想定。
  */
-import fs from 'fs/promises';
-import path from 'path';
-import matter from 'gray-matter';
+import { getCollection, type CollectionEntry } from 'astro:content';
 import { normalizeWork, sortWorks, type WorkFromMd } from './work-model';
 
 export type { WorkFromMd } from './work-model';
 
-const WORKS_DIR = path.join(process.cwd(), 'content', 'works');
-
-export async function getWorkSlugs(): Promise<string[]> {
-  const files = await fs.readdir(WORKS_DIR);
-  return files.filter(f => f.endsWith('.md')).map(f => f.replace(/\.md$/, ''));
+/** 新しい順に並べた全作品（コレクションのエントリと、表示用に正規化したデータの組） */
+export async function getAllWorkEntries(): Promise<{ entry: CollectionEntry<'works'>; work: WorkFromMd }[]> {
+  const entries = await getCollection('works');
+  const pairs = entries.map(entry => ({ entry, work: normalizeWork(entry.data, undefined, entry.id) }));
+  const order = sortWorks(pairs.map(p => p.work));
+  return order.map(w => pairs.find(p => p.work === w)!);
 }
 
-export async function getWorkBySlug(slug: string): Promise<WorkFromMd | null> {
-  try {
-    const full = path.join(WORKS_DIR, `${slug}.md`);
-    const raw = await fs.readFile(full, 'utf8');
-    const { data, content } = matter(raw);
-    return normalizeWork(data, content, slug);
-  } catch {
-    return null;
-  }
-}
-
+/** 新しい順に並べた全作品 */
 export async function getAllWorks(): Promise<WorkFromMd[]> {
-  const slugs = await getWorkSlugs();
-  const works = await Promise.all(slugs.map(s => getWorkBySlug(s)));
-  const list = works.filter(Boolean) as WorkFromMd[];
-  return sortWorks(list);
+  return (await getAllWorkEntries()).map(p => p.work);
 }

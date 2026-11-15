@@ -1,0 +1,66 @@
+---
+import '@/styles/global.css';
+import '@/styles/motion.css';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import AsciiComment from '@/components/AsciiComment.astro';
+import MaintenancePage from '@/components/MaintenancePage.astro';
+import Seo from '@/components/Seo.astro';
+import type { PageMeta } from '@/lib/seo';
+import { MAINTENANCE_MODE } from '@/lib/maintenance';
+
+interface Props {
+  /** <title> をそのまま指定する（404 など、OGP が不要なページ用） */
+  title?: string;
+  robots?: string;
+  /** <title> / description / OGP（works・blog 共通の仕組み） */
+  meta?: PageMeta;
+}
+
+const { title, robots, meta } = Astro.props;
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {
+      MAINTENANCE_MODE ? (
+        <>
+          {robots && <meta name="robots" content={robots} />}
+          <title>サイト改修中 | KSR</title>
+          <meta name="robots" content="noindex, nofollow" />
+        </>
+      ) : (
+        <>
+          {meta ? <Seo meta={meta} /> : title && <title>{title}</title>}
+          {robots && <meta name="robots" content={robots} />}
+        </>
+      )
+    }
+    <link rel="icon" href="/favicon.ico" sizes="24x24" type="image/x-icon" />
+    <!-- 出現アニメーションを有効にする（JS が動かない環境では内容を隠さない） -->
+    <script is:inline>document.documentElement.classList.add('motion');</script>
+    {!MAINTENANCE_MODE && <AsciiComment />}
+  </head>
+  {
+    MAINTENANCE_MODE ? (
+      <body class="antialiased">
+        <MaintenancePage />
+      </body>
+    ) : (
+      <body class="bg-navy text-slate antialiased">
+        <Header />
+        <main class="container mx-auto px-6 md:px-12 lg:px-24">
+          <slot />
+        </main>
+        <Footer />
+        <script>
+          import { observeInView } from '@/scripts/motion';
+          observeInView();
+        </script>
+      </body>
+    )
+  }
+</html>

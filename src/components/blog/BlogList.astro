@@ -1,0 +1,38 @@
+---
+/** ブログ記事の一覧（最小限のデザイン。作品一覧と同じクラスを使う） */
+import type { BlogPost } from '@/lib/blog-model';
+import PostMeta from './PostMeta.astro';
+
+interface Props {
+  posts: BlogPost[];
+}
+
+const { posts } = Astro.props;
+---
+
+<div class="min-h-screen pt-24 pb-16">
+  <div class="max-w-3xl mx-auto">
+    <h1 class="text-4xl md:text-5xl font-bold text-light-slate mb-12">Blog</h1>
+
+    {
+      posts.length === 0 ? (
+        <p class="text-slate">まだ記事はありません。</p>
+      ) : (
+        <ul class="border-t border-slate/20">
+          {posts.map(post => (
+            <li>
+              <a
+                href={`/blog/${post.slug}`}
+                class="group block py-6 px-6 border-b border-slate/20 transition-colors hover:bg-slate/5"
+              >
+                <h2 class="text-2xl font-semibold text-light-slate group-hover:text-teal transition-colors mb-1">{post.title}</h2>
+                <p class="text-slate text-sm mb-2">{post.description}</p>
+                <PostMeta post={post} />
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+</div>

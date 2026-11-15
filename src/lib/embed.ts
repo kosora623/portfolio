@@ -1,6 +1,6 @@
 /**
  * Markdown 本文中の URL から埋め込み種別を判定する純粋関数群。
- * React / Next.js に依存しないため、Astro 移行後は remark/rehype プラグインからも流用できる。
+ * ビルド時の rehype プラグイン（src/lib/markdown/rehype-content.ts）から使う。
  */
 
 export function getYouTubeEmbedUrl(url: string): string | null {
@@ -28,7 +28,40 @@ export function isInstagramUrl(url: string) {
   return /(?:https?:\/\/)?(?:www\.)?instagram\.com\//i.test(url) || /(?:https?:\/\/)?(?:www\.)?instagr\.am\//i.test(url);
 }
 
-/** oEmbed 経由での埋め込み対象（現状 EmbedFetcher に渡しているもの）か */
+/** Next.js 版で実行時 oEmbed（EmbedFetcher）に渡していた URL か */
 export function isOEmbedTarget(url: string) {
   return isTwitterUrl(url) || isNicoUrl(url) || isBiliUrl(url) || isInstagramUrl(url);
+}
+
+/** ニコニコ動画のプレーヤー URL（動画 ID が取れない場合は null） */
+export function getNicoEmbedUrl(url: string): string | null {
+  const m = url.match(/nicovideo\.jp\/watch\/((?:sm|nm|so)?\d+)/i);
+  return m ? `https://embed.nicovideo.jp/watch/${m[1]}` : null;
+}
+
+/** bilibili のプレーヤー URL（BV 番号が取れない場合は null。b23.tv の短縮 URL は解決できない） */
+export function getBiliEmbedUrl(url: string): string | null {
+  const m = url.match(/bilibili\.com\/video\/(BV[\w]+)/i);
+  return m ? `https://player.bilibili.com/player.html?bvid=${m[1]}&autoplay=0` : null;
+}
+
+/**
+ * 「URL だけの段落」をビルド時に埋め込む先。
+ * - YouTube / ニコニコ / bilibili: iframe
+ * - X / Instagram: 公式の埋め込みにはトークンや外部スクリプトが必要なため、通常のリンクのまま（null）
+ */
+export type EmbedTarget = { kind: 'youtube' | 'niconico' | 'bilibili'; src: string };
+
+export function resolveEmbed(url: string): EmbedTarget | null {
+  const yt = getYouTubeEmbedUrl(url);
+  if (yt) return { kind: 'youtube', src: yt };
+  if (isNicoUrl(url)) {
+    const src = getNicoEmbedUrl(url);
+    return src ? { kind: 'niconico', src } : null;
+  }
+  if (isBiliUrl(url)) {
+    const src = getBiliEmbedUrl(url);
+    return src ? { kind: 'bilibili', src } : null;
+  }
+  return null;
 }
