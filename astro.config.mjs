@@ -1,6 +1,5 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 import { unified } from '@astrojs/markdown-remark';
 import rehypeContent from './src/lib/markdown/rehype-content.ts';
@@ -12,7 +11,6 @@ export default defineConfig({
   // /works/ATMclicker → works/ATMclicker.html（Next.js の static export と同じ URL 形式）
   build: { format: 'file' },
   trailingSlash: 'never',
-  integrations: [react()],
   vite: {
     plugins: [tailwindcss()],
   },
