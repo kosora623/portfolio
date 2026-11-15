@@ -430,14 +430,29 @@ JS の転送量（gzip、HTML 内のインラインスクリプトを含む）:
 
 ### 6.6 残タスク
 
-- [ ] プレビューデプロイでの確認（§6.5）
+- [x] 本番デプロイでの確認（§6.5）: 2026-11-15 に https://kosora623.com で確認。結果は §6.7
 - [ ] UI リニューアル（UI_PROPOSAL.md）: B-1（色）、B-2（埋め込みの縦横比）、B-3（本文のタイポグラフィ）、`prefers-reduced-motion`（D-22）
 - [ ] 画像の最適化（B-9）: `src/assets` に移して `astro:assets` を使う。frontmatter の `thumbnailUrl` を `image()` に
 - [ ] トップページの `<title>` / description / OGP（B-6。works とブログは §7 で対応済み。D-30）
-- [ ] Cloudflare Pages に `SITE_URL` を設定する（og:url / og:image / canonical を出すため。D-29）
+- [ ] Cloudflare Pages に `SITE_URL` を設定し、**再デプロイする**（og:url / og:image / canonical を出すため。D-29）。2026-11-15 時点の本番ではこの 3 つが出ていない（§6.7）
 - [ ] ブログをヘッダーのナビに載せるか決める（D-33）
 - [ ] 純粋関数（`work-model.ts`、`embed.ts`、`rehype-content.ts`）のユニットテスト
 - [ ] `eslint-plugin-astro` 2 系に上げるときは ESLint 10 への更新が必要（D-16）
+
+
+### 6.7 本番デプロイの確認結果（2026-11-15）
+
+確認先: https://kosora623.com （PR #3 マージ後の main）
+
+| 項目 | 結果 |
+|---|---|
+| `/`、`/works`、`/works/<slug>` × 6、`/blog` | すべて 200、末尾スラッシュ付きへのリダイレクトなし。改修中ページではなく通常のサイト |
+| `<title>` / og:title / description | works・blog は期待どおり（「ページ名 \| KSR」）。トップページは `<title>` なし（B-6、既知） |
+| og:url / og:image / canonical | **全ページで出ていない**。`SITE_URL` 未設定のビルドと同じ出力。ローカルで `SITE_URL=https://kosora623.com npm run build` すると 3 つとも正しく出るので、コードの問題ではなく Cloudflare 側の設定（未設定、または設定後に再デプロイしていない） |
+| 存在しない URL | エラー（4xx）が返ることは確認。`out/404.html` は出力されており、Cloudflare Pages はこれを 404 で返す仕様。ステータスコードと内容は直接確認できていない |
+| コンソールエラー | 未確認（ブラウザで開ける環境がなかった） |
+
+確認方法の制約: 作業環境のネットワーク設定で kosora623.com への直接接続（curl）ができなかったため、Web 取得ツール経由で確認した。ヘッダーと生の HTML は見られず、404 のステータスとコンソールは確認できていない。
 
 ---
 
