@@ -5,14 +5,19 @@ import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import AsciiComment from '@/components/AsciiComment.astro';
 import MaintenancePage from '@/components/MaintenancePage.astro';
+import Seo from '@/components/Seo.astro';
+import type { PageMeta } from '@/lib/seo';
 import { MAINTENANCE_MODE } from '@/lib/maintenance';
 
 interface Props {
+  /** <title> をそのまま指定する（404 など、OGP が不要なページ用） */
   title?: string;
   robots?: string;
+  /** <title> / description / OGP（works・blog 共通の仕組み） */
+  meta?: PageMeta;
 }
 
-const { title, robots } = Astro.props;
+const { title, robots, meta } = Astro.props;
 ---
 
 <!doctype html>
@@ -29,7 +34,7 @@ const { title, robots } = Astro.props;
         </>
       ) : (
         <>
-          {title && <title>{title}</title>}
+          {meta ? <Seo meta={meta} /> : title && <title>{title}</title>}
           {robots && <meta name="robots" content={robots} />}
         </>
       )

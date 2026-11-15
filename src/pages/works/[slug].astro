@@ -15,7 +15,9 @@ const { entry, work } = Astro.props;
 const html = await renderEntryBody(entry);
 ---
 
-<BaseLayout>
+<BaseLayout
+  meta={{ title: work.title, description: work.summary || undefined, image: work.thumbnailUrl, type: 'article' }}
+>
   <div class="relative min-h-screen">
     <Particles />
     <div class="relative z-10">

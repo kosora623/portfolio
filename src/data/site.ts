@@ -1,12 +1,18 @@
 /**
  * サイト全体で使う設定・リンク類。
  * UI フレームワーク非依存のプレーンなデータ（アイコンは文字列キーで持ち、
- * 実際のアイコンコンポーネントへの対応は src/components/socialIcons.ts で行う）。
+ * 実際の SVG は src/components/icons/iconData.ts にある）。
  */
 
 export const site = {
   shortName: 'KSR',
   contactEmail: 'contact@kosora623.com',
+} as const;
+
+/** ページごとの description（OGP にも使う） */
+export const pageDescriptions = {
+  works: '小空 - KSR の制作物（映像・音楽・プログラミング）の一覧です。',
+  blog: '小空 - KSR のブログです。',
 } as const;
 
 export const navItems = [
