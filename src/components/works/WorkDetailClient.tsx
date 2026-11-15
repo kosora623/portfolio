@@ -1,19 +1,17 @@
-"use client";
 
 import React from 'react';
 import Link from '@/components/framework/Link';
 import Image from '@/components/framework/Image';
-import { motion, Variants } from 'framer-motion';
+import { motion, type Variants } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import type { WorkFromMd } from '@/lib/work-model';
 import { getYouTubeEmbedUrl, isOEmbedTarget } from '@/lib/embed';
 import { tagInfo } from '@/data/tags';
-import dynamic from 'next/dynamic';
 
 type MdNode = { type?: string; tagName?: string; children?: MdNode[] };
 
-const EmbedFetcher = dynamic(() => import('@/components/EmbedFetcher'), { ssr: false });
+import EmbedFetcher from '@/components/EmbedFetcher';
 
 export default function WorkDetailClient({ work }: { work: WorkFromMd }) {
   const containerVariants: Variants = {

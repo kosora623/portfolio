@@ -1,0 +1,11 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import WorkPageShell from '@/components/WorkPageShell';
+import { getAllWorks } from '@/lib/works';
+
+const works = await getAllWorks();
+---
+
+<BaseLayout>
+  <WorkPageShell client:only="react" works={works} />
+</BaseLayout>

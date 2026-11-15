@@ -1,4 +1,3 @@
-'use client';
 import Link from '@/components/framework/Link';
 import { useState, useEffect } from 'react';
 import { navItems, site } from '@/data/site';

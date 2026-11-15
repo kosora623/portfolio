@@ -1,0 +1,17 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import WorkPageShell from '@/components/WorkPageShell';
+import { getAllWorks, type WorkFromMd } from '@/lib/works';
+
+export const getStaticPaths = (async () => {
+  const works = await getAllWorks();
+  return works.map(work => ({ params: { slug: work.slug }, props: { work } }));
+}) satisfies GetStaticPaths;
+
+const { work } = Astro.props as { work: WorkFromMd };
+---
+
+<BaseLayout>
+  <WorkPageShell client:only="react" work={work} />
+</BaseLayout>

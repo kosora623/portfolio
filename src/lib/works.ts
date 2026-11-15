@@ -1,37 +1,29 @@
 /**
- * content/works/*.md を読み込むローダー（ビルド時・サーバー側専用）。
- *
+ * works コレクション（content/works/*.md）を読み込むローダー（ビルド時専用）。
  * データの形や並び順は ./work-model.ts に分離している。
- * Astro 移行時はこのファイルを Content Collections（getCollection）に置き換える想定。
  */
-import fs from 'fs/promises';
-import path from 'path';
-import matter from 'gray-matter';
+import fs from 'node:fs/promises';
+import { getCollection } from 'astro:content';
+import { parseFrontmatter } from '@astrojs/markdown-remark';
 import { normalizeWork, sortWorks, type WorkFromMd } from './work-model';
 
 export type { WorkFromMd } from './work-model';
 
-const WORKS_DIR = path.join(process.cwd(), 'content', 'works');
-
-export async function getWorkSlugs(): Promise<string[]> {
-  const files = await fs.readdir(WORKS_DIR);
-  return files.filter(f => f.endsWith('.md')).map(f => f.replace(/\.md$/, ''));
+/**
+ * Markdown 本文を元ファイルから読み直す。
+ * entry.body は前後の空白が trim されており、本文先頭の全角スペース（字下げ）が消えてしまうため。
+ */
+async function readRawBody(filePath: string | undefined, fallback: string | undefined) {
+  if (!filePath) return fallback;
+  const raw = await fs.readFile(filePath, 'utf8');
+  return parseFrontmatter(raw).content;
 }
 
-export async function getWorkBySlug(slug: string): Promise<WorkFromMd | null> {
-  try {
-    const full = path.join(WORKS_DIR, `${slug}.md`);
-    const raw = await fs.readFile(full, 'utf8');
-    const { data, content } = matter(raw);
-    return normalizeWork(data, content, slug);
-  } catch {
-    return null;
-  }
-}
-
+/** 新しい順に並べた全作品 */
 export async function getAllWorks(): Promise<WorkFromMd[]> {
-  const slugs = await getWorkSlugs();
-  const works = await Promise.all(slugs.map(s => getWorkBySlug(s)));
-  const list = works.filter(Boolean) as WorkFromMd[];
-  return sortWorks(list);
+  const entries = await getCollection('works');
+  const works = await Promise.all(
+    entries.map(async e => normalizeWork(e.data, await readRawBody(e.filePath, e.body), e.id)),
+  );
+  return sortWorks(works);
 }

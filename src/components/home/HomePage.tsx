@@ -1,8 +1,7 @@
-'use client';
 
 import Link from '@/components/framework/Link';
 import Image from '@/components/framework/Image';
-import { motion, Variants } from 'framer-motion';
+import { motion, type Variants } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import ParticleBackground from '@/components/ParticleBackground';
 import { socialIcons } from '@/components/socialIcons';

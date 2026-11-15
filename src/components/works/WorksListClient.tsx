@@ -1,8 +1,7 @@
-"use client";
 
 import Link from '@/components/framework/Link';
 import Image from '@/components/framework/Image';
-import { motion, Variants } from 'framer-motion';
+import { motion, type Variants } from 'framer-motion';
 import type { WorkFromMd } from '@/lib/work-model';
 import { tagInfo } from '@/data/tags';
 
