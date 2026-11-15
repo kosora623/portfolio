@@ -1,0 +1,56 @@
+---
+import type { WorkFromMd } from '@/lib/work-model';
+import { tagInfo } from '@/data/tags';
+
+interface Props {
+  works: WorkFromMd[];
+}
+
+const { works } = Astro.props;
+
+// framer-motion 版と同じタイミング: 見出し → 一覧（0.1s 後）→ 各行を 0.1s ずつずらす
+const item = (delay: number) => `--motion-x:-20px;--motion-duration:.5s;--motion-delay:${delay}s`;
+---
+
+<div class="min-h-screen pt-24 pb-16">
+  <div class="max-w-3xl mx-auto" data-motion>
+    <h1 class="text-4xl md:text-5xl font-bold text-light-slate mb-12" data-motion style={item(0)}>My Works</h1>
+
+    <div class="border-t border-slate/20" data-motion style="--motion-delay:.1s">
+      {
+        works.map((work, i) => (
+          <div data-motion style={item(0.1 + i * 0.1)}>
+            <a
+              href={`/works/${work.slug}`}
+              class="group relative block py-6 px-6 border-b border-slate/20 transition-colors hover:bg-slate/5 overflow-hidden"
+            >
+              {work.thumbnailUrl && (
+                <img
+                  alt={`${work.title} thumbnail`}
+                  loading="lazy"
+                  decoding="async"
+                  class="absolute inset-0 z-0 opacity-0 group-hover:opacity-50 transition-opacity duration-300"
+                  src={work.thumbnailUrl}
+                  style="position: absolute; height: 100%; width: 100%; inset: 0px; object-fit: cover; color: transparent;"
+                />
+              )}
+
+              <div class="relative z-10 flex items-start justify-between">
+                <div>
+                  <h2 class="text-2xl font-semibold text-light-slate group-hover:text-teal transition-colors mb-1">{work.title}</h2>
+                  <p class="text-slate text-sm mb-2">{work.summary}</p>
+                  <div class="flex space-x-3">
+                    {work.tags.map(tag => (
+                      <span class={`font-mono text-xs ${tagInfo[tag]?.color ?? ''}`}>{tag}</span>
+                    ))}
+                  </div>
+                </div>
+                <span class="text-teal font-mono text-lg ml-8">{work.year}</span>
+              </div>
+            </a>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</div>

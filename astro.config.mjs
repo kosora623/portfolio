@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 import { unified } from '@astrojs/markdown-remark';
+import rehypeContent from './src/lib/markdown/rehype-content.ts';
 
 // https://astro.build/config
 export default defineConfig({
@@ -16,8 +17,9 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   markdown: {
-    // react-markdown と同じ remark/rehype 系で処理する（コードブロックの装飾・引用符の自動変換はしない）
+    // works / blog の本文は src/lib/markdown/render.ts で描画している（同じ設定）。
+    // ここは Astro 標準の render() を使う場合のための設定。
     syntaxHighlight: false,
-    processor: unified({ smartypants: false }),
+    processor: unified({ smartypants: false, rehypePlugins: [rehypeContent] }),
   },
 });

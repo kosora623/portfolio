@@ -1,0 +1,38 @@
+---
+import type { WorkFromMd } from '@/lib/work-model';
+import { tagInfo } from '@/data/tags';
+
+interface Props {
+  work: WorkFromMd;
+}
+
+const { work } = Astro.props;
+
+// framer-motion 版と同じタイミング: 0.2s ずつずらして下からフェードイン
+const item = (i: number) => `--motion-y:20px;--motion-duration:.6s;--motion-delay:${i * 0.2}s`;
+---
+
+<div class="min-h-screen pt-24">
+  <div class="max-w-3xl mx-auto" data-motion>
+    <div data-motion style={item(0)}>
+      <a href="/works" class="text-teal hover:underline mb-8 inline-block">&larr; Back to Works</a>
+    </div>
+
+    <div class="flex items-center space-x-4 mb-2" data-motion style={item(1)}>
+      <p class="text-teal font-mono">{work.year}</p>
+      <div class="flex space-x-3">
+        {work.tags.map(tag => <span class={`font-mono text-sm ${tagInfo[tag]?.color ?? ''}`}>{tagInfo[tag]?.name ?? tag}</span>)}
+      </div>
+    </div>
+
+    <h1 class="text-4xl md:text-5xl font-bold text-light-slate mb-8" data-motion style={item(2)}>{work.title}</h1>
+
+    <div class="space-y-8">
+      <div data-motion style={item(3)}>
+        <div class="prose max-w-none text-slate text-lg leading-relaxed">
+          <slot />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

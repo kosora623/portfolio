@@ -1,11 +1,17 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import WorkPageShell from '@/components/WorkPageShell';
+import Particles from '@/components/Particles.astro';
+import WorksList from '@/components/works/WorksList.astro';
 import { getAllWorks } from '@/lib/works';
 
 const works = await getAllWorks();
 ---
 
 <BaseLayout>
-  <WorkPageShell client:only="react" works={works} />
+  <div class="relative min-h-screen">
+    <Particles />
+    <div class="relative z-10">
+      <WorksList works={works} />
+    </div>
+  </div>
 </BaseLayout>

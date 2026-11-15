@@ -1,5 +1,6 @@
 ---
 import '@/styles/global.css';
+import '@/styles/motion.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer.astro';
 import AsciiComment from '@/components/AsciiComment.astro';
@@ -34,6 +35,8 @@ const { title, robots } = Astro.props;
       )
     }
     <link rel="icon" href="/favicon.ico" sizes="24x24" type="image/x-icon" />
+    <!-- 出現アニメーションを有効にする（JS が動かない環境では内容を隠さない） -->
+    <script is:inline>document.documentElement.classList.add('motion');</script>
     {!MAINTENANCE_MODE && <AsciiComment />}
   </head>
   {
@@ -48,6 +51,10 @@ const { title, robots } = Astro.props;
           <slot />
         </main>
         <Footer />
+        <script>
+          import { observeInView } from '@/scripts/motion';
+          observeInView();
+        </script>
       </body>
     )
   }

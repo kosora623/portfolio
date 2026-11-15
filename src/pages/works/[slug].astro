@@ -1,17 +1,27 @@
 ---
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import WorkPageShell from '@/components/WorkPageShell';
-import { getAllWorks, type WorkFromMd } from '@/lib/works';
+import Particles from '@/components/Particles.astro';
+import WorkDetail from '@/components/works/WorkDetail.astro';
+import { getAllWorkEntries } from '@/lib/works';
+import { renderEntryBody } from '@/lib/markdown/render';
 
 export const getStaticPaths = (async () => {
-  const works = await getAllWorks();
-  return works.map(work => ({ params: { slug: work.slug }, props: { work } }));
+  const entries = await getAllWorkEntries();
+  return entries.map(({ entry, work }) => ({ params: { slug: work.slug }, props: { entry, work } }));
 }) satisfies GetStaticPaths;
 
-const { work } = Astro.props as { work: WorkFromMd };
+const { entry, work } = Astro.props;
+const html = await renderEntryBody(entry);
 ---
 
 <BaseLayout>
-  <WorkPageShell client:only="react" work={work} />
+  <div class="relative min-h-screen">
+    <Particles />
+    <div class="relative z-10">
+      <WorkDetail work={work}>
+        <Fragment set:html={html} />
+      </WorkDetail>
+    </div>
+  </div>
 </BaseLayout>
