@@ -34,6 +34,7 @@ PUBLIC_MAINTENANCE_MODE=false npm run build
 ## コンテンツ
 
 - 作品: `content/works/*.md`（スキーマは `src/content.config.ts`）。ファイル名が URL（`/works/<ファイル名>`）になります
+- ブログ: `content/blog/*.md`（`/blog/<ファイル名>`）。見本は `content/blog/_template.md`。`draft: true` の記事は `npm run build` に含まれません（`npm run dev` では表示されます）
 - プロフィール・リンクなど: `src/data/`
 
 ## ディレクトリ
@@ -41,7 +42,7 @@ PUBLIC_MAINTENANCE_MODE=false npm run build
 | パス | 内容 |
 |---|---|
 | `src/pages/` | ルーティング |
-| `src/layouts/` | 共通レイアウト（`<head>`、改修中モード） |
+| `src/layouts/` | 共通レイアウト（`<head>`、OGP、改修中モード） |
 | `src/components/` | UI（すべて `.astro`） |
 | `src/scripts/` | クライアントで動く JS（パーティクル、スクロール時の出現） |
 | `src/lib/` | データの読み込み・Markdown の描画など |
@@ -50,5 +51,11 @@ PUBLIC_MAINTENANCE_MODE=false npm run build
 ## デプロイ
 
 Cloudflare Pages。ビルドコマンド `npm run build`、出力ディレクトリ `out`。
+
+| 環境変数 | 用途 |
+|---|---|
+| `PUBLIC_MAINTENANCE_MODE` | 改修中モード（上記） |
+| `SITE_URL` | 公開 URL（例: `https://example.com`）。設定すると OGP の `og:url` / `og:image` と canonical が出力されます |
+| `NODE_VERSION` | `.node-version` が効かない場合に `22` を指定 |
 
 移行の経緯・判断の記録は [MIGRATION_PLAN.md](./MIGRATION_PLAN.md)、UI リニューアルの案は [UI_PROPOSAL.md](./UI_PROPOSAL.md) にあります。

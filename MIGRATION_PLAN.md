@@ -240,6 +240,13 @@ UI リニューアルの提案は別ファイル [UI_PROPOSAL.md](./UI_PROPOSAL.
 | D-25 | ページ遷移は通常の `<a>`（MPA）にした。Next.js のクライアントサイド遷移・プリフェッチは再現していない | `<ClientRouter />`（View Transitions）を入れるとスクリプトの再実行の扱いが複雑になる。ページが軽くなったので、まずは素の遷移で十分と判断した。必要なら `prefetch` 設定で追加できる |
 | D-26 | Content Collection のスキーマで `tags` を `video` / `code` / `music` に限定した | 未定義のタグで詳細ページが壊れる問題（B-8）を、ビルド時のエラーとして検出するため |
 | D-27 | Astro の Markdown が付ける見出しの `id`（アンカー）はそのままにした | 表示には影響せず、ブログでは見出しへのリンクに使えるため。比較では無視している |
+| D-28 | **（ブログ）「works と同じ OGP の仕組み」を先に作った**。works には OGP がなかったため、共通の `Seo.astro` / `src/lib/seo.ts` を作って works に適用し、ブログも同じものを使う | 指示の前提（works に OGP がある）が現状と違ったため。works ページに `<title>` が付いた以外、表示は変わらない |
+| D-29 | og:url・og:image・canonical は、環境変数 `SITE_URL`（`astro.config` の `site`）があるときだけ出力する | 絶対 URL が必要だが、本番ドメインはリポジトリから確定できないため推測しなかった。Cloudflare Pages に `SITE_URL` を設定すれば出力される |
+| D-30 | トップページには `<title>` / OGP を付けなかった | 依頼の範囲（works と同じ仕組みでブログに OGP）を超えるため。B-6 の残タスク |
+| D-31 | 下書き（`draft: true`）は `npm run build` では除外し、`npm run dev` では「下書き」ラベル付きで表示する | 「ビルドに含めない」を満たしつつ、書いている途中の記事を手元で確認できるようにするため |
+| D-32 | `content/blog/` の `_` で始まるファイルは読み込まない。書き方の見本として `_template.md` を置いた | 実際の記事は書いていない（サンプル記事を公開してしまわないため）。記事が 0 件の間はビルド時に glob-loader の警告が出るが、問題はない |
+| D-33 | ブログはヘッダーのナビにまだ載せていない | 全ページのヘッダーの見た目が変わるため、判断を任せたい。載せる場合は `src/data/site.ts` の `navItems` に 1 行足すだけ |
+| D-34 | ブログのタグは自由入力（works のような固定の一覧にしない）。日付は日本時間で表示する | ブログのタグは増えていくものなので。日時（`2026-11-14T21:00:00+09:00`）を書いた場合も日本時間の日付になる |
 
 ---
 
@@ -343,6 +350,9 @@ src/
 | 5 | `chore: remove React, Next.js leftovers and unused dependencies` | React 関連・未使用の依存とファイルを削除 |
 | 6 | `chore: keep docs and content Markdown out of Tailwind class scanning` | D-12 の根本対策（`@source not`） |
 | 7 | `docs: record Astro migration (phase 1-2)` | このセクション、判断ログ D-13〜D-27、README、`.node-version` |
+| 8 | `feat: add title, description and OGP meta to works pages` | §7 |
+| 9 | `feat: add blog (collection, list and post pages)` | §7 |
+| 10 | `docs: record blog and OGP` | §7、判断ログ D-28〜D-34 |
 
 ### 6.2 構成（移行後）
 
@@ -423,6 +433,43 @@ JS の転送量（gzip、HTML 内のインラインスクリプトを含む）:
 - [ ] プレビューデプロイでの確認（§6.5）
 - [ ] UI リニューアル（UI_PROPOSAL.md）: B-1（色）、B-2（埋め込みの縦横比）、B-3（本文のタイポグラフィ）、`prefers-reduced-motion`（D-22）
 - [ ] 画像の最適化（B-9）: `src/assets` に移して `astro:assets` を使う。frontmatter の `thumbnailUrl` を `image()` に
-- [ ] `<title>` / description / OGP（B-6）
+- [ ] トップページの `<title>` / description / OGP（B-6。works とブログは §7 で対応済み。D-30）
+- [ ] Cloudflare Pages に `SITE_URL` を設定する（og:url / og:image / canonical を出すため。D-29）
+- [ ] ブログをヘッダーのナビに載せるか決める（D-33）
 - [ ] 純粋関数（`work-model.ts`、`embed.ts`、`rehype-content.ts`）のユニットテスト
 - [ ] `eslint-plugin-astro` 2 系に上げるときは ESLint 10 への更新が必要（D-16）
+
+---
+
+## 7. ブログ機能と OGP
+
+### 7.1 OGP（works・blog 共通）
+
+- `BaseLayout` の `meta` プロパティ → `src/components/Seo.astro` → `src/lib/seo.ts` の `resolveMeta()`
+- 出力: `<title>`（「ページ名 | KSR」）、`description`、`og:title` / `og:description` / `og:type` / `og:site_name` / `og:locale`、`twitter:card`
+- `SITE_URL` があるときだけ: `canonical`、`og:url`、`og:image`（画像があれば `twitter:card` は `summary_large_image`）
+- 作品詳細: タイトル・summary・サムネイル、`og:type=article`
+- ブログ記事: タイトル・description、`og:type=article`、`article:published_time`
+- 改修中モードでは出力しない（従来どおり「サイト改修中 | KSR」と `noindex, nofollow` だけ）
+
+### 7.2 ブログ
+
+| 項目 | 内容 |
+|---|---|
+| 記事 | `content/blog/<slug>.md`（`_` で始まるファイルは無視。`_template.md` が見本） |
+| frontmatter | `title`（必須）、`date`（必須）、`description`（必須）、`tags`（任意）、`draft`（任意、既定 false） |
+| URL | `/blog` → `out/blog.html`、`/blog/<slug>` → `out/blog/<slug>.html` |
+| 並び順 | 日付の新しい順（同じ日付ならファイル名順） |
+| 下書き | `npm run build` では除外。`npm run dev` では「下書き」ラベル付きで表示 |
+| 本文 | works と同じ Markdown 描画（字下げの保持、リンク、動画の埋め込み、生 HTML は出力しない） |
+| デザイン | works と同じクラスを使った最小限のもの（UI リニューアルで作り直す） |
+| コード | `src/content.config.ts`（スキーマ）、`src/lib/blog-model.ts`（純粋関数）、`src/lib/blog.ts`（読み込み）、`src/pages/blog*.astro`、`src/components/blog/` |
+
+### 7.3 検証
+
+- 一時的な記事（公開 2 件・下書き 1 件、字下げ・内部/外部リンク・YouTube URL・生 HTML・見出しを含む）でビルドし、次を確認してから一時記事を削除した
+  - 下書きと `_template.md` が出力に含まれない／並び順／日本時間の日付表示
+  - 本文の描画（字下げ、リンクのクラスと `target`、埋め込み、生 HTML の除去）
+  - OGP（`SITE_URL` あり・なし、改修中モード）
+  - 開発サーバーでは下書きが表示されること
+- 記事 0 件の状態で、lint・型チェック・両モードのビルド・全 URL（`/blog` を含む 10 ページ）を確認。works ページの DOM は OGP 追加前と同一
