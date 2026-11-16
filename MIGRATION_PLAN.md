@@ -440,7 +440,7 @@ JS の転送量（gzip、HTML 内のインラインスクリプトを含む）:
 - [ ] トップページの `<title>` / description / OGP（B-6。works とブログは §7 で対応済み。D-30）
 - [ ] Cloudflare Pages に `SITE_URL` を設定し、**再デプロイする**（og:url / og:image / canonical を出すため。D-29）。2026-11-15 時点の本番ではこの 3 つが出ていない（§6.7）
 - [x] ブログをヘッダーのナビに載せる（D-36）
-- [ ] 最初のブログ記事を公開する（下書きは用意済み。D-38）
+- [x] 最初のブログ記事「ブログページの開設！」を公開する（D-38）
 - [ ] 純粋関数（`work-model.ts`、`embed.ts`、`rehype-content.ts`）のユニットテスト
 - [ ] `eslint-plugin-astro` 2 系に上げるときは ESLint 10 への更新が必要（D-16）
 
