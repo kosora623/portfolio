@@ -69,6 +69,15 @@ function isBlankParagraph(p: Element): boolean {
   );
 }
 
+/** 段落がリンク 1 つだけで、その文字が URL そのものか */
+function isBareUrlParagraph(p: Element): boolean {
+  const kids = p.children.filter(c => !(c.type === 'text' && /^[\s\u3000]*$/.test(c.value)));
+  const [a] = kids;
+  if (kids.length !== 1 || !isElement(a, 'a')) return false;
+  const text = a.children.map(c => (c.type === 'text' ? c.value : '')).join('').trim();
+  return text === String(a.properties.href ?? '').trim();
+}
+
 /** 段落を置き換える要素の配列を返す（変更しない場合は null） */
 function transformParagraph(p: Element): Child[] | null {
   if (isBlankParagraph(p)) return [];
@@ -76,7 +85,9 @@ function transformParagraph(p: Element): Child[] | null {
   if (p.children.length === 1 && isElement(first, 'img')) {
     return p.children; // 画像だけの段落は <p> で包まない
   }
-  if (isElement(first, 'a') && typeof first.properties.href === 'string') {
+  // 埋め込みにするのは、URL をそのまま 1 行に書いた段落だけ。
+  // 「[動画はこちらから](URL)」のように文字を付けたリンクはリンクのまま残す
+  if (isBareUrlParagraph(p) && isElement(first, 'a') && typeof first.properties.href === 'string') {
     const target = resolveEmbed(first.properties.href);
     if (target) return [embed(target)];
   }

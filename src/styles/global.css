@@ -150,6 +150,7 @@ img {
 .prose pre { padding: 1em; overflow-x: auto; background: var(--color-thumb); font-family: var(--font-mono); font-size: 0.875em; line-height: 1.7; }
 .prose hr { border: 0; border-top: 1px solid var(--color-line); }
 .prose del { color: var(--color-muted); }
+.prose .content-image { display: block; }
 .prose .content-image img { display: block; width: 100%; border: 1px solid var(--color-line); background: var(--color-thumb); }
 /* 動画の埋め込み（16:9。B-2） */
 .prose .content-embed { aspect-ratio: 16 / 9; max-width: 100%; background: var(--color-ink); }
