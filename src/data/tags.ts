@@ -1,9 +1,11 @@
 /**
- * 作品タグの表示名と色（Tailwind クラス）。
- * 一覧・詳細ページで共有する。UI リニューアル時は color をデザイントークンに置き換える想定。
+ * 作品タグの表示名とアイコン（一覧・詳細ページで共有する）。
+ * キーは content.config.ts のスキーマでも使う（未定義のタグはビルド時にエラー）。
  */
-export const tagInfo: Record<string, { name: string; color: string }> = {
-  video: { name: 'Video', color: 'text-red-400' },
-  code: { name: 'Code', color: 'text-green-400' },
-  music: { name: 'Music', color: 'text-yellow-400' },
+import type { LineIconKey } from '@/components/icons/lineIcons';
+
+export const tagInfo: Record<string, { name: string; icon: LineIconKey }> = {
+  video: { name: '映像', icon: 'video' },
+  music: { name: '音楽', icon: 'music' },
+  code: { name: 'コード', icon: 'code' },
 };

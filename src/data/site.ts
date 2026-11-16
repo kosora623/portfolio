@@ -5,20 +5,20 @@
  */
 
 export const site = {
-  shortName: 'KSR',
+  shortName: 'kosora',
   contactEmail: 'contact@kosora623.com',
 } as const;
 
 /** ページごとの description（OGP にも使う） */
 export const pageDescriptions = {
-  works: '小空 - KSR の制作物（映像・音楽・プログラミング）の一覧です。',
-  blog: '小空 - KSR のブログです。',
+  works: 'kosora の制作物（映像・音楽・プログラミング）の一覧です。',
+  blog: 'kosora のブログです。',
 } as const;
 
 export const navItems = [
-  { name: 'HOME', href: '/' },
-  { name: 'WORKS', href: '/works' },
-  { name: 'BLOG', href: '/blog' },
+  { name: 'Home', href: '/' },
+  { name: 'Works', href: '/works' },
+  { name: 'Blog', href: '/blog' },
 ] as const;
 
 export type SocialIconKey = 'email' | 'github' | 'youtube' | 'twitter' | 'play';
