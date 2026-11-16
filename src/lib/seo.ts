@@ -7,7 +7,7 @@
 import { site } from '@/data/site';
 
 export interface PageMeta {
-  /** ページ固有のタイトル（サイト名は自動で付く） */
+  /** ページ固有のタイトル（サイト名は自動で付く。サイト名そのもののときは付けない） */
   title: string;
   description?: string;
   /** public/ からのパス（/works-images/... など）または絶対 URL */
@@ -37,7 +37,7 @@ export function resolveMeta(meta: PageMeta, pathname: string, siteUrl: URL | und
   const abs = (p: string) => (siteUrl ? new URL(p, siteUrl).href : undefined);
   const image = meta.image ? (/^https?:\/\//.test(meta.image) ? meta.image : abs(meta.image)) : undefined;
   return {
-    title: `${meta.title} | ${site.shortName}`,
+    title: meta.title === site.shortName ? meta.title : `${meta.title} | ${site.shortName}`,
     description: meta.description,
     type: meta.type ?? 'website',
     url: abs(toPublicPath(pathname)),

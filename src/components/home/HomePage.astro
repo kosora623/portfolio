@@ -22,10 +22,14 @@ const { worksCount } = Astro.props;
 </section>
 
 <div class="rows">
-  <section aria-labelledby="about">
-    <h2 id="about" class="label">about</h2>
-    <p>{about.intro}</p>
-  </section>
+  {
+    about.intro && (
+      <section aria-labelledby="about">
+        <h2 id="about" class="label">about</h2>
+        <p>{about.intro}</p>
+      </section>
+    )
+  }
 
   <section aria-labelledby="stack">
     <h2 id="stack" class="label">stack</h2>

@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
+import sitemap from '@astrojs/sitemap';
 import { unified } from '@astrojs/markdown-remark';
 import rehypeContent from './src/lib/markdown/rehype-content.ts';
 
@@ -14,6 +15,8 @@ export default defineConfig({
   // /works/oneday-op → works/oneday-op.html（Next.js の static export と同じ URL 形式）
   build: { format: 'file' },
   trailingSlash: 'never',
+  // sitemap-index.xml / sitemap-0.xml を出力する（site が未設定のときは何もしない）
+  integrations: [sitemap()],
   vite: {
     plugins: [tailwindcss()],
   },

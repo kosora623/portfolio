@@ -11,10 +11,12 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "lint": "eslint"
+    "lint": "eslint",
+    "thumbs": "node scripts/make-thumbs.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.9",
+    "@astrojs/sitemap": "^3.7.4",
     "astro": "^7.4.12"
   },
   "devDependencies": {

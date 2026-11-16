@@ -11,6 +11,7 @@ export const site = {
 
 /** ページごとの description（OGP にも使う） */
 export const pageDescriptions = {
+  home: 'kosora のポートフォリオサイトです。映像・音楽・プログラミングの制作物とブログを載せています。',
   works: 'kosora の制作物（映像・音楽・プログラミング）の一覧です。',
   blog: 'kosora のブログです。',
 } as const;
