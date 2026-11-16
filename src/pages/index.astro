@@ -1,8 +1,11 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import HomePage from '@/components/home/HomePage.astro';
+import { getAllWorks } from '@/lib/works';
+
+const worksCount = (await getAllWorks()).length;
 ---
 
 <BaseLayout>
-  <HomePage />
+  <HomePage worksCount={worksCount} />
 </BaseLayout>
