@@ -1,24 +1,31 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { site } from '@/data/site';
 ---
 
-<BaseLayout title="404: This page could not be found." robots="noindex">
-  <div
-    style='font-family:system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";height:100vh;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center'
-  >
-    <div>
-      <style is:inline>
-        body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}
-      </style>
-      <h1
-        class="next-error-h1"
-        style="display:inline-block;margin:0 20px 0 0;padding:0 23px 0 0;font-size:24px;font-weight:500;vertical-align:top;line-height:49px"
-      >
-        404
-      </h1>
-      <div style="display:inline-block">
-        <h2 style="font-size:14px;font-weight:400;line-height:49px;margin:0">This page could not be found.</h2>
-      </div>
-    </div>
-  </div>
+<BaseLayout title={`ページが見つかりません | ${site.shortName}`} robots="noindex">
+  <section class="not-found">
+    <p class="label">404</p>
+    <h1>ページが見つかりません</h1>
+    <p>URL が変わったか、ページが削除された可能性があります。</p>
+    <p class="links"><a class="button" href="/">ホームへ</a><a class="button" href="/works">Works へ</a></p>
+  </section>
 </BaseLayout>
+
+<style>
+  .not-found {
+    padding-block: 64px 32px;
+  }
+  h1 {
+    font-size: clamp(1.7rem, 4.8vw, 2.6rem);
+    font-weight: 600;
+    line-height: 1.45;
+    margin-bottom: 8px;
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+  }
+</style>

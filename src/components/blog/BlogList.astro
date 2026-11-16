@@ -1,5 +1,5 @@
 ---
-/** ブログ記事の一覧（最小限のデザイン。作品一覧と同じクラスを使う） */
+/** ブログ記事の一覧（作品一覧と同じ組み方） */
 import type { BlogPost } from '@/lib/blog-model';
 import PostMeta from './PostMeta.astro';
 
@@ -10,29 +10,67 @@ interface Props {
 const { posts } = Astro.props;
 ---
 
-<div class="min-h-screen pt-24 pb-16">
-  <div class="max-w-3xl mx-auto">
-    <h1 class="text-4xl md:text-5xl font-bold text-light-slate mb-12">Blog</h1>
-
-    {
-      posts.length === 0 ? (
-        <p class="text-slate">まだ記事はありません。</p>
-      ) : (
-        <ul class="border-t border-slate/20">
-          {posts.map(post => (
-            <li>
-              <a
-                href={`/blog/${post.slug}`}
-                class="group block py-6 px-6 border-b border-slate/20 transition-colors hover:bg-slate/5"
-              >
-                <h2 class="text-2xl font-semibold text-light-slate group-hover:text-teal transition-colors mb-1">{post.title}</h2>
-                <p class="text-slate text-sm mb-2">{post.description}</p>
-                <PostMeta post={post} />
-              </a>
-            </li>
-          ))}
-        </ul>
-      )
-    }
-  </div>
+<div class="head">
+  <h1>Blog</h1>
+  <span class="mono count">{posts.length} 件</span>
 </div>
+
+{
+  posts.length === 0 ? (
+    <p class="empty">まだ記事はありません。</p>
+  ) : (
+    <ul>
+      {posts.map(post => (
+        <li>
+          <a href={`/blog/${post.slug}`} class="item">
+            <b>{post.title}</b>
+            {post.description && <small>{post.description}</small>}
+            <PostMeta post={post} />
+          </a>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+<style>
+  .head {
+    display: flex;
+    gap: 8px 28px;
+    align-items: baseline;
+    padding-block: 32px 20px;
+    border-bottom: 1px solid var(--color-ink);
+  }
+  h1 {
+    font-size: clamp(2rem, 5.6vw, 3rem);
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .count,
+  .empty {
+    color: var(--color-muted);
+  }
+  .empty {
+    padding-top: 24px;
+  }
+  .item {
+    display: block;
+    border-bottom: 1px solid var(--color-line);
+    padding-block: 18px;
+    line-height: 1.6;
+  }
+  .item b {
+    display: block;
+    font-weight: 500;
+    font-size: 1.1rem;
+  }
+  .item small {
+    display: block;
+    color: var(--color-muted);
+    font-size: 14px;
+    margin-block: 4px 6px;
+  }
+  .item:hover b {
+    color: var(--color-link);
+  }
+</style>
