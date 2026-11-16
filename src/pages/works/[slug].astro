@@ -1,29 +1,28 @@
 ---
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Particles from '@/components/Particles.astro';
 import WorkDetail from '@/components/works/WorkDetail.astro';
 import { getAllWorkEntries } from '@/lib/works';
 import { renderEntryBody } from '@/lib/markdown/render';
+import { adjacentWorks } from '@/lib/work-model';
 
 export const getStaticPaths = (async () => {
   const entries = await getAllWorkEntries();
-  return entries.map(({ entry, work }) => ({ params: { slug: work.slug }, props: { entry, work } }));
+  const works = entries.map(e => e.work);
+  return entries.map(({ entry, work }) => ({
+    params: { slug: work.slug },
+    props: { entry, work, ...adjacentWorks(works, work.slug) },
+  }));
 }) satisfies GetStaticPaths;
 
-const { entry, work } = Astro.props;
+const { entry, work, newer, older } = Astro.props;
 const html = await renderEntryBody(entry);
 ---
 
 <BaseLayout
   meta={{ title: work.title, description: work.summary || undefined, image: work.thumbnailUrl, type: 'article' }}
 >
-  <div class="relative min-h-screen">
-    <Particles />
-    <div class="relative z-10">
-      <WorkDetail work={work}>
-        <Fragment set:html={html} />
-      </WorkDetail>
-    </div>
-  </div>
+  <WorkDetail work={work} newer={newer} older={older}>
+    <Fragment set:html={html} />
+  </WorkDetail>
 </BaseLayout>

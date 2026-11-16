@@ -1,40 +1,74 @@
 ---
 import { navItems, site } from '@/data/site';
+
+/** 現在のページ（/works/foo なら Works） */
+const path = Astro.url.pathname.replace(/\.html$/, '').replace(/\/index$/, '/');
+const isCurrent = (href: string) => (href === '/' ? path === '/' : path === href || path.startsWith(`${href}/`));
 ---
 
-<header class="fixed top-0 left-0 w-full z-50 pointer-events-auto transition-all duration-300 bg-transparent" role="banner">
-  <nav class="container mx-auto p-4 flex justify-between items-center">
-    <a href="/" class="text-2xl font-bold text-teal tracking-wider z-50 pointer-events-auto">{site.shortName}</a>
-    <div class="space-x-6 flex items-center">
+<a href="#main" class="skip sr-only-focusable">本文へ移動</a>
+<header class="page site-header">
+  <a href="/" class="logo" aria-label={`${site.shortName}（ホーム）`}><span class="logo-mark" aria-hidden="true"></span>{site.shortName}</a>
+  <nav aria-label="メイン">
+    <ul>
       {
         navItems.map(item => (
-          <a
-            href={item.href}
-            class="text-light-slate transition-all duration-200 transform hover:text-teal hover:scale-105 hover:translate-y-[-2px] z-50 pointer-events-auto"
-          >
-            <span class="relative after:absolute after:inset-x-0 after:-bottom-1 after:h-[2px] after:bg-transparent hover:after:bg-teal after:transition-all after:duration-200">{item.name}</span>
-          </a>
+          <li>
+            <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+              {item.name}
+            </a>
+          </li>
         ))
       }
-    </div>
+    </ul>
   </nav>
 </header>
 
-<script>
-  // 10px 以上スクロールしたら背景を付ける（React 版と同じく、最初のスクロールで判定する）
-  const header = document.querySelector<HTMLElement>('header[role="banner"]');
-  const scrolledClasses = ['bg-navy/80', 'backdrop-blur-sm', 'shadow-lg'];
-  let scrolled = false;
-  window.addEventListener('scroll', () => {
-    const next = window.scrollY > 10;
-    if (!header || next === scrolled) return;
-    scrolled = next;
-    if (next) {
-      header.classList.remove('bg-transparent');
-      header.classList.add(...scrolledClasses);
-    } else {
-      header.classList.remove(...scrolledClasses);
-      header.classList.add('bg-transparent');
-    }
-  });
-</script>
+<style>
+  .skip {
+    position: absolute;
+    left: 16px;
+    top: 8px;
+    z-index: 10;
+    background: var(--color-ink);
+    color: var(--color-paper);
+    padding: 4px 12px;
+  }
+  .site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    padding-block: 24px;
+  }
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 17px;
+    line-height: 1.6;
+  }
+  .logo-mark {
+    width: 14px;
+    height: 14px;
+    background: linear-gradient(var(--sky-top), var(--sky-bottom));
+  }
+  ul {
+    display: flex;
+    gap: 22px;
+  }
+  nav a {
+    font-family: var(--font-mono);
+    font-size: 13.5px;
+    color: var(--color-muted);
+  }
+  nav a:hover,
+  nav a[aria-current='page'] {
+    color: var(--color-ink);
+  }
+  nav a[aria-current='page'] {
+    border-bottom: 1px solid currentColor;
+  }
+</style>

@@ -1,39 +1,53 @@
 /**
  * トップページに表示するプロフィール情報。
  * 文言を変えるときはここだけ編集すればよい（UI 側は表示のみ担当）。
+ * icon は src/components/icons/LineIcon.astro のキー。
  */
+import type { LineIconKey } from '@/components/icons/lineIcons';
 
 export const hero = {
-  greeting: 'ようこそ！',
-  title: '小空 - KSR です',
-  subtitle: 'いろんなものを作ります',
-  roles: 'Video Production / Programming / Music Composition',
+  name: 'kosora',
+  tagline: 'いろんなものを作ります。映像、音楽、プログラミング。',
 } as const;
 
 export const about = {
-  intro: 'こんにちは、小空 - KSR です。',
-  skillsLabel: '使用している主な技術・ツール:',
-  profileImage: { src: '/profile.jpg', alt: 'KSR Profile Picture', width: 300, height: 300 },
+  intro: 'こんにちは、kosora です。映像と音楽を作り、プログラムも書きます。',
 } as const;
 
-export const skills = ['Aviutl', 'Adobe After Effects', 'Blender','Cakewalk', 'Cubase','GarageBand','HTML/CSS', 'JavaScript', 'TypeScript', 'React', 'Next.js', 'Three.js', 'Python', 'Processing', 'C++', 'OpenCV', 'C#', 'Unity', 'Flutter', 'Dart', 'Git/GitHub'];
+export interface StackGroup {
+  label: string;
+  icon: LineIconKey;
+  items: string[];
+}
+
+/** 使っている技術・ツール（分野ごと） */
+export const stack: StackGroup[] = [
+  { label: '映像', icon: 'video', items: ['Aviutl', 'Adobe After Effects', 'Blender'] },
+  { label: '音楽', icon: 'music', items: ['Cakewalk', 'Cubase', 'GarageBand'] },
+  {
+    label: 'コード',
+    icon: 'code',
+    items: ['HTML/CSS', 'JavaScript', 'TypeScript', 'React', 'Next.js', 'Three.js', 'Python', 'Processing', 'C++', 'OpenCV', 'C#', 'Unity', 'Flutter', 'Dart', 'Git/GitHub'],
+  },
+];
 
 export interface ProfileItem {
   title: string;
-  description: string;
+  icon: LineIconKey;
+  description?: string;
 }
 
 export const interests: ProfileItem[] = [
-  { title: 'モーショングラフィックス - Motion Graphics', description: '' },
-  { title: 'ジェネラティブアート - Generative Art',  description: '' },
-  { title: 'インタラクティブアート - Interactive Art', description:'' },
-  { title: 'Webフロントエンド - WebFrontend', description: '' },
-  { title: '画像処理 - Image Processing', description: '' },
-  { title: 'サウンドデザイン - Sound Design', description: '' },
+  { title: 'モーショングラフィックス', icon: 'motion' },
+  { title: 'ジェネラティブアート', icon: 'generative' },
+  { title: 'インタラクティブアート', icon: 'cursor' },
+  { title: 'Web フロントエンド', icon: 'web' },
+  { title: '画像処理', icon: 'image' },
+  { title: 'サウンドデザイン', icon: 'wave' },
 ];
 
 export const hobbies: ProfileItem[] = [
-  { title: '散歩 - Walk', description: 'いろんな場所に出没します。どこかで会えるかも...？' },
-  { title: '音楽ゲーム - Music Game', description: '大体の機種には触っています。指押しが大好物。' },
-  { title: '電子工作 - Electronics', description: '最近始めました。Arduino Uno R3で遊んでいます。' },
+  { title: '散歩', icon: 'pin', description: 'いろんな場所に出没します。どこかで会えるかも...？' },
+  { title: '音楽ゲーム', icon: 'gamepad', description: '大体の機種には触っています。指押しが大好物。' },
+  { title: '電子工作', icon: 'chip', description: '最近始めました。Arduino Uno R3で遊んでいます。' },
 ];

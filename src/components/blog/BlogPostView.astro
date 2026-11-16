@@ -1,5 +1,5 @@
 ---
-/** ブログ記事ページ（最小限のデザイン。作品詳細と同じクラスを使う） */
+/** ブログ記事ページ（作品詳細と同じ組み方） */
 import type { BlogPost } from '@/lib/blog-model';
 import PostMeta from './PostMeta.astro';
 
@@ -10,15 +10,30 @@ interface Props {
 const { post } = Astro.props;
 ---
 
-<article class="min-h-screen pt-24 pb-16">
-  <div class="max-w-3xl mx-auto">
-    <a href="/blog" class="text-teal hover:underline mb-8 inline-block">&larr; Back to Blog</a>
-    <div class="mb-2">
-      <PostMeta post={post} size="sm" />
-    </div>
-    <h1 class="text-4xl md:text-5xl font-bold text-light-slate mb-8">{post.title}</h1>
-    <div class="post-body prose max-w-none text-slate text-lg leading-relaxed">
-      <slot />
-    </div>
+<article>
+  <p class="crumb mono"><a href="/blog" class="link">blog</a></p>
+  <h1>{post.title}</h1>
+  <PostMeta post={post} />
+  <div class="prose body">
+    <slot />
   </div>
 </article>
+
+<style>
+  .crumb {
+    padding-top: 16px;
+    color: var(--color-muted);
+    font-size: 14px;
+  }
+  h1 {
+    font-size: clamp(1.7rem, 4.8vw, 2.6rem);
+    font-weight: 600;
+    line-height: 1.45;
+    padding-block: 10px 6px;
+  }
+  .body {
+    border-top: 1px solid var(--color-line);
+    margin-top: 24px;
+    padding-top: 36px;
+  }
+</style>

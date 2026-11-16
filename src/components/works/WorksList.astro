@@ -1,56 +1,217 @@
 ---
+/**
+ * 作品一覧。年ごとにまとめ、1 作品 1 行で並べる（作品が増えても形が変わらない）。
+ * 分野の絞り込みは JS が動くときだけ表示する（JS がなければ全件が見える）。
+ */
 import type { WorkFromMd } from '@/lib/work-model';
 import { tagInfo } from '@/data/tags';
+import LineIcon from '@/components/icons/LineIcon.astro';
+import { formatYearMonth, groupByYear } from '@/lib/work-model';
 
 interface Props {
   works: WorkFromMd[];
 }
 
 const { works } = Astro.props;
-
-// framer-motion 版と同じタイミング: 見出し → 一覧（0.1s 後）→ 各行を 0.1s ずつずらす
-const item = (delay: number) => `--motion-x:-20px;--motion-duration:.5s;--motion-delay:${delay}s`;
+const years = groupByYear(works);
+const filters = [
+  { key: 'all', name: 'すべて', count: works.length },
+  ...Object.entries(tagInfo).map(([key, t]) => ({ key, name: t.name, count: works.filter(w => w.tags.includes(key)).length })),
+];
 ---
 
-<div class="min-h-screen pt-24 pb-16">
-  <div class="max-w-3xl mx-auto" data-motion>
-    <h1 class="text-4xl md:text-5xl font-bold text-light-slate mb-12" data-motion style={item(0)}>My Works</h1>
-
-    <div class="border-t border-slate/20" data-motion style="--motion-delay:.1s">
-      {
-        works.map((work, i) => (
-          <div data-motion style={item(0.1 + i * 0.1)}>
-            <a
-              href={`/works/${work.slug}`}
-              class="group relative block py-6 px-6 border-b border-slate/20 transition-colors hover:bg-slate/5 overflow-hidden"
-            >
-              {work.thumbnailUrl && (
-                <img
-                  alt={`${work.title} thumbnail`}
-                  loading="lazy"
-                  decoding="async"
-                  class="absolute inset-0 z-0 opacity-0 group-hover:opacity-50 transition-opacity duration-300"
-                  src={work.thumbnailUrl}
-                  style="position: absolute; height: 100%; width: 100%; inset: 0px; object-fit: cover; color: transparent;"
-                />
-              )}
-
-              <div class="relative z-10 flex items-start justify-between">
-                <div>
-                  <h2 class="text-2xl font-semibold text-light-slate group-hover:text-teal transition-colors mb-1">{work.title}</h2>
-                  <p class="text-slate text-sm mb-2">{work.summary}</p>
-                  <div class="flex space-x-3">
-                    {work.tags.map(tag => (
-                      <span class={`font-mono text-xs ${tagInfo[tag]?.color ?? ''}`}>{tag}</span>
-                    ))}
-                  </div>
-                </div>
-                <span class="text-teal font-mono text-lg ml-8">{work.year}</span>
-              </div>
-            </a>
-          </div>
-        ))
-      }
-    </div>
-  </div>
+<div class="head">
+  <h1>Works</h1>
+  <span class="mono count" data-works-count>{works.length} 点</span>
+  <fieldset class="filters" data-works-filter hidden>
+    <legend class="sr-only-focusable">分野で絞り込む</legend>
+    {
+      filters.map(f => (
+        <label>
+          <input type="radio" name="works-filter" value={f.key} checked={f.key === 'all'} />
+          <span>
+            {f.name} <span class="mono">{f.count}</span>
+          </span>
+        </label>
+      ))
+    }
+  </fieldset>
 </div>
+
+{
+  years.map(({ year, works: list }) => (
+    <section class="year" aria-labelledby={`y${year}`} data-year>
+      <h2 id={`y${year}`} class="mono">
+        {year}
+        <small data-year-count>{list.length} 点</small>
+      </h2>
+      <ul>
+        {list.map(work => (
+          <li data-tags={work.tags.join(' ')}>
+            <a href={`/works/${work.slug}`} class="item">
+              <span class="thumb">
+                {work.thumbnailUrl && <img src={work.thumbnailUrl} alt="" loading="lazy" decoding="async" width="128" height="72" />}
+              </span>
+              <span class="text">
+                <b>{work.title}</b>
+                {work.summary && <small>{work.summary}</small>}
+              </span>
+              <span class="meta mono">
+                <span class="tags" aria-label={work.tags.map(t => tagInfo[t]?.name ?? t).join('・')}>
+                  {work.tags.map(t => tagInfo[t] && <LineIcon name={tagInfo[t].icon} />)}
+                </span>
+                {formatYearMonth(work)}
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))
+}
+
+<script>
+  const filter = document.querySelector<HTMLFieldSetElement>('[data-works-filter]');
+  if (filter) {
+    filter.hidden = false;
+    const total = document.querySelector('[data-works-count]');
+    filter.addEventListener('change', e => {
+      const key = (e.target as HTMLInputElement).value;
+      let shown = 0;
+      document.querySelectorAll<HTMLElement>('[data-year]').forEach(section => {
+        let n = 0;
+        section.querySelectorAll<HTMLElement>('li[data-tags]').forEach(li => {
+          const hit = key === 'all' || li.dataset.tags!.split(' ').includes(key);
+          li.hidden = !hit;
+          if (hit) n++;
+        });
+        section.hidden = n === 0;
+        const c = section.querySelector('[data-year-count]');
+        if (c) c.textContent = `${n} 点`;
+        shown += n;
+      });
+      if (total) total.textContent = `${shown} 点`;
+    });
+  }
+</script>
+
+<style>
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 28px;
+    align-items: baseline;
+    padding-block: 32px 20px;
+  }
+  h1 {
+    font-size: clamp(2rem, 5.6vw, 3rem);
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .count {
+    color: var(--color-muted);
+  }
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 22px;
+    margin-left: auto;
+    border: 0;
+    padding: 0;
+  }
+  .filters[hidden] {
+    display: none;
+  }
+  .filters label {
+    cursor: pointer;
+    color: var(--color-muted);
+    font-size: 15px;
+  }
+  .filters input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .filters input:checked + span {
+    color: var(--color-ink);
+    border-bottom: 1px solid currentColor;
+  }
+  .filters input:focus-visible + span {
+    outline: 2px solid var(--color-link);
+    outline-offset: 3px;
+  }
+
+  .year h2 {
+    display: flex;
+    gap: 12px;
+    align-items: baseline;
+    font-size: 1rem;
+    font-weight: 600;
+    border-bottom: 1px solid var(--color-ink);
+    padding-top: 28px;
+  }
+  .year h2 small {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--color-muted);
+  }
+  .item {
+    display: grid;
+    grid-template-columns: 128px minmax(0, 1fr) auto;
+    gap: 20px;
+    align-items: center;
+    border-bottom: 1px solid var(--color-line);
+    padding-block: 14px;
+    line-height: 1.6;
+  }
+  .thumb {
+    display: block;
+    aspect-ratio: 16 / 9;
+    background: var(--color-thumb);
+    overflow: hidden;
+  }
+  .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .text b {
+    display: block;
+    font-weight: 500;
+    font-size: 1.02rem;
+  }
+  .text small {
+    display: block;
+    color: var(--color-muted);
+    font-size: 13.5px;
+  }
+  .item:hover b {
+    color: var(--color-link);
+  }
+  .meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--color-muted);
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  .tags {
+    display: flex;
+    gap: 6px;
+  }
+
+  @media (max-width: 760px) {
+    .item {
+      grid-template-columns: 96px minmax(0, 1fr);
+      gap: 4px 14px;
+      align-items: start;
+    }
+    .thumb {
+      grid-row: span 2;
+    }
+    .meta {
+      grid-column: 2;
+    }
+  }
+</style>

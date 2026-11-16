@@ -50,3 +50,26 @@ export function compareWorks(a: WorkFromMd, b: WorkFromMd): number {
 export function sortWorks(works: WorkFromMd[]): WorkFromMd[] {
   return [...works].sort(compareWorks);
 }
+
+/** 一覧の日付表示: 2025.06（月がなければ 2025） */
+export function formatYearMonth(work: Pick<WorkFromMd, 'year' | 'month'>): string {
+  return work.month ? `${work.year}.${String(work.month).padStart(2, '0')}` : String(work.year);
+}
+
+/** 並び順を保ったまま年ごとにまとめる（sortWorks 済みの配列を渡す） */
+export function groupByYear(works: WorkFromMd[]): { year: number; works: WorkFromMd[] }[] {
+  const groups: { year: number; works: WorkFromMd[] }[] = [];
+  for (const w of works) {
+    const last = groups[groups.length - 1];
+    if (last && last.year === w.year) last.works.push(w);
+    else groups.push({ year: w.year, works: [w] });
+  }
+  return groups;
+}
+
+/** 前後の作品（newer は一覧で 1 つ上 = 新しいほう） */
+export function adjacentWorks(works: WorkFromMd[], slug: string): { newer?: WorkFromMd; older?: WorkFromMd } {
+  const i = works.findIndex(w => w.slug === slug);
+  if (i < 0) return {};
+  return { newer: works[i - 1], older: works[i + 1] };
+}

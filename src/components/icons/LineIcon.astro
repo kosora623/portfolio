@@ -1,0 +1,24 @@
+---
+/** 線のアイコン。装飾なので読み上げない（意味は隣の文字で伝える） */
+import { lineIcons, type LineIconKey } from './lineIcons';
+
+interface Props {
+  name: LineIconKey;
+  class?: string;
+}
+
+const { name, class: className } = Astro.props;
+---
+
+<svg
+  class:list={['line-icon', className]}
+  viewBox="0 0 24 24"
+  aria-hidden="true"
+  focusable="false"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.6"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  set:html={lineIcons[name]}
+/>

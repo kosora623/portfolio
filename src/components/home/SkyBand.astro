@@ -1,0 +1,33 @@
+---
+/**
+ * トップの空の帯。色は <html data-sky> （BaseLayout のインラインスクリプトが時刻から決める）で変わる。
+ * 将来は時間帯ごとの空の写真を出す予定（UI_PROPOSAL.md §6.5）。今は写真の代わりのグラデーション。
+ */
+---
+
+<figure class="sky-band">
+  <div class="sky" role="img" aria-label="いまの時間帯の空の色"></div>
+  <figcaption class="mono">いまの空<span data-sky-time></span></figcaption>
+</figure>
+
+<script is:inline>
+  (function () {
+    const el = document.querySelector('[data-sky-time]');
+    if (!el) return;
+    const d = new Date();
+    const p = function (n) { return String(n).padStart(2, '0'); };
+    el.textContent = '　' + p(d.getHours()) + ':' + p(d.getMinutes());
+  })();
+</script>
+
+<style>
+  .sky {
+    height: clamp(160px, 28vw, 300px);
+    background: linear-gradient(var(--sky-top), var(--sky-bottom));
+  }
+  figcaption {
+    padding-top: 6px;
+    font-size: 12.5px;
+    color: var(--color-muted);
+  }
+</style>

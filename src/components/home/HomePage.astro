@@ -1,108 +1,222 @@
 ---
-import Particles from '@/components/Particles.astro';
-import Icon from '@/components/icons/Icon.astro';
+import SkyBand from './SkyBand.astro';
+import LineIcon from '@/components/icons/LineIcon.astro';
+import SocialIcon from '@/components/icons/SocialIcon.astro';
 import { socialLinks } from '@/data/site';
-import { hero, about, skills, interests, hobbies } from '@/data/profile';
+import { hero, about, stack, interests, hobbies } from '@/data/profile';
 
-// framer-motion 版と同じタイミング
-const heroItem = (i: number) => `--motion-y:20px;--motion-duration:.8s;--motion-delay:${i * 0.2}s`;
-const section = '--motion-y:30px;--motion-duration:.8s';
+interface Props {
+  /** 作品の件数（「つくったものを見る」に表示） */
+  worksCount: number;
+}
+
+const { worksCount } = Astro.props;
 ---
 
-<div class="relative h-screen flex flex-col justify-center">
-  <Particles />
-  <div class="relative z-10" data-motion>
-    <p class="text-teal mb-4 text-lg" data-motion style={heroItem(0)}>{hero.greeting}</p>
-    <h1 class="text-5xl md:text-7xl font-extrabold text-light-slate mb-2" data-motion style={heroItem(1)}>{hero.title}</h1>
-    <h2 class="text-4xl md:text-6xl font-bold text-slate mb-8" data-motion style={heroItem(2)}>{hero.subtitle}</h2>
-    <p class="max-w-xl text-lg mb-10" data-motion style={heroItem(3)}>{hero.roles}</p>
-    <div data-motion style={heroItem(4)}>
-      <a
-        href="/works"
-        class="px-8 py-3 border border-teal text-teal font-bold rounded transition-all duration-200 transform hover:bg-teal/10 inline-block"
-        data-hover-lift>Works</a
-      >
-    </div>
-  </div>
-</div>
-<section class="py-24" id="about" data-motion data-motion-inview style={section}>
-  <h2 class="text-3xl font-bold text-light-slate mb-8 flex items-center"><span class="text-teal font-mono mr-3">01.</span>About Me<span class="flex-grow ml-4 h-px bg-slate/30"></span></h2>
-  <div class="grid grid-cols-1 md:grid-cols-5 gap-12">
-    <div class="md:col-span-3 text-slate text-lg space-y-4">
-      <p>{about.intro}</p>
-      <p class="font-mono text-light-slate mt-6">{about.skillsLabel}</p>
-      <div class="flex flex-wrap gap-3 pt-4">
-        {skills.map(skill => <div class="px-4 py-2 bg-slate/10 border border-slate/20 rounded-full text-sm font-mono text-teal">{skill}</div>)}
-      </div>
-    </div>
-    <div class="md:col-span-2 relative w-full max-w-xs mx-auto">
-      <div class="relative group">
-        <div class="absolute -inset-0.5 bg-gradient-to-r from-teal to-blue-500 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
-        <div class="relative bg-navy rounded-lg p-1">
-          <img
-            alt={about.profileImage.alt}
-            loading="lazy"
-            width={about.profileImage.width}
-            height={about.profileImage.height}
-            decoding="async"
-            class="rounded-md w-full"
-            style="color: transparent;"
-            src={about.profileImage.src}
-          />
-        </div>
-      </div>
-    </div>
-  </div>
+<SkyBand />
+
+<section class="hero">
+  <h1 class="mono">{hero.name}</h1>
+  <p>{hero.tagline}</p>
+  <a class="button" href="/works">つくったものを見る（{worksCount}）</a>
 </section>
 
-<section class="py-24" id="interests" data-motion data-motion-inview style={section}>
-  <h2 class="text-3xl font-bold text-light-slate mb-12 flex items-center"><span class="text-teal font-mono mr-3">02.</span>Interests<span class="flex-grow ml-4 h-px bg-slate/30"></span></h2>
-  <div class="max-w-2xl space-y-8">
-    {
-      interests.map(interest => (
-        <div>
-          <h3 class="text-xl font-bold text-light-slate mb-1 flex items-center"><span class="text-teal mr-3">・</span>{interest.title}</h3>
-          <p class="text-slate pl-7">{interest.description}</p>
-        </div>
-      ))
-    }
-  </div>
-</section>
+<div class="rows">
+  <section aria-labelledby="about">
+    <h2 id="about" class="label">about</h2>
+    <p>{about.intro}</p>
+  </section>
 
-<section class="py-24" id="hobbies" data-motion data-motion-inview style={section}>
-  <h2 class="text-3xl font-bold text-light-slate mb-12 flex items-center"><span class="text-teal font-mono mr-3">03.</span>Hobbies<span class="flex-grow ml-4 h-px bg-slate/30"></span></h2>
-  <div class="max-w-2xl space-y-8">
-    {
-      hobbies.map(hobby => (
-        <div>
-          <h3 class="text-xl font-bold text-light-slate mb-1 flex items-center"><span class="text-teal mr-3">・</span>{hobby.title}</h3>
-          <p class="text-slate pl-7">{hobby.description}</p>
-        </div>
-      ))
-    }
-  </div>
-</section>
-
-<section class="py-24 text-center" id="socials" data-motion data-motion-inview style={section}>
-  <h2 class="text-3xl font-bold text-light-slate mb-12"><span class="text-teal font-mono text-2xl block mb-3">04.</span>各種SNS</h2>
-  <div class="max-w-sm mx-auto" data-motion>
-    {
-      socialLinks.map((link, i) => (
-        <a
-          href={link.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="group flex items-center p-4 border-b border-slate/20 transition-all duration-200 hover:bg-slate/5 hover:scale-105"
-          data-motion
-          style={heroItem(i)}
-        >
-          <Icon name={link.icon} class="text-3xl text-slate group-hover:text-teal transition-all duration-200" />
-          <div class="ml-5 text-left">
-            <p class="text-sm text-slate">{link.name}</p>
-            <p class="text-lg font-mono text-light-slate">{link.handle}</p>
+  <section aria-labelledby="stack">
+    <h2 id="stack" class="label">stack</h2>
+    <dl class="stack">
+      {
+        stack.map(group => (
+          <div>
+            <dt>
+              <LineIcon name={group.icon} />
+              {group.label}
+            </dt>
+            <dd>{group.items.join('、')}</dd>
           </div>
-        </a>
-      ))
+        ))
+      }
+    </dl>
+  </section>
+
+  <section aria-labelledby="interests">
+    <h2 id="interests" class="label">interests</h2>
+    <ul class="interests">
+      {
+        interests.map(item => (
+          <li>
+            <LineIcon name={item.icon} />
+            {item.title}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section aria-labelledby="hobbies">
+    <h2 id="hobbies" class="label">hobbies</h2>
+    <ul class="hobbies">
+      {
+        hobbies.map(item => (
+          <li>
+            <b>
+              <LineIcon name={item.icon} />
+              {item.title}
+            </b>
+            {item.description && <span>{item.description}</span>}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section aria-labelledby="contact">
+    <h2 id="contact" class="label">contact</h2>
+    <ul class="contact">
+      {
+        socialLinks.map(link => {
+          const external = link.href.startsWith('http');
+          return (
+            <li>
+              <a href={link.href} {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+                <b>
+                  <SocialIcon name={link.icon} />
+                  {link.name}
+                </b>
+                <span class="handle">{link.handle}</span>
+                {external && (
+                  <span class="ext">
+                    <LineIcon name="external" />
+                    <span class="sr-only-focusable">（新しいタブで開きます）</span>
+                  </span>
+                )}
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </section>
+</div>
+
+<style>
+  .hero {
+    padding-block: 44px 56px;
+  }
+  .hero h1 {
+    font-size: clamp(2.6rem, 8vw, 5rem);
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.04em;
+  }
+  .hero p {
+    margin-top: 14px;
+    font-size: 1.05rem;
+  }
+  .hero .button {
+    margin-top: 32px;
+  }
+
+  .rows > section {
+    display: grid;
+    grid-template-columns: 10rem minmax(0, 1fr);
+    gap: 8px 32px;
+    border-top: 1px solid var(--color-line);
+    padding-block: 30px;
+    font-size: 1.06rem;
+  }
+  .rows > section:last-child {
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .stack div {
+    display: grid;
+    grid-template-columns: 6.5em minmax(0, 1fr);
+    gap: 16px;
+  }
+  .stack dt,
+  .interests li,
+  .hobbies b,
+  .contact b {
+    display: flex;
+    align-items: center;
+    gap: 0.55em;
+  }
+  .stack dt {
+    color: var(--color-muted);
+    align-items: flex-start;
+    padding-top: 0.45em;
+    line-height: 1.2;
+  }
+  .stack dd {
+    min-width: 0;
+  }
+
+  .interests {
+    columns: 2;
+    column-gap: 36px;
+  }
+  .interests li {
+    break-inside: avoid;
+    border-bottom: 1px solid var(--color-line);
+    padding-block: 5px;
+  }
+
+  .hobbies li + li {
+    margin-top: 10px;
+  }
+  .hobbies b {
+    font-weight: 500;
+  }
+  .hobbies span {
+    display: block;
+    padding-left: 1.7em;
+    color: var(--color-muted);
+    font-size: 14.5px;
+    line-height: 1.7;
+  }
+
+  .contact a {
+    display: grid;
+    grid-template-columns: 8.5em minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+    border-bottom: 1px solid var(--color-line);
+    padding-block: 9px;
+    line-height: 1.7;
+  }
+  .contact li:first-child a {
+    padding-top: 0;
+  }
+  .contact b {
+    font-weight: 500;
+  }
+  .handle {
+    color: var(--color-muted);
+    overflow-wrap: anywhere;
+  }
+  .contact a:hover,
+  .contact a:hover .handle,
+  .contact a:hover :global(svg) {
+    color: var(--color-link);
+  }
+
+  @media (max-width: 760px) {
+    .rows > section {
+      grid-template-columns: minmax(0, 1fr);
     }
-  </div>
-</section>
+  }
+  @media (max-width: 520px) {
+    .interests {
+      columns: 1;
+    }
+    .contact a {
+      grid-template-columns: 7.5em minmax(0, 1fr) auto;
+    }
+  }
+</style>

@@ -1,26 +1,42 @@
 ---
-import { footerSocialLinks } from '@/data/site';
-import Icon from '@/components/icons/Icon.astro';
+import { footerSocialLinks, site } from '@/data/site';
+import SocialIcon from '@/components/icons/SocialIcon.astro';
 ---
 
-<footer class="py-8 text-center text-slate">
-  <div class="container mx-auto px-6">
-    <div class="flex justify-center space-x-6 mb-4">
-      {
-        footerSocialLinks.map(link => (
-          <a
-            href={link.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`Link to ${link.href}`}
-            class="text-2xl transition-all duration-200 transform hover:scale-110 hover:-translate-y-1 hover:text-teal"
-          >
-            <Icon name={link.icon} />
+<footer class="page site-footer">
+  <p class="mono">© 2026 {site.shortName}</p>
+  <ul>
+    {
+      footerSocialLinks.map(link => (
+        <li>
+          <a href={link.href} target="_blank" rel="noopener noreferrer" aria-label={`${link.name}（新しいタブで開きます）`}>
+            <SocialIcon name={link.icon} />
           </a>
-        ))
-      }
-    </div>
-
-    <p class="text-sm font-mono">2025 Built by kosora</p>
-  </div>
+        </li>
+      ))
+    }
+  </ul>
 </footer>
+
+<style>
+  .site-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding-block: 64px 32px;
+    color: var(--color-muted);
+    font-size: 13px;
+  }
+  ul {
+    display: flex;
+    gap: 18px;
+  }
+  a {
+    display: inline-flex;
+    padding: 4px;
+  }
+  a:hover :global(svg) {
+    color: var(--color-ink);
+  }
+</style>

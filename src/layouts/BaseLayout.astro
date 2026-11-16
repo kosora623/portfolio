@@ -1,6 +1,5 @@
 ---
 import '@/styles/global.css';
-import '@/styles/motion.css';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import AsciiComment from '@/components/AsciiComment.astro';
@@ -8,6 +7,7 @@ import MaintenancePage from '@/components/MaintenancePage.astro';
 import Seo from '@/components/Seo.astro';
 import type { PageMeta } from '@/lib/seo';
 import { MAINTENANCE_MODE } from '@/lib/maintenance';
+import { site } from '@/data/site';
 
 interface Props {
   /** <title> をそのまま指定する（404 など、OGP が不要なページ用） */
@@ -29,7 +29,7 @@ const { title, robots, meta } = Astro.props;
       MAINTENANCE_MODE ? (
         <>
           {robots && <meta name="robots" content={robots} />}
-          <title>サイト改修中 | KSR</title>
+          <title>サイト改修中 | {site.shortName}</title>
           <meta name="robots" content="noindex, nofollow" />
         </>
       ) : (
@@ -40,26 +40,29 @@ const { title, robots, meta } = Astro.props;
       )
     }
     <link rel="icon" href="/favicon.ico" sizes="24x24" type="image/x-icon" />
-    <!-- 出現アニメーションを有効にする（JS が動かない環境では内容を隠さない） -->
-    <script is:inline>document.documentElement.classList.add('motion');</script>
+    <meta name="theme-color" content="#f5f7f9" />
+    <!-- 見ている人の時刻に合わせて空の色を変える（JS が動かない環境では昼の色） -->
+    <script is:inline>
+      (function () {
+        const h = new Date().getHours();
+        const sky = h >= 5 && h < 8 ? 'morning' : h >= 8 && h < 16 ? 'day' : h >= 16 && h < 19 ? 'evening' : 'night';
+        document.documentElement.dataset.sky = sky;
+      })();
+    </script>
     {!MAINTENANCE_MODE && <AsciiComment />}
   </head>
   {
     MAINTENANCE_MODE ? (
-      <body class="antialiased">
+      <body>
         <MaintenancePage />
       </body>
     ) : (
-      <body class="bg-navy text-slate antialiased">
+      <body>
         <Header />
-        <main class="container mx-auto px-6 md:px-12 lg:px-24">
+        <main id="main" class="page" tabindex="-1">
           <slot />
         </main>
         <Footer />
-        <script>
-          import { observeInView } from '@/scripts/motion';
-          observeInView();
-        </script>
       </body>
     )
   }

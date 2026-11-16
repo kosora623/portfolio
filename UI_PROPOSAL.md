@@ -236,7 +236,7 @@ Astro 移行（[MIGRATION_PLAN.md](./MIGRATION_PLAN.md) Phase 3）と同時に U
 | # | 項目 | 内容 | 状態 |
 |---|---|---|---|
 | U-1 | トップの配置 | 配置 1: 左に小見出し、右に内容を揃えた行（about / stack / interests / hobbies / contact） | 提案どおりで進める（変更の連絡があれば差し替え） |
-| U-2 | フォント | Geist（本文の欧文）、Geist Mono（名前・小見出し・日付・ナビ）、Zen Kaku Gothic New（本文の日本語）。外部の Web フォントサービスを使わず、`@fontsource` 系のパッケージで同梱する | **依存の追加なので、実装前に確認する** |
+| U-2 | フォント | Web フォントは使わず、OS に入っているフォントを使う（`system-ui` と `ui-monospace` を先頭にしたフォントの並び）。Mac は San Francisco / SF Mono とヒラギノ、Windows は Segoe UI / Consolas と游ゴシック、Android は Roboto / Noto Sans CJK になる | 決定（軽さを優先。D-39） |
 | U-3 | 空の写真 | 写真が届くまでは時間帯ごとのグラデーションを表示する。写真の仕分けは撮影時刻からの自動判定を第一案にする（EXIF を読むために依存が増える場合は、その時点で確認する。代わりにフォルダで手動で分ける方法もある） | 写真待ち |
 | U-4 | 名前 | サイト上の「KSR」「小空」をすべて kosora にする。`<title>`、OGP、改修中ページ、フッターを含む | 提案どおりで進める |
 | U-5 | テーマ | 最初は明るい配色だけ。夜の空のときも背景は明るいまま。ダーク版は必要になったら追加 | 提案どおりで進める |
@@ -259,8 +259,8 @@ Astro 移行（[MIGRATION_PLAN.md](./MIGRATION_PLAN.md) Phase 3）と同時に U
 
 | 種類 | トークン | 値 |
 |---|---|---|
-| フォント | `--font-sans` | `"Geist", "Zen Kaku Gothic New", system-ui, sans-serif` |
-| | `--font-mono` | `"Geist Mono", ui-monospace, monospace` |
+| フォント | `--font-sans` | `system-ui, -apple-system, "Segoe UI", "Hiragino Sans", "Yu Gothic UI", Meiryo, "Noto Sans JP", sans-serif`（全体は `global.css`） |
+| | `--font-mono` | `ui-monospace, "SF Mono", Menlo, Consolas, "Roboto Mono", monospace`（同上） |
 | 文字サイズ | 本文 | 16px、行間 2（日本語の本文）。一覧の行は 1.6 |
 | | 小見出し（`about` など） | 13px、`font-mono`、`muted` |
 | | 名前（トップ） | `clamp(2.6rem, 8vw, 5rem)`、`font-mono`、字間 -0.04em |

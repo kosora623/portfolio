@@ -3,15 +3,28 @@ import { formatDate, type BlogPost } from '@/lib/blog-model';
 
 interface Props {
   post: BlogPost;
-  size?: 'sm' | 'xs';
 }
 
-const { post, size = 'xs' } = Astro.props;
-const text = size === 'sm' ? 'text-sm' : 'text-xs';
+const { post } = Astro.props;
 ---
 
-<div class="flex flex-wrap items-center gap-x-3 gap-y-1">
-  <time datetime={formatDate(post.date)} class={`font-mono ${text} text-teal`}>{formatDate(post.date)}</time>
-  {post.tags.map(tag => <span class={`font-mono ${text}`}>#{tag}</span>)}
-  {post.draft && <span class={`font-mono ${text} text-yellow-400`}>下書き</span>}
-</div>
+<span class="post-meta mono">
+  <time datetime={formatDate(post.date)}>{formatDate(post.date).replaceAll('-', '.')}</time>
+  {post.tags.map(tag => <span>#{tag}</span>)}
+  {post.draft && <span class="draft">下書き</span>}
+</span>
+
+<style>
+  .post-meta {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 2px 12px;
+    color: var(--color-muted);
+    font-size: 13.5px;
+  }
+  .draft {
+    color: var(--color-ink);
+    border: 1px solid currentColor;
+    padding: 0 6px;
+  }
+</style>

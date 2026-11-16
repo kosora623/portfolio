@@ -11,7 +11,7 @@ export default defineConfig({
   site: process.env.SITE_URL || undefined,
   // Cloudflare Pages の出力ディレクトリ設定（out）を変えずに済むよう、Next.js の export と同じ場所に出力する
   outDir: './out',
-  // /works/ATMclicker → works/ATMclicker.html（Next.js の static export と同じ URL 形式）
+  // /works/oneday-op → works/oneday-op.html（Next.js の static export と同じ URL 形式）
   build: { format: 'file' },
   trailingSlash: 'never',
   vite: {
