@@ -438,7 +438,7 @@ JS の転送量（gzip、HTML 内のインラインスクリプトを含む）:
 - [ ] UI リニューアル（UI_PROPOSAL.md §6 の案 K で実装。D-35）: B-1（色）、B-2（埋め込みの縦横比）、B-3（本文のタイポグラフィ）、`prefers-reduced-motion`（D-22）
 - [ ] 画像の最適化（B-9）: `src/assets` に移して `astro:assets` を使う。frontmatter の `thumbnailUrl` を `image()` に
 - [ ] トップページの `<title>` / description / OGP（B-6。works とブログは §7 で対応済み。D-30）
-- [ ] Cloudflare Pages に `SITE_URL` を設定し、**再デプロイする**（og:url / og:image / canonical を出すため。D-29）。2026-11-15 時点の本番ではこの 3 つが出ていない（§6.7）
+- [x] Cloudflare Pages に `SITE_URL` を設定し、再デプロイする（D-29）。2026-11-16 に設定・再デプロイし、本番で og:url / og:image / canonical が出ることを確認（§6.7）
 - [x] ブログをヘッダーのナビに載せる（D-36）
 - [x] 最初のブログ記事「ブログページの開設！」を公開する（D-38）
 - [ ] 純粋関数（`work-model.ts`、`embed.ts`、`rehype-content.ts`）のユニットテスト
@@ -458,6 +458,15 @@ JS の転送量（gzip、HTML 内のインラインスクリプトを含む）:
 | コンソールエラー | 未確認（ブラウザで開ける環境がなかった） |
 
 確認方法の制約: 作業環境のネットワーク設定で kosora623.com への直接接続（curl）ができなかったため、Web 取得ツール経由で確認した。ヘッダーと生の HTML は見られず、404 のステータスとコンソールは確認できていない。
+
+**再確認（2026-11-16、`SITE_URL=https://kosora623.com` を設定して再デプロイした後）**
+
+- `/works`、`/works/ATMclicker`、`/works/celestime-memories`、`/blog`、`/blog/blog-launch`: canonical と og:url が本番 URL で出ている
+- サムネイルのある作品: og:image（例: `https://kosora623.com/works-images/04/04thumbnail.png`）と `twitter:card=summary_large_image` が出ている
+- 一覧ページとブログ記事は画像がないので og:image なし（想定どおり。共通の OG 画像はトップページの OGP 対応で扱う）
+- トップページは `<title>` も OGP もまだない（B-6）
+- 404 のステータスとコンソールエラーは引き続き未確認
+- 注意: Web 取得ツールは古い取得結果を返すことがあり、クエリ文字列を付けて再取得して確認した
 
 ---
 
