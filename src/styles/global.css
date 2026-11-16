@@ -5,6 +5,22 @@
 @source not "../../content";
 
 /*
+ * Windows の游ゴシックは Regular が細く、本文がかすれて見える。
+ * 本文（〜400）には Medium、見出しや作品名（500〜）には Bold を割り当てた別名を作り、--font-sans で使う。
+ * どちらの書体もない環境では local() が失敗し、この別名は飛ばされる。
+ */
+@font-face {
+  font-family: "Yu Gothic Text";
+  font-weight: 100 400;
+  src: local("Yu Gothic Medium"), local("YuGothic-Medium");
+}
+@font-face {
+  font-family: "Yu Gothic Text";
+  font-weight: 500 900;
+  src: local("Yu Gothic Bold"), local("YuGothic-Bold");
+}
+
+/*
  * デザイントークン（UI_PROPOSAL.md §6.3）。色はここに定義したものだけを使う。
  * フォントは Web フォントを読み込まず、OS に入っているものを使う（サイトを軽くするため）。
  */
@@ -18,7 +34,8 @@
   --color-thumb: #e9ecef;
 
   --font-*: initial;
-  --font-sans: system-ui, -apple-system, "Segoe UI", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Yu Gothic", Meiryo, "Noto Sans JP", "Noto Sans CJK JP", sans-serif;
+  /* system-ui は Windows で Yu Gothic UI（句読点・括弧が半角幅に詰まる UI 向けの書体）になるので、和文は名前で指定する */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic Text", "Yu Gothic", YuGothic, Meiryo, "Noto Sans JP", "Noto Sans CJK JP", system-ui, sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Cascadia Mono", "Roboto Mono", "Noto Sans Mono", "DejaVu Sans Mono", monospace;
 }
 

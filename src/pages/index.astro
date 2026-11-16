@@ -2,10 +2,11 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import HomePage from '@/components/home/HomePage.astro';
 import { getAllWorks } from '@/lib/works';
+import { site, pageDescriptions } from '@/data/site';
 
 const worksCount = (await getAllWorks()).length;
 ---
 
-<BaseLayout>
+<BaseLayout meta={{ title: site.shortName, description: pageDescriptions.home }}>
   <HomePage worksCount={worksCount} />
 </BaseLayout>

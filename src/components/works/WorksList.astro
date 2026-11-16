@@ -7,6 +7,7 @@ import type { WorkFromMd } from '@/lib/work-model';
 import { tagInfo } from '@/data/tags';
 import LineIcon from '@/components/icons/LineIcon.astro';
 import { formatYearMonth, groupByYear } from '@/lib/work-model';
+import { listThumbnailSrc } from '@/lib/thumbnail';
 
 interface Props {
   works: WorkFromMd[];
@@ -50,7 +51,7 @@ const filters = [
           <li data-tags={work.tags.join(' ')}>
             <a href={`/works/${work.slug}`} class="item">
               <span class="thumb">
-                {work.thumbnailUrl && <img src={work.thumbnailUrl} alt="" loading="lazy" decoding="async" width="128" height="72" />}
+                {work.thumbnailUrl && <img src={listThumbnailSrc(work.thumbnailUrl)} alt="" loading="lazy" decoding="async" width="128" height="72" />}
               </span>
               <span class="text">
                 <b>{work.title}</b>
