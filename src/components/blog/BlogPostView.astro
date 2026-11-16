@@ -17,7 +17,7 @@ const { post } = Astro.props;
       <PostMeta post={post} size="sm" />
     </div>
     <h1 class="text-4xl md:text-5xl font-bold text-light-slate mb-8">{post.title}</h1>
-    <div class="prose max-w-none text-slate text-lg leading-relaxed">
+    <div class="post-body prose max-w-none text-slate text-lg leading-relaxed">
       <slot />
     </div>
   </div>

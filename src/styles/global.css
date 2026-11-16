@@ -32,3 +32,20 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/*
+ * ブログ本文の最低限の書式（見出し・リスト・引用・コード）。
+ * works の本文は全角スペースや空行で見た目を作っているので、段落（p）には触れず、ブログだけに当てる。
+ * UI リニューアル（B-3）で作り直す前提の仮のスタイル。
+ */
+.post-body h2 { font-size: 1.5em; font-weight: 700; margin: 1.75em 0 0.6em; padding-bottom: 0.3em; border-bottom: 1px solid rgb(255 255 255 / 0.15); }
+.post-body h3 { font-size: 1.25em; font-weight: 700; margin: 1.5em 0 0.5em; }
+.post-body h2:first-child, .post-body h3:first-child { margin-top: 0; }
+.post-body ul, .post-body ol { margin: 0.75em 0; padding-left: 1.5em; }
+.post-body ul { list-style: disc; }
+.post-body ol { list-style: decimal; }
+.post-body li + li { margin-top: 0.25em; }
+.post-body blockquote { margin: 1em 0; padding-left: 1em; border-left: 3px solid rgb(255 255 255 / 0.25); opacity: 0.85; }
+.post-body :not(pre) > code { font-size: 0.9em; padding: 0.1em 0.35em; border-radius: 4px; background: rgb(255 255 255 / 0.08); }
+.post-body pre { margin: 1em 0; padding: 1em; overflow-x: auto; border-radius: 6px; background: rgb(255 255 255 / 0.06); font-size: 0.875em; line-height: 1.6; }
+.post-body hr { margin: 2em 0; border-color: rgb(255 255 255 / 0.15); }

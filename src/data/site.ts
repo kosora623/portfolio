@@ -18,6 +18,7 @@ export const pageDescriptions = {
 export const navItems = [
   { name: 'HOME', href: '/' },
   { name: 'WORKS', href: '/works' },
+  { name: 'BLOG', href: '/blog' },
 ] as const;
 
 export type SocialIconKey = 'email' | 'github' | 'youtube' | 'twitter' | 'play';
