@@ -1,0 +1,23 @@
+---
+/** 連絡先のアイコン。GitHub・YouTube・Twitter はブランドのロゴ、それ以外は線のアイコン */
+import type { SocialIconKey } from '@/data/site';
+import Icon from './Icon.astro';
+import LineIcon from './LineIcon.astro';
+
+interface Props {
+  name: SocialIconKey;
+  class?: string;
+}
+
+const { name, class: className } = Astro.props;
+---
+
+{
+  name === 'email' ? (
+    <LineIcon name="mail" class={className} />
+  ) : name === 'play' ? (
+    <LineIcon name="play" class={className} />
+  ) : (
+    <Icon name={name} class:list={['brand-icon', className]} />
+  )
+}
