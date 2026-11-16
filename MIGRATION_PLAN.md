@@ -247,6 +247,7 @@ UI リニューアルの提案は別ファイル [UI_PROPOSAL.md](./UI_PROPOSAL.
 | D-32 | `content/blog/` の `_` で始まるファイルは読み込まない。書き方の見本として `_template.md` を置いた | 実際の記事は書いていない（サンプル記事を公開してしまわないため）。記事が 0 件の間はビルド時に glob-loader の警告が出るが、問題はない |
 | D-33 | ブログはヘッダーのナビにまだ載せていない | 全ページのヘッダーの見た目が変わるため、判断を任せたい。載せる場合は `src/data/site.ts` の `navItems` に 1 行足すだけ |
 | D-34 | ブログのタグは自由入力（works のような固定の一覧にしない）。日付は日本時間で表示する | ブログのタグは増えていくものなので。日時（`2026-11-14T21:00:00+09:00`）を書いた場合も日本時間の日付になる |
+| D-35 | **UI リニューアルは案 K「kosora と空」で進める**（UI_PROPOSAL.md §6）。名前の表記は kosora に統一する | §3 の案 A〜C は「AI っぽい」として見送られ、比較を重ねた結果。作品が増えても崩れない一覧、トップに作品を置かない、落ち着いたエンジニアらしい見た目、という条件を満たすため |
 
 ---
 
@@ -326,7 +327,7 @@ src/
 - [x] `content.config.ts` のスキーマ（`thumbnailUrl` は public のパスのまま。`image()` 化は画像最適化と一緒に行う。`title: z.string()`, `year: z.number()`, `month: z.coerce.number().optional()`, `tags: z.array(z.enum(['video','code','music']))`, `summary: z.string().default('')`, `thumbnailUrl` → `image()`）
 - [x] 埋め込み用の remark/rehype プラグイン（`src/lib/embed.ts` を利用）
 - [ ] Cloudflare Pages の設定変更（§2.4）
-- [ ] UI リニューアル（UI_PROPOSAL.md）
+- [ ] UI リニューアル（UI_PROPOSAL.md §6 の案 K で実装。D-35）
 
 ### 5.3 コンテンツ側（任意）
 
@@ -431,7 +432,7 @@ JS の転送量（gzip、HTML 内のインラインスクリプトを含む）:
 ### 6.6 残タスク
 
 - [x] 本番デプロイでの確認（§6.5）: 2026-11-15 に https://kosora623.com で確認。結果は §6.7
-- [ ] UI リニューアル（UI_PROPOSAL.md）: B-1（色）、B-2（埋め込みの縦横比）、B-3（本文のタイポグラフィ）、`prefers-reduced-motion`（D-22）
+- [ ] UI リニューアル（UI_PROPOSAL.md §6 の案 K で実装。D-35）: B-1（色）、B-2（埋め込みの縦横比）、B-3（本文のタイポグラフィ）、`prefers-reduced-motion`（D-22）
 - [ ] 画像の最適化（B-9）: `src/assets` に移して `astro:assets` を使う。frontmatter の `thumbnailUrl` を `image()` に
 - [ ] トップページの `<title>` / description / OGP（B-6。works とブログは §7 で対応済み。D-30）
 - [ ] Cloudflare Pages に `SITE_URL` を設定し、**再デプロイする**（og:url / og:image / canonical を出すため。D-29）。2026-11-15 時点の本番ではこの 3 つが出ていない（§6.7）
