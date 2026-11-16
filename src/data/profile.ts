@@ -11,7 +11,7 @@ export const hero = {
 } as const;
 
 export const about = {
-  intro: 'こんにちは、kosora です。映像と音楽を作り、プログラムも書きます。',
+  intro: '',
 } as const;
 
 export interface StackGroup {
@@ -23,11 +23,11 @@ export interface StackGroup {
 /** 使っている技術・ツール（分野ごと） */
 export const stack: StackGroup[] = [
   { label: '映像', icon: 'video', items: ['Aviutl', 'Adobe After Effects', 'Blender'] },
-  { label: '音楽', icon: 'music', items: ['Cakewalk', 'Cubase', 'GarageBand'] },
+  { label: '音楽', icon: 'music', items: ['Cubase', 'GarageBand'] },
   {
     label: 'コード',
     icon: 'code',
-    items: ['HTML/CSS', 'JavaScript', 'TypeScript', 'React', 'Next.js', 'Three.js', 'Python', 'Processing', 'C++', 'OpenCV', 'C#', 'Unity', 'Flutter', 'Dart', 'Git/GitHub'],
+    items: ['TypeScript', 'Python', 'C++'],
   },
 ];
 
