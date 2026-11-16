@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Particles from '@/components/Particles.astro';
 import WorksList from '@/components/works/WorksList.astro';
 import { getAllWorks } from '@/lib/works';
 import { pageDescriptions } from '@/data/site';
@@ -9,10 +8,5 @@ const works = await getAllWorks();
 ---
 
 <BaseLayout meta={{ title: 'Works', description: pageDescriptions.works }}>
-  <div class="relative min-h-screen">
-    <Particles />
-    <div class="relative z-10">
-      <WorksList works={works} />
-    </div>
-  </div>
+  <WorksList works={works} />
 </BaseLayout>
