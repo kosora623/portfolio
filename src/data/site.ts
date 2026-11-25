@@ -22,7 +22,7 @@ export const navItems = [
   { name: 'Blog', href: '/blog' },
 ] as const;
 
-export type SocialIconKey = 'email' | 'github' | 'youtube' | 'twitter' | 'play';
+export type SocialIconKey = 'email' | 'github' | 'youtube' | 'x' | 'play';
 
 export interface SocialLink {
   id: string;
@@ -37,13 +37,13 @@ export const socialLinks: SocialLink[] = [
   { id: 'email', name: 'Email', href: `mailto:${site.contactEmail}`, icon: 'email', handle: site.contactEmail },
   { id: 'github', name: 'GitHub', href: 'https://github.com/kosora623', icon: 'github', handle: '@kosora623' },
   { id: 'youtube', name: 'YouTube', href: 'https://youtube.com/@k0sora623', icon: 'youtube', handle: '@k0sora623' },
-  { id: 'twitter', name: 'Twitter', href: 'https://twitter.com/kosora623', icon: 'twitter', handle: '@kosora623' },
+  { id: 'x', name: 'X', href: 'https://x.com/kosora_623', icon: 'x', handle: '@kosora_623' },
   { id: 'niconico', name: 'Niconico', href: 'https://www.nicovideo.jp/user/89885173', icon: 'play', handle: 'ニコニコ動画' },
   { id: 'bilibili', name: 'Bilibili', href: 'https://space.bilibili.com/553358219', icon: 'play', handle: 'Bilibili' },
 ];
 
 /** フッターに表示する SNS（この順で表示） */
-const footerSocialIds = ['github', 'twitter', 'youtube'] as const;
+const footerSocialIds = ['github', 'x', 'youtube'] as const;
 
 export const footerSocialLinks: SocialLink[] = footerSocialIds.map(
   id => socialLinks.find(l => l.id === id)!,
