@@ -1,6 +1,6 @@
 ---
 /**
- * 作品一覧。年ごとにまとめ、1 作品 1 行で並べる（作品が増えても形が変わらない）。
+ * 作品一覧。年ごとにまとめ、サムネイルのカードを PC 4 列・スマホ 2 列で並べる（作品が増えても形が変わらない）。
  * 分野の絞り込みは JS が動くときだけ表示する（JS がなければ全件が見える）。
  */
 import type { WorkFromMd } from '@/lib/work-model';
@@ -46,22 +46,22 @@ const filters = [
         {year}
         <small data-year-count>{list.length} 点</small>
       </h2>
-      <ul>
+      <ul class="grid">
         {list.map(work => (
           <li data-tags={work.tags.join(' ')}>
-            <a href={`/works/${work.slug}`} class="item">
+            <a href={`/works/${work.slug}`} class="card">
               <span class="thumb">
-                {work.thumbnailUrl && <img src={listThumbnailSrc(work.thumbnailUrl)} alt="" loading="lazy" decoding="async" width="128" height="72" />}
+                {work.thumbnailUrl && <img src={listThumbnailSrc(work.thumbnailUrl)} alt="" loading="lazy" decoding="async" width="384" height="216" />}
               </span>
-              <span class="text">
-                <b>{work.title}</b>
-                {work.summary && <small>{work.summary}</small>}
-              </span>
-              <span class="meta mono">
-                <span class="tags" aria-label={work.tags.map(t => tagInfo[t]?.name ?? t).join('・')}>
-                  {work.tags.map(t => tagInfo[t] && <LineIcon name={tagInfo[t].icon} />)}
-                </span>
-                {formatYearMonth(work)}
+              <b>{work.title}</b>
+              <span class="meta">
+                <span class="mono">{formatYearMonth(work)}</span>
+                {work.tags.map(t => tagInfo[t] && (
+                  <span class="tag">
+                    <LineIcon name={tagInfo[t].icon} />
+                    {tagInfo[t].name}
+                  </span>
+                ))}
               </span>
             </a>
           </li>
@@ -156,18 +156,25 @@ const filters = [
     font-weight: 400;
     color: var(--color-muted);
   }
-  .item {
+  .grid {
     display: grid;
-    grid-template-columns: 128px minmax(0, 1fr) auto;
-    gap: 20px;
-    align-items: center;
-    border-bottom: 1px solid var(--color-line);
-    padding-block: 14px;
-    line-height: 1.6;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 28px 20px;
+    padding-top: 18px;
+  }
+  .grid li[hidden] {
+    display: none;
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    line-height: 1.5;
   }
   .thumb {
     display: block;
     aspect-ratio: 16 / 9;
+    max-width: 100%;
     background: var(--color-thumb);
     overflow: hidden;
   }
@@ -175,44 +182,55 @@ const filters = [
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.3s;
   }
-  .text b {
-    display: block;
+  .card:hover .thumb img {
+    transform: scale(1.03);
+  }
+  .card b {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-top: 4px;
     font-weight: 500;
-    font-size: 1.02rem;
+    font-size: 0.95rem;
   }
-  .text small {
-    display: block;
-    color: var(--color-muted);
-    font-size: 13.5px;
-  }
-  .item:hover b {
+  .card:hover b {
     color: var(--color-link);
   }
   .meta {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 12px;
+    gap: 2px 10px;
     color: var(--color-muted);
-    font-size: 14px;
-    white-space: nowrap;
+    font-size: 12.5px;
   }
-  .tags {
-    display: flex;
-    gap: 6px;
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .tag :global(.line-icon) {
+    width: 14px;
+    height: 14px;
   }
 
-  @media (max-width: 760px) {
-    .item {
-      grid-template-columns: 96px minmax(0, 1fr);
-      gap: 4px 14px;
-      align-items: start;
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
-    .thumb {
-      grid-row: span 2;
+  }
+  @media (max-width: 640px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px 14px;
     }
-    .meta {
-      grid-column: 2;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .thumb img {
+      transition: none;
     }
   }
 </style>
