@@ -37,7 +37,7 @@ export interface ProfileItem {
 export const interests: ProfileItem[] = [
   { title: 'モーショングラフィックス', icon: 'motion' },
   { title: 'ジェネラティブアート', icon: 'generative' },
-  { title: 'インタラクティブアート', icon: 'cursor' },
+  { title: 'HCI', icon: 'cursor' },
   { title: 'Web フロントエンド', icon: 'web' },
   { title: '画像処理', icon: 'image' },
   { title: 'サウンドデザイン', icon: 'wave' },
