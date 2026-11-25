@@ -7,8 +7,6 @@ export const lineIcons = {
   music: '<path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/>',
   code: '<path d="M8 8l-4 4 4 4M16 8l4 4-4 4M13.5 5l-3 14"/>',
   motion: '<circle cx="7" cy="12" r="3"/><path d="M13 12h8M14 8h5M14 16h5"/>',
-  generative:
-    '<circle cx="6" cy="7" r="1.5"/><circle cx="17" cy="6" r="1.5"/><circle cx="12" cy="13" r="1.5"/><circle cx="6" cy="18" r="1.5"/><circle cx="18" cy="17" r="1.5"/><path d="M7 8.2l4 3.8M16 7.2l-3 4.6M10.8 14l-3.6 3M13.3 13.8l3.5 2.5"/>',
   cursor: '<path d="M6 4l12 7-5 1.5L11 18z"/>',
   web: '<rect x="3" y="4.5" width="18" height="15" rx="2"/><path d="M3 9h18M6 6.8h.01M8.5 6.8h.01"/>',
   image: '<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 15l-5-4.5L7 19"/>',
