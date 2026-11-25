@@ -13,8 +13,9 @@ thumbnailUrl: /works-images/05/05thumbnail.png
 
 ![siteimage](/works-images/05/05thumbnail.png)
 
-- フレームワーク: Next.js
+2026年11月に、Next.js から Astro に移行して作り直しました。あわせてブログを追加し、デザインも一新しています。
+
+- フレームワーク: Astro（2025年10月の公開時は Next.js）
 - 言語: TypeScript
-- アニメーション: FramerMotion
 - ホスティング: Cloudflare Pages
 - ソースコード: [GitHub](https://github.com/kosora623/portfolio)

@@ -11,7 +11,7 @@ export const hero = {
 } as const;
 
 export const about = {
-  intro: '',
+  intro: '大学で情報系を学びながら、映像・音楽・プログラミングで制作をしています。',
 } as const;
 
 export interface StackGroup {
@@ -24,11 +24,8 @@ export interface StackGroup {
 export const stack: StackGroup[] = [
   { label: '映像', icon: 'video', items: ['Aviutl', 'Adobe After Effects', 'Blender'] },
   { label: '音楽', icon: 'music', items: ['Cubase', 'GarageBand'] },
-  {
-    label: 'コード',
-    icon: 'code',
-    items: ['TypeScript', 'Python', 'C++'],
-  },
+  { label: 'コード', icon: 'code', items: ['TypeScript', 'Python', 'Java', 'Astro'] },
+  { label: '勉強中', icon: 'book', items: ['C++', 'Rust', 'Elixir'] },
 ];
 
 export interface ProfileItem {
@@ -44,10 +41,14 @@ export const interests: ProfileItem[] = [
   { title: 'Web フロントエンド', icon: 'web' },
   { title: '画像処理', icon: 'image' },
   { title: 'サウンドデザイン', icon: 'wave' },
+  { title: 'ハッカソン', icon: 'bolt' },
+  { title: 'ブラウザ拡張・ツール作り', icon: 'tool' },
+  { title: 'Windows 環境のカスタマイズ', icon: 'terminal' },
+  { title: 'プログラミング言語', icon: 'lambda' },
 ];
 
 export const hobbies: ProfileItem[] = [
   { title: '散歩', icon: 'pin', description: 'いろんな場所に出没します。どこかで会えるかも...？' },
   { title: '音楽ゲーム', icon: 'gamepad', description: '大体の機種には触っています。指押しが大好物。' },
-  { title: '電子工作', icon: 'chip', description: '最近始めました。Arduino Uno R3で遊んでいます。' },
+  { title: '電子工作', icon: 'chip', description: 'Arduino と STM32 が手元にあります。何に使おうか考え中です。' },
 ];
