@@ -41,7 +41,6 @@ export const interests: ProfileItem[] = [
   { title: 'Web フロントエンド', icon: 'web' },
   { title: '画像処理', icon: 'image' },
   { title: 'サウンドデザイン', icon: 'wave' },
-  { title: 'ブラウザ拡張・ツール作り', icon: 'tool' },
 ];
 
 export const hobbies: ProfileItem[] = [
