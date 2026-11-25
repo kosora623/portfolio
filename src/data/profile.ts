@@ -41,9 +41,7 @@ export const interests: ProfileItem[] = [
   { title: 'Web フロントエンド', icon: 'web' },
   { title: '画像処理', icon: 'image' },
   { title: 'サウンドデザイン', icon: 'wave' },
-  { title: 'ハッカソン', icon: 'bolt' },
   { title: 'ブラウザ拡張・ツール作り', icon: 'tool' },
-  { title: 'Windows 環境のカスタマイズ', icon: 'terminal' },
   { title: 'プログラミング言語', icon: 'lambda' },
 ];
 
