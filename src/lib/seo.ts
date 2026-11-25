@@ -6,11 +6,14 @@
  */
 import { site } from '@/data/site';
 
+/** 画像のないページ（トップ・一覧・ブログ記事）で使う共通の OG 画像（1200×630） */
+export const DEFAULT_OG_IMAGE = '/og.png';
+
 export interface PageMeta {
   /** ページ固有のタイトル（サイト名は自動で付く。サイト名そのもののときは付けない） */
   title: string;
   description?: string;
-  /** public/ からのパス（/works-images/... など）または絶対 URL */
+  /** public/ からのパス（/works-images/... など）または絶対 URL。省略時は DEFAULT_OG_IMAGE */
   image?: string;
   type?: 'website' | 'article';
   /** 記事の公開日（type: 'article' のとき article:published_time に出力） */
@@ -35,7 +38,8 @@ export function toPublicPath(pathname: string): string {
 
 export function resolveMeta(meta: PageMeta, pathname: string, siteUrl: URL | undefined): ResolvedMeta {
   const abs = (p: string) => (siteUrl ? new URL(p, siteUrl).href : undefined);
-  const image = meta.image ? (/^https?:\/\//.test(meta.image) ? meta.image : abs(meta.image)) : undefined;
+  const src = meta.image ?? DEFAULT_OG_IMAGE;
+  const image = /^https?:\/\//.test(src) ? src : abs(src);
   return {
     title: meta.title === site.shortName ? meta.title : `${meta.title} | ${site.shortName}`,
     description: meta.description,
