@@ -17,9 +17,11 @@ export const getStaticPaths = (async () => {
 const { entry, post, newer, older } = Astro.props;
 // 作品ページと同じ Markdown の描画（src/lib/markdown）
 const html = await renderEntryBody(entry);
+// 共有したときの画像: frontmatter の image、なければビルド時に作った画像（src/pages/og/blog/[slug].png.ts）
+const image = post.image ?? `/og/blog/${post.slug}.png`;
 ---
 
-<BaseLayout meta={{ title: post.title, description: post.description, type: 'article', publishedTime: post.date }}>
+<BaseLayout meta={{ title: post.title, description: post.description, type: 'article', publishedTime: post.date, image }}>
   <BlogPostView post={post} newer={newer} older={older}>
     <Fragment set:html={html} />
   </BlogPostView>

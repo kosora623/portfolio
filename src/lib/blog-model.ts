@@ -8,6 +8,8 @@ export interface BlogPost {
   date: Date;
   description: string;
   tags: string[];
+  /** OGP 画像（public/ からのパス、または絶対 URL）。省略可 */
+  image?: string;
   draft: boolean;
 }
 
@@ -50,4 +52,20 @@ export function formatDate(date: Date): string {
   }).formatToParts(date);
   const get = (type: string) => parts.find(p => p.type === type)?.value ?? '';
   return `${get('year')}-${get('month')}-${get('day')}`;
+}
+
+export type Sky = 'morning' | 'day' | 'evening' | 'night';
+
+/**
+ * 記事の OGP 画像の空の色（投稿した日本時間の時刻で決める。区切りはトップの空の帯と同じ）。
+ * 日付だけの記事（日本時間 0:00:00 ちょうど）は時刻が分からないので昼の空にする。
+ */
+export function skyFor(date: Date): Sky {
+  const jst = new Date(date.getTime() + JST_OFFSET_MS);
+  const h = jst.getUTCHours();
+  if (h === 0 && jst.getUTCMinutes() === 0 && jst.getUTCSeconds() === 0 && jst.getUTCMilliseconds() === 0) return 'day';
+  if (h >= 5 && h < 8) return 'morning';
+  if (h >= 8 && h < 16) return 'day';
+  if (h >= 16 && h < 19) return 'evening';
+  return 'night';
 }

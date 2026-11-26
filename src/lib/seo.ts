@@ -7,7 +7,7 @@
 import { site } from '@/data/site';
 import { toJstIso } from './blog-model';
 
-/** 画像のないページ（トップ・一覧・ブログ記事）で使う共通の OG 画像（1200×630） */
+/** 画像のないページ（トップ・一覧など）で使う共通の OG 画像（1200×630） */
 export const DEFAULT_OG_IMAGE = '/og.png';
 
 export interface PageMeta {

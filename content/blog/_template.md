@@ -6,6 +6,7 @@ date: 2026-11-15
 description: 一覧ページと OGP に表示する説明文
 tags:
   - diary
+# image: /blog-images/xx.png # 共有したときの画像（1200×630 推奨）。省略すると自動で作ります
 draft: true # true の間は npm run build に含まれません（npm run dev では表示されます）
 ---
 
