@@ -266,9 +266,9 @@ UI リニューアルの提案は別ファイル [UI_PROPOSAL.md](./UI_PROPOSAL.
 | D-51 | YouTube の埋め込みは、最初は iframe の srcdoc でサムネイルと再生ボタンだけを表示し、押したら youtube-nocookie.com のプレーヤーに移動する。サイト側の JS は 0 のまま | プレーヤーを読み込むだけで YouTube のスクリプトが大量に届き、ページが重くなる |
 | D-52 | `public/_headers` で `/_astro/*`（ハッシュ付きのファイル名）を 1 年キャッシュ（immutable）にする | これまでは 4 時間ごとに再検証していた |
 | D-53 | 中身の短いページでもフッターを画面の下端に置く（body を 3 段の grid に）。トップと記事ページに JSON-LD（WebSite / BlogPosting）を出す | フッターが画面の途中に浮いていた。検索結果での表示のため |
-| D-50 | 画像の最適化（B-9）は `astro:assets` ではなく、サムネイルと同じスクリプト（`npm run images`、`scripts/make-images.mjs`）で行う。本文の画像は幅 1200px までの WebP を `public/opt/` に書き出してコミットし、`rehype-content.ts` で差し替える。縦横の大きさは `src/data/optimized-images.json` から `width` / `height` に入れる | 本文は独自の Markdown 描画（`render.ts`）なので `astro:assets` の自動最適化が効かず、`image()` 化には画像の移動と描画の作り直しが要る。既存のサムネイルの仕組みを広げれば依存もビルドの処理も増えない。いちばん重い作品ページが約 2.3MB → 約 160KB になり、16:9 決め打ちの width / height によるずれ（CLS）もなくなった |
-| D-51 | ユニットテストは vitest ではなく Node.js 標準の `node:test` で書く（`tests/*.test.ts`、`npm test`）。GitHub Actions で main へのプッシュとプルリクエストごとに lint・`astro check`・テスト・ビルドを行う | 依存を増やさないため。Node.js 22 は TypeScript をそのまま実行できるので、対象の純粋関数（`work-model.ts`、`embed.ts`、`blog-model.ts`）は追加の設定なしでテストできる。`rehype-content.ts` は拡張子なしの import があるため今回は対象外 |
-| D-52 | ブログ記事の OGP 画像は、frontmatter の `image`（public/ からのパスか絶対 URL）があればそれを使い、なければビルド時に記事ごとに作る（`/og/blog/<slug>.png`、`src/lib/og-image.ts`）。デザインは C 案「空の額縁」で、空の色は投稿時刻（日本時間、トップの空の帯と同じ区切り）で決め、日付だけの記事は昼の空にする。生成には開発用の依存 `satori`・`@resvg/resvg-js` を使い、フォント（Noto Sans JP・JetBrains Mono）は Google Fonts から画像に出る文字だけを取る。取れないときは共通の `og.png` で代用する | 本人がデザイン C と依存の追加を選んだ（2026-11-27）。画像はビルド時に作るので配信するページの重さは変わらない。フォントをリポジトリに置かずに済み、取得に失敗してもビルドは止まらない |
+| D-54 | 画像の最適化（B-9）は `astro:assets` ではなく、サムネイルと同じスクリプト（`npm run images`、`scripts/make-images.mjs`）で行う。本文の画像は幅 1200px までの WebP を `public/opt/` に書き出してコミットし、`rehype-content.ts` で差し替える。縦横の大きさは `src/data/optimized-images.json` から `width` / `height` に入れる | 本文は独自の Markdown 描画（`render.ts`）なので `astro:assets` の自動最適化が効かず、`image()` 化には画像の移動と描画の作り直しが要る。既存のサムネイルの仕組みを広げれば依存もビルドの処理も増えない。いちばん重い作品ページが約 2.3MB → 約 160KB になり、16:9 決め打ちの width / height によるずれ（CLS）もなくなった |
+| D-55 | ユニットテストは vitest ではなく Node.js 標準の `node:test` で書く（`tests/*.test.ts`、`npm test`）。GitHub Actions で main へのプッシュとプルリクエストごとに lint・`astro check`・テスト・ビルドを行う | 依存を増やさないため。Node.js 22 は TypeScript をそのまま実行できるので、対象の純粋関数（`work-model.ts`、`embed.ts`、`blog-model.ts`）は追加の設定なしでテストできる。`rehype-content.ts` は拡張子なしの import があるため今回は対象外 |
+| D-56 | ブログ記事の OGP 画像は、frontmatter の `image`（public/ からのパスか絶対 URL）があればそれを使い、なければビルド時に記事ごとに作る（`/og/blog/<slug>.png`、`src/lib/og-image.ts`）。デザインは C 案「空の額縁」で、空の色は投稿時刻（日本時間、トップの空の帯と同じ区切り）で決め、日付だけの記事は昼の空にする。生成には開発用の依存 `satori`・`@resvg/resvg-js` を使い、フォント（Noto Sans JP・JetBrains Mono）は Google Fonts から画像に出る文字だけを取る。取れないときは共通の `og.png` で代用する | 本人がデザイン C と依存の追加を選んだ（2026-11-27）。画像はビルド時に作るので配信するページの重さは変わらない。フォントをリポジトリに置かずに済み、取得に失敗してもビルドは止まらない |
 
 ---
 
@@ -340,7 +340,7 @@ src/
 - [x] B-8: タグ参照を安全に（スキーマでも検証。D-26）
 - [x] B-4: `EmbedFetcher` を廃止（D-19）
 - [x] `README.md` を実際の内容に書き換える
-- [x] 純粋関数（`work-model.ts`、`embed.ts`）のユニットテストを追加（`node:test`。D-51）
+- [x] 純粋関数（`work-model.ts`、`embed.ts`）のユニットテストを追加（`node:test`。D-55）
 
 ### 5.2 移行時（Phase 1〜4）
 
@@ -454,12 +454,12 @@ JS の転送量（gzip、HTML 内のインラインスクリプトを含む）:
 
 - [x] 本番デプロイでの確認（§6.5）: 2026-11-15 に https://kosora623.com で確認。結果は §6.7
 - [ ] UI リニューアル（UI_PROPOSAL.md §6 の案 K で実装。D-35）: B-1（色）、B-2（埋め込みの縦横比）、B-3（本文のタイポグラフィ）、`prefers-reduced-motion`（D-22）
-- [x] 画像の最適化（B-9）: `npm run images` で WebP を生成する方式にした（D-50）
+- [x] 画像の最適化（B-9）: `npm run images` で WebP を生成する方式にした（D-54）
 - [x] トップページの `<title>` / description / OGP（B-6。works とブログは §7 で対応済み。D-30）。共通の OG 画像は D-44
 - [x] Cloudflare Pages に `SITE_URL` を設定し、再デプロイする（D-29）。2026-11-16 に設定・再デプロイし、本番で og:url / og:image / canonical が出ることを確認（§6.7）
 - [x] ブログをヘッダーのナビに載せる（D-36）
 - [x] 最初のブログ記事「ブログページの開設！」を公開する（D-38）
-- [x] 純粋関数（`work-model.ts`、`embed.ts`、`blog-model.ts`）のユニットテストと CI（D-51）。`rehype-content.ts` は未
+- [x] 純粋関数（`work-model.ts`、`embed.ts`、`blog-model.ts`）のユニットテストと CI（D-55）。`rehype-content.ts` は未
 - [ ] `eslint-plugin-astro` 2 系に上げるときは ESLint 10 への更新が必要（D-16）
 
 
