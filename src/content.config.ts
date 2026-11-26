@@ -22,6 +22,8 @@ const works = defineCollection({
     tags: z.array(z.enum(tagKeys)).default([]),
     summary: z.string().default(''),
     thumbnailUrl: z.string().optional(),
+    // true の作品は npm run build に含めない（npm run dev では確認用に表示する）
+    draft: z.boolean().default(false),
   }),
 });
 

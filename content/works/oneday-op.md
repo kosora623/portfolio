@@ -11,7 +11,7 @@ thumbnailUrl: /works-images/02/onedayOP.png
 
 エストニアの首都タリンで開催された日本文化紹介イベント「One day in Japanese School」のオープニング映像を制作しました。イベント参加者である現地の日本文化ファンの皆様に対し、イベントへの期待感と日本の奥深い魅力を導入で効果的に伝えることを意識しました。
 
-![imagekarate](/works-images/02/onedayOP.png)
+![オープニング映像のタイトル画面。桜を背景に空手の蹴りのシルエットと「One day in Japanese School」の文字](/works-images/02/onedayOP.png)
 
 [→動画はこちらから](https://www.instagram.com/reel/C7erh39s0cu/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==)
 

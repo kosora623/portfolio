@@ -84,8 +84,16 @@ img {
   height: auto;
 }
 
+/* 中身の短いページでもフッターを画面の下端に置く（ヘッダー / main / フッターの 3 段） */
+.layout {
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
 /* ページの横幅と左右の余白 */
 .page {
+  width: 100%;
   max-width: var(--page-width);
   margin-inline: auto;
   padding-left: var(--gutter);

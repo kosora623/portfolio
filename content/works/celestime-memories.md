@@ -14,7 +14,7 @@ thumbnailUrl: /works-images/03/03thumbnail.jpg
 
 楽曲ではイントロとサビ周辺のメロディーを担当しています。映像ではシネマティックなカメラワーク、フレーズと同期するような文字の表現を意識して作成いたしました。[bakabakaC](https://x.com/C_bakabakaP)さんのキャッチーなフレーズと共にお楽しみください。
 
-![celestetumbnail](/works-images/03/03thumbnail.jpg)
+![「セレスタイム・メモリーズ」のサムネイル](/works-images/03/03thumbnail.jpg)
 
 youtubeはこちらから↓
 

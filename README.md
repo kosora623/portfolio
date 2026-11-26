@@ -1,6 +1,6 @@
 # kosora portfolio
 
-小空 - KSR のポートフォリオサイト。[Astro](https://astro.build/) による完全静的サイトです（2026-11 に Next.js から移行）。
+kosora のポートフォリオサイト「小空の部屋」。[Astro](https://astro.build/) による完全静的サイトです（2026-11 に Next.js から移行）。
 
 ## 必要なもの
 
