@@ -40,15 +40,36 @@ function imageWrapper(img: Element): Element {
 }
 
 const embedTitles: Record<EmbedTarget['kind'], string> = {
-  youtube: 'YouTube video player',
+  youtube: 'YouTube の動画',
   niconico: 'ニコニコ動画 プレーヤー',
   bilibili: 'bilibili プレーヤー',
 };
 
+/**
+ * YouTube はプレーヤーを読み込むだけで多くのスクリプトが届くので、最初はサムネイルだけを表示する。
+ * iframe の srcdoc にサムネイルと再生ボタン（リンク）を書いておき、押されたときに iframe 内で
+ * プレーヤー（youtube-nocookie.com、自動再生）へ移動する。サイト側の JS は使わない。
+ */
+function youtubeFacade(src: string): string {
+  const id = src.split('/embed/')[1];
+  const player = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1`;
+  return (
+    '<style>*{margin:0}html,body{height:100%;background:#1d2129}' +
+    'a{display:block;height:100%;position:relative}' +
+    'img{width:100%;height:100%;object-fit:cover}' +
+    'span{position:absolute;inset:0;margin:auto;width:68px;height:48px;border-radius:12px;background:rgba(0,0,0,.72)}' +
+    'span::after{content:"";position:absolute;left:27px;top:14px;border-style:solid;border-width:10px 0 10px 17px;border-color:transparent transparent transparent #fff}' +
+    'a:hover span,a:focus-visible span{background:#d00}a:focus-visible{outline:3px solid #fff;outline-offset:-3px}</style>' +
+    `<a href="${player}" aria-label="動画を再生する"><img src="https://i.ytimg.com/vi/${id}/hqdefault.jpg" alt=""><span></span></a>`
+  );
+}
+
 function embed(target: EmbedTarget): Element {
+  const facade = target.kind === 'youtube' ? youtubeFacade(target.src) : undefined;
   return el('div', { className: ['content-embed'] }, [
     el('iframe', {
       src: target.src,
+      ...(facade ? { srcDoc: facade } : {}),
       title: embedTitles[target.kind],
       frameBorder: '0',
       allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture',

@@ -262,6 +262,10 @@ UI リニューアルの提案は別ファイル [UI_PROPOSAL.md](./UI_PROPOSAL.
 | D-47 | ブログの front matter の日付だけの値（2026-11-16）は日本時間の 0 時として扱う（`fromFrontmatterDate`）。article:published_time も +09:00 で出す | YAML の日付は UTC の 0 時になり、OGP 上で日本時間 9 時の公開になっていた |
 | D-48 | favicon を本人の手描きの顔から作り直す（`favicon.ico` 16/32/48px、`apple-touch-icon.png` 180px）。小さいサイズは線を太らせてつぶれないようにした | 本人の依頼（2026-11-26） |
 | D-49 | ブログ記事ページは、本文の幅（36em）の列をページの中央に置く。ヘッダー・フッターは他のページと同じ幅のまま | 本人の依頼（2026-11-27）。PC で右側だけが大きく空いていた。本文の幅は読みやすさのため広げない |
+| D-50 | Works にもブログと同じ `draft: true` を設ける（`npm run build` に含めず、`npm run dev` では表示）。準備中の「M3-2025-秋」を下書きにした | 準備中のページが一覧・サイトマップ・検索に出ていた |
+| D-51 | YouTube の埋め込みは、最初は iframe の srcdoc でサムネイルと再生ボタンだけを表示し、押したら youtube-nocookie.com のプレーヤーに移動する。サイト側の JS は 0 のまま | プレーヤーを読み込むだけで YouTube のスクリプトが大量に届き、ページが重くなる |
+| D-52 | `public/_headers` で `/_astro/*`（ハッシュ付きのファイル名）を 1 年キャッシュ（immutable）にする | これまでは 4 時間ごとに再検証していた |
+| D-53 | 中身の短いページでもフッターを画面の下端に置く（body を 3 段の grid に）。トップと記事ページに JSON-LD（WebSite / BlogPosting）を出す | フッターが画面の途中に浮いていた。検索結果での表示のため |
 | D-50 | 画像の最適化（B-9）は `astro:assets` ではなく、サムネイルと同じスクリプト（`npm run images`、`scripts/make-images.mjs`）で行う。本文の画像は幅 1200px までの WebP を `public/opt/` に書き出してコミットし、`rehype-content.ts` で差し替える。縦横の大きさは `src/data/optimized-images.json` から `width` / `height` に入れる | 本文は独自の Markdown 描画（`render.ts`）なので `astro:assets` の自動最適化が効かず、`image()` 化には画像の移動と描画の作り直しが要る。既存のサムネイルの仕組みを広げれば依存もビルドの処理も増えない。いちばん重い作品ページが約 2.3MB → 約 160KB になり、16:9 決め打ちの width / height によるずれ（CLS）もなくなった |
 | D-51 | ユニットテストは vitest ではなく Node.js 標準の `node:test` で書く（`tests/*.test.ts`、`npm test`）。GitHub Actions で main へのプッシュとプルリクエストごとに lint・`astro check`・テスト・ビルドを行う | 依存を増やさないため。Node.js 22 は TypeScript をそのまま実行できるので、対象の純粋関数（`work-model.ts`、`embed.ts`、`blog-model.ts`）は追加の設定なしでテストできる。`rehype-content.ts` は拡張子なしの import があるため今回は対象外 |
 

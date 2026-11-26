@@ -8,6 +8,8 @@ tags:
   - video
 summary: "準備中のページです。"
 thumbnailUrl: /works-images/preparation.jpg
+# 内容ができたら false にする（または行ごと消す）
+draft: true
 ---
 
 準備中の内容です。

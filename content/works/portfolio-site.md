@@ -11,7 +11,7 @@ thumbnailUrl: /works-images/05/05thumbnail.png
 
 今までの制作物、そしてこれからの制作物をまとめたいなと思い作成しました。
 
-![siteimage](/works-images/05/05thumbnail.png)
+![公開当初（Next.js 版）のトップページ](/works-images/05/05thumbnail.png)
 
 2026年11月に、Next.js から Astro に移行して作り直しました。あわせてブログを追加し、デザインも一新しています。
 
