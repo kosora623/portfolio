@@ -1,0 +1,22 @@
+{
+  "/works-images/01/SNSphoto.jpg": {
+    "src": "/opt/works-images/01/SNSphoto.webp",
+    "width": 1200,
+    "height": 2403
+  },
+  "/works-images/02/onedayOP.png": {
+    "src": "/opt/works-images/02/onedayOP.webp",
+    "width": 679,
+    "height": 415
+  },
+  "/works-images/03/03thumbnail.jpg": {
+    "src": "/opt/works-images/03/03thumbnail.webp",
+    "width": 1200,
+    "height": 675
+  },
+  "/works-images/05/05thumbnail.png": {
+    "src": "/opt/works-images/05/05thumbnail.webp",
+    "width": 1200,
+    "height": 539
+  }
+}

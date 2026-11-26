@@ -2,13 +2,15 @@
  * Markdown 本文（works / blog）の HTML をビルド時に整える rehype プラグイン。
  * Next.js 時代に react-markdown のカスタムコンポーネント（img / a / p）で行っていた処理を、そのまま移植したもの。
  *
- * - img: <span class="content-image"> で包み、遅延読み込みの属性を付ける
+ * - img: <span class="content-image"> で包み、遅延読み込みの属性を付ける。
+ *   軽量版（npm run images で生成）があればそれに差し替え、実際の縦横の大きさを width / height にする
  * - a: 外部リンク（http/https）は新しいタブで開く（見た目は CSS の .prose a）
  * - p: 空白（全角スペースを含む）だけの段落は出力しない。画像だけの段落は <p> を外す。先頭がリンクの段落で、リンク先が動画なら埋め込みに置き換える
  * - 生の HTML（raw ノード）は出力しない（react-markdown は rehype-raw なしでは HTML を描画しなかったため）
  */
 import type { Element, ElementContent, Root, RootContent } from 'hast';
 import { resolveEmbed, type EmbedTarget } from '../embed';
+import { optimizedImage } from '../thumbnail';
 
 type Parent = Root | Element;
 type Child = RootContent;
@@ -22,15 +24,17 @@ function el(tagName: string, properties: Element['properties'], children: Elemen
 
 function imageWrapper(img: Element): Element {
   const { src, alt, title } = img.properties;
+  const opt = typeof src === 'string' ? optimizedImage(src) : undefined;
   return el('span', { className: ['content-image'] }, [
     el('img', {
       alt: alt ?? '',
       ...(title != null ? { title } : {}),
       loading: 'lazy',
-      width: 800,
-      height: 450,
+      // 大きさが分からない画像は、これまでどおり 16:9 の枠を仮に置く
+      width: opt?.width ?? 800,
+      height: opt?.height ?? 450,
       decoding: 'async',
-      src: src ?? '',
+      src: opt?.src ?? src ?? '',
     }),
   ]);
 }
