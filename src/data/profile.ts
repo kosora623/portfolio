@@ -11,7 +11,7 @@ export const hero = {
 } as const;
 
 export const about = {
-  intro: '大学で情報系を学びながら、映像・音楽・プログラミングで制作をしています。',
+  intro: '',
 } as const;
 
 export interface StackGroup {
