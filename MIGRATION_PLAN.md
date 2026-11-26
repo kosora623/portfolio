@@ -263,6 +263,7 @@ UI リニューアルの提案は別ファイル [UI_PROPOSAL.md](./UI_PROPOSAL.
 | D-48 | favicon を本人の手描きの顔から作り直す（`favicon.ico` 16/32/48px、`apple-touch-icon.png` 180px）。小さいサイズは線を太らせてつぶれないようにした | 本人の依頼（2026-11-26） |
 | D-49 | ブログ記事ページは、本文の幅（36em）の列をページの中央に置く。ヘッダー・フッターは他のページと同じ幅のまま | 本人の依頼（2026-11-27）。PC で右側だけが大きく空いていた。本文の幅は読みやすさのため広げない |
 | D-50 | 画像の最適化（B-9）は `astro:assets` ではなく、サムネイルと同じスクリプト（`npm run images`、`scripts/make-images.mjs`）で行う。本文の画像は幅 1200px までの WebP を `public/opt/` に書き出してコミットし、`rehype-content.ts` で差し替える。縦横の大きさは `src/data/optimized-images.json` から `width` / `height` に入れる | 本文は独自の Markdown 描画（`render.ts`）なので `astro:assets` の自動最適化が効かず、`image()` 化には画像の移動と描画の作り直しが要る。既存のサムネイルの仕組みを広げれば依存もビルドの処理も増えない。いちばん重い作品ページが約 2.3MB → 約 160KB になり、16:9 決め打ちの width / height によるずれ（CLS）もなくなった |
+| D-51 | ユニットテストは vitest ではなく Node.js 標準の `node:test` で書く（`tests/*.test.ts`、`npm test`）。GitHub Actions で main へのプッシュとプルリクエストごとに lint・`astro check`・テスト・ビルドを行う | 依存を増やさないため。Node.js 22 は TypeScript をそのまま実行できるので、対象の純粋関数（`work-model.ts`、`embed.ts`、`blog-model.ts`）は追加の設定なしでテストできる。`rehype-content.ts` は拡張子なしの import があるため今回は対象外 |
 
 ---
 
@@ -334,7 +335,7 @@ src/
 - [x] B-8: タグ参照を安全に（スキーマでも検証。D-26）
 - [x] B-4: `EmbedFetcher` を廃止（D-19）
 - [x] `README.md` を実際の内容に書き換える
-- [ ] 純粋関数（`work-model.ts`、`embed.ts`）のユニットテストを追加（vitest を入れる場合）
+- [x] 純粋関数（`work-model.ts`、`embed.ts`）のユニットテストを追加（`node:test`。D-51）
 
 ### 5.2 移行時（Phase 1〜4）
 
@@ -453,7 +454,7 @@ JS の転送量（gzip、HTML 内のインラインスクリプトを含む）:
 - [x] Cloudflare Pages に `SITE_URL` を設定し、再デプロイする（D-29）。2026-11-16 に設定・再デプロイし、本番で og:url / og:image / canonical が出ることを確認（§6.7）
 - [x] ブログをヘッダーのナビに載せる（D-36）
 - [x] 最初のブログ記事「ブログページの開設！」を公開する（D-38）
-- [ ] 純粋関数（`work-model.ts`、`embed.ts`、`rehype-content.ts`）のユニットテスト
+- [x] 純粋関数（`work-model.ts`、`embed.ts`、`blog-model.ts`）のユニットテストと CI（D-51）。`rehype-content.ts` は未
 - [ ] `eslint-plugin-astro` 2 系に上げるときは ESLint 10 への更新が必要（D-16）
 
 
