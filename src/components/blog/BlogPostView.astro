@@ -5,9 +5,13 @@ import PostMeta from './PostMeta.astro';
 
 interface Props {
   post: BlogPost;
+  /** 1 つ新しい記事（ない場合は undefined） */
+  newer?: BlogPost;
+  /** 1 つ古い記事（ない場合は undefined） */
+  older?: BlogPost;
 }
 
-const { post } = Astro.props;
+const { post, newer, older } = Astro.props;
 ---
 
 <article>
@@ -17,6 +21,27 @@ const { post } = Astro.props;
   <div class="prose body">
     <slot />
   </div>
+  <footer class="post-end">
+    {
+      (older || newer) && (
+        <nav class="post-nav" aria-label="ほかの記事">
+          {older && (
+            <a href={`/blog/${older.slug}`} class="older">
+              <span class="mono">← 前の記事</span>
+              <b>{older.title}</b>
+            </a>
+          )}
+          {newer && (
+            <a href={`/blog/${newer.slug}`} class="newer">
+              <span class="mono">次の記事 →</span>
+              <b>{newer.title}</b>
+            </a>
+          )}
+        </nav>
+      )
+    }
+    <p class="back mono"><a href="/blog" class="link">記事一覧へ</a></p>
+  </footer>
 </article>
 
 <style>
@@ -35,5 +60,49 @@ const { post } = Astro.props;
     border-top: 1px solid var(--color-line);
     margin-top: 24px;
     padding-top: 36px;
+  }
+  .post-end {
+    max-width: 36em;
+    margin-top: 56px;
+    border-top: 1px solid var(--color-line);
+  }
+  .post-nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 24px;
+  }
+  .post-nav a {
+    display: block;
+    padding-block: 16px;
+    border-bottom: 1px solid var(--color-line);
+    line-height: 1.6;
+  }
+  .post-nav .newer {
+    grid-column: 2;
+    text-align: right;
+  }
+  .post-nav span {
+    display: block;
+    color: var(--color-muted);
+    font-size: 13px;
+  }
+  .post-nav b {
+    font-weight: 500;
+  }
+  .post-nav a:hover b {
+    color: var(--color-link);
+  }
+  .back {
+    padding-top: 20px;
+    font-size: 14px;
+  }
+  @media (max-width: 520px) {
+    .post-nav {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .post-nav .newer {
+      grid-column: 1;
+      text-align: left;
+    }
   }
 </style>

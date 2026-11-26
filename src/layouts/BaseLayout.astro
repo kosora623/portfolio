@@ -29,7 +29,7 @@ const { title, robots, meta } = Astro.props;
       MAINTENANCE_MODE ? (
         <>
           {robots && <meta name="robots" content={robots} />}
-          <title>サイト改修中 | {site.shortName}</title>
+          <title>サイト改修中 | {site.title}</title>
           <meta name="robots" content="noindex, nofollow" />
         </>
       ) : (
@@ -39,7 +39,9 @@ const { title, robots, meta } = Astro.props;
         </>
       )
     }
-    <link rel="icon" href="/favicon.ico" sizes="24x24" type="image/x-icon" />
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    {!MAINTENANCE_MODE && <link rel="alternate" type="application/rss+xml" title={`${site.title}のブログ`} href="/rss.xml" />}
     <meta name="theme-color" content="#f5f7f9" />
     <!-- 見ている人の時刻に合わせて空の色を変える（JS が動かない環境では昼の色） -->
     <script is:inline>

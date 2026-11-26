@@ -24,11 +24,8 @@ export interface StackGroup {
 export const stack: StackGroup[] = [
   { label: '映像', icon: 'video', items: ['Adobe After Effects', 'Blender'] },
   { label: '音楽', icon: 'music', items: ['Cubase'] },
-  {
-    label: 'コード',
-    icon: 'code',
-    items: ['TypeScript', 'Python', 'C++'],
-  },
+  { label: 'コード', icon: 'code', items: ['TypeScript', 'Python', 'Java', 'Astro'] },
+  { label: '勉強中', icon: 'book', items: ['C++', 'Rust', 'Elixir'] },
 ];
 
 export interface ProfileItem {
@@ -39,8 +36,7 @@ export interface ProfileItem {
 
 export const interests: ProfileItem[] = [
   { title: 'モーショングラフィックス', icon: 'motion' },
-  { title: 'ジェネラティブアート', icon: 'generative' },
-  { title: 'インタラクティブアート', icon: 'cursor' },
+  { title: 'HCI', icon: 'cursor' },
   { title: '画像処理', icon: 'image' },
   { title: 'サウンドデザイン', icon: 'wave' },
 ];
@@ -48,5 +44,5 @@ export const interests: ProfileItem[] = [
 export const hobbies: ProfileItem[] = [
   { title: '散歩', icon: 'pin', description: 'いろんな場所に出没します。どこかで会えるかも...？' },
   { title: '音楽ゲーム', icon: 'gamepad', description: '大体の機種には触っています。指押しが大好物。' },
-  { title: '電子工作', icon: 'chip', description: '最近始めました。Arduino Uno R3で遊んでいます。' },
+  { title: '電子工作', icon: 'chip', description: 'Arduino と STM32 が手元にあります。何に使おうか考え中です。' },
 ];
