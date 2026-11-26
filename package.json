@@ -12,6 +12,7 @@
     "preview": "astro preview",
     "check": "astro check",
     "lint": "eslint",
+    "test": "node --test \"tests/**/*.test.ts\"",
     "thumbs": "node scripts/make-thumbs.mjs"
   },
   "dependencies": {

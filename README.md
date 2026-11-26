@@ -15,6 +15,7 @@ npm run build    # 静的ビルド → out/
 npm run preview  # ビルド結果の確認
 npm run lint     # ESLint
 npm run check    # 型チェック（astro check）
+npm test         # ユニットテスト（Node.js 標準の node:test。tests/*.test.ts）
 ```
 
 ## 改修中モード
@@ -51,6 +52,8 @@ PUBLIC_MAINTENANCE_MODE=true npm run build   # 改修中ページでビルドす
 ## デプロイ
 
 Cloudflare Pages。ビルドコマンド `npm run build`、出力ディレクトリ `out`。
+
+GitHub Actions（`.github/workflows/ci.yml`）が main へのプッシュとプルリクエストで lint・型チェック・テスト・ビルドを行います。
 
 | 環境変数 | 用途 |
 |---|---|
