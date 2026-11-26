@@ -1,12 +1,38 @@
 ---
-import { site } from '@/data/site';
-import { resolveMeta, type PageMeta } from '@/lib/seo';
+import { site, socialLinks } from '@/data/site';
+import { resolveMeta, toPublicPath, type PageMeta } from '@/lib/seo';
 
 interface Props {
   meta: PageMeta;
 }
 
 const m = resolveMeta(Astro.props.meta, Astro.url.pathname, Astro.site);
+
+// 検索エンジン向けの構造化データ（JSON-LD）。絶対 URL が必要なので site が設定されているときだけ出す
+const path = toPublicPath(Astro.url.pathname);
+const home = Astro.site ? new URL('/', Astro.site).href : undefined;
+const person = {
+  '@type': 'Person',
+  name: site.shortName,
+  url: home,
+  sameAs: socialLinks.filter(l => l.href.startsWith('https://')).map(l => l.href),
+};
+const jsonLd = !m.url
+  ? undefined
+  : path === '/'
+    ? { '@context': 'https://schema.org', '@type': 'WebSite', name: site.title, url: m.url, description: m.description, author: person }
+    : path.startsWith('/blog/') && m.publishedTime
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'BlogPosting',
+          headline: Astro.props.meta.title,
+          description: m.description,
+          datePublished: m.publishedTime,
+          url: m.url,
+          image: m.image,
+          author: person,
+        }
+      : undefined;
 ---
 
 <title>{m.title}</title>
@@ -21,3 +47,4 @@ const m = resolveMeta(Astro.props.meta, Astro.url.pathname, Astro.site);
 {m.image && <meta property="og:image" content={m.image} />}
 {m.publishedTime && <meta property="article:published_time" content={m.publishedTime} />}
 <meta name="twitter:card" content={m.twitterCard} />
+{jsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')} />}
