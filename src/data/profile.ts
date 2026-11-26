@@ -22,8 +22,8 @@ export interface StackGroup {
 
 /** 使っている技術・ツール（分野ごと） */
 export const stack: StackGroup[] = [
-  { label: '映像', icon: 'video', items: ['Aviutl', 'Adobe After Effects', 'Blender'] },
-  { label: '音楽', icon: 'music', items: ['Cubase', 'GarageBand'] },
+  { label: '映像', icon: 'video', items: ['Adobe After Effects', 'Blender'] },
+  { label: '音楽', icon: 'music', items: ['Cubase'] },
   {
     label: 'コード',
     icon: 'code',
@@ -41,7 +41,6 @@ export const interests: ProfileItem[] = [
   { title: 'モーショングラフィックス', icon: 'motion' },
   { title: 'ジェネラティブアート', icon: 'generative' },
   { title: 'インタラクティブアート', icon: 'cursor' },
-  { title: 'Web フロントエンド', icon: 'web' },
   { title: '画像処理', icon: 'image' },
   { title: 'サウンドデザイン', icon: 'wave' },
 ];
