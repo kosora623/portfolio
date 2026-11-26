@@ -7,16 +7,20 @@ import { renderEntryBody } from '@/lib/markdown/render';
 
 export const getStaticPaths = (async () => {
   const entries = await getPostEntries();
-  return entries.map(({ entry, post }) => ({ params: { slug: post.slug }, props: { entry, post } }));
+  // entries は新しい順なので、1 つ前が「次の記事（新しい）」、1 つ後が「前の記事（古い）」
+  return entries.map(({ entry, post }, i) => ({
+    params: { slug: post.slug },
+    props: { entry, post, newer: entries[i - 1]?.post, older: entries[i + 1]?.post },
+  }));
 }) satisfies GetStaticPaths;
 
-const { entry, post } = Astro.props;
+const { entry, post, newer, older } = Astro.props;
 // 作品ページと同じ Markdown の描画（src/lib/markdown）
 const html = await renderEntryBody(entry);
 ---
 
 <BaseLayout meta={{ title: post.title, description: post.description, type: 'article', publishedTime: post.date }}>
-  <BlogPostView post={post}>
+  <BlogPostView post={post} newer={newer} older={older}>
     <Fragment set:html={html} />
   </BlogPostView>
 </BaseLayout>

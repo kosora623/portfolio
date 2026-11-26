@@ -7,6 +7,6 @@ import { site, pageDescriptions } from '@/data/site';
 const worksCount = (await getAllWorks()).length;
 ---
 
-<BaseLayout meta={{ title: site.shortName, description: pageDescriptions.home }}>
+<BaseLayout meta={{ title: site.title, description: pageDescriptions.home }}>
   <HomePage worksCount={worksCount} />
 </BaseLayout>

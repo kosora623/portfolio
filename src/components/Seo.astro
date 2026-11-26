@@ -15,7 +15,7 @@ const m = resolveMeta(Astro.props.meta, Astro.url.pathname, Astro.site);
 <meta property="og:title" content={m.title} />
 {m.description && <meta property="og:description" content={m.description} />}
 <meta property="og:type" content={m.type} />
-<meta property="og:site_name" content={site.shortName} />
+<meta property="og:site_name" content={site.title} />
 <meta property="og:locale" content="ja_JP" />
 {m.url && <meta property="og:url" content={m.url} />}
 {m.image && <meta property="og:image" content={m.image} />}

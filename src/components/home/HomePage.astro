@@ -92,7 +92,16 @@ const { worksCount } = Astro.props;
                   <SocialIcon name={link.icon} />
                   {link.name}
                 </b>
-                <span class="handle">{link.handle}</span>
+                <span class="handle">
+                  {
+                    // メールアドレスは @ の後ろで折り返す（スマホで .com の途中で切れないように）
+                    link.id === 'email' ? (
+                      <>{link.handle.split('@')[0]}@<wbr />{link.handle.split('@')[1]}</>
+                    ) : (
+                      link.handle
+                    )
+                  }
+                </span>
                 {external && (
                   <span class="ext">
                     <LineIcon name="external" />
@@ -202,7 +211,7 @@ const { worksCount } = Astro.props;
   }
   .handle {
     color: var(--color-muted);
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
   }
   .contact a:hover,
   .contact a:hover .handle,
