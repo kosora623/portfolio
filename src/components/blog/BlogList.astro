@@ -13,6 +13,7 @@ const { posts } = Astro.props;
 <div class="head">
   <h1>Blog</h1>
   <span class="mono count">{posts.length} 件</span>
+  <a href="/rss.xml" class="mono rss">RSS</a>
 </div>
 
 {
@@ -45,6 +46,14 @@ const { posts } = Astro.props;
     font-size: clamp(2rem, 5.6vw, 3rem);
     font-weight: 600;
     line-height: 1.2;
+  }
+  .rss {
+    margin-left: auto;
+    font-size: 13.5px;
+    color: var(--color-muted);
+  }
+  .rss:hover {
+    color: var(--color-link);
   }
   .count,
   .empty {

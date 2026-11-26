@@ -2,6 +2,7 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { tagInfo } from '@/data/tags';
+import { fromFrontmatterDate } from '@/lib/blog-model';
 
 const tagKeys = Object.keys(tagInfo) as [string, ...string[]];
 
@@ -37,7 +38,8 @@ const blog = defineCollection({
   schema: z.object({
     title: z.string(),
     // YAML の日付（2026-11-15）や日時（2026-11-15T10:00:00+09:00）を受け付ける
-    date: z.coerce.date(),
+    // 日付だけのときは日本時間の 0 時として扱う（src/lib/blog-model.ts）
+    date: z.coerce.date().transform(fromFrontmatterDate),
     description: z.string(),
     tags: z.array(z.string()).default([]),
     // true の記事は npm run build に含めない（npm run dev では確認用に表示する）

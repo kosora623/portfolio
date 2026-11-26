@@ -6,6 +6,10 @@
 
 export const site = {
   shortName: 'kosora',
+  /** タブ・検索結果・OGP に出すサイト名 */
+  title: '小空の部屋',
+  /** フッターの © の開始年 */
+  since: 2025,
   contactEmail: 'contact@kosora623.com',
 } as const;
 

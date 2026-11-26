@@ -1,10 +1,13 @@
 ---
 import { footerSocialLinks, site } from '@/data/site';
 import SocialIcon from '@/components/icons/SocialIcon.astro';
+
+/** ビルドした年（＝最後に更新した年） */
+const year = new Date().getFullYear();
 ---
 
 <footer class="page site-footer">
-  <p class="mono">© 2026 {site.shortName}</p>
+  <p class="mono">© {site.since}–{year} {site.shortName}</p>
   <ul>
     {
       footerSocialLinks.map(link => (
