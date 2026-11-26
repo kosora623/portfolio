@@ -44,6 +44,8 @@ const blog = defineCollection({
     date: z.coerce.date().transform(fromFrontmatterDate),
     description: z.string(),
     tags: z.array(z.string()).default([]),
+    // 共有したときの OGP 画像（public/ からのパス、または絶対 URL）。省略時は記事ごとに自動生成した画像を使う
+    image: z.string().optional(),
     // true の記事は npm run build に含めない（npm run dev では確認用に表示する）
     draft: z.boolean().default(false),
   }),

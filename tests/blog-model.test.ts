@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { comparePosts, formatDate, fromFrontmatterDate, isVisible, toJstIso, type BlogPost } from '../src/lib/blog-model.ts';
+import { comparePosts, formatDate, fromFrontmatterDate, isVisible, skyFor, toJstIso, type BlogPost } from '../src/lib/blog-model.ts';
 
 const post = (slug: string, iso: string): BlogPost => ({ slug, title: slug, date: new Date(iso), description: '', tags: [], draft: false });
 
@@ -25,4 +25,13 @@ test('fromFrontmatterDate: 日付だけの値は日本時間の 0 時、時刻�
 test('formatDate: 日本時間の日付（UTC では前日でも）', () => {
   assert.equal(formatDate(new Date('2026-11-15T15:30:00Z')), '2026-11-16');
   assert.equal(formatDate(fromFrontmatterDate(new Date('2026-11-16'))), '2026-11-16');
+});
+
+test('skyFor: 投稿時刻（日本時間）で空の色を選ぶ。日付だけの記事は昼', () => {
+  assert.equal(skyFor(fromFrontmatterDate(new Date('2026-11-16'))), 'day');
+  assert.equal(skyFor(new Date('2026-11-16T06:30:00+09:00')), 'morning');
+  assert.equal(skyFor(new Date('2026-11-16T12:00:00+09:00')), 'day');
+  assert.equal(skyFor(new Date('2026-11-16T17:00:00+09:00')), 'evening');
+  assert.equal(skyFor(new Date('2026-11-16T23:15:00+09:00')), 'night');
+  assert.equal(skyFor(new Date('2026-11-16T00:30:00+09:00')), 'night');
 });

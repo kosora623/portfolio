@@ -268,6 +268,7 @@ UI リニューアルの提案は別ファイル [UI_PROPOSAL.md](./UI_PROPOSAL.
 | D-53 | 中身の短いページでもフッターを画面の下端に置く（body を 3 段の grid に）。トップと記事ページに JSON-LD（WebSite / BlogPosting）を出す | フッターが画面の途中に浮いていた。検索結果での表示のため |
 | D-50 | 画像の最適化（B-9）は `astro:assets` ではなく、サムネイルと同じスクリプト（`npm run images`、`scripts/make-images.mjs`）で行う。本文の画像は幅 1200px までの WebP を `public/opt/` に書き出してコミットし、`rehype-content.ts` で差し替える。縦横の大きさは `src/data/optimized-images.json` から `width` / `height` に入れる | 本文は独自の Markdown 描画（`render.ts`）なので `astro:assets` の自動最適化が効かず、`image()` 化には画像の移動と描画の作り直しが要る。既存のサムネイルの仕組みを広げれば依存もビルドの処理も増えない。いちばん重い作品ページが約 2.3MB → 約 160KB になり、16:9 決め打ちの width / height によるずれ（CLS）もなくなった |
 | D-51 | ユニットテストは vitest ではなく Node.js 標準の `node:test` で書く（`tests/*.test.ts`、`npm test`）。GitHub Actions で main へのプッシュとプルリクエストごとに lint・`astro check`・テスト・ビルドを行う | 依存を増やさないため。Node.js 22 は TypeScript をそのまま実行できるので、対象の純粋関数（`work-model.ts`、`embed.ts`、`blog-model.ts`）は追加の設定なしでテストできる。`rehype-content.ts` は拡張子なしの import があるため今回は対象外 |
+| D-52 | ブログ記事の OGP 画像は、frontmatter の `image`（public/ からのパスか絶対 URL）があればそれを使い、なければビルド時に記事ごとに作る（`/og/blog/<slug>.png`、`src/lib/og-image.ts`）。デザインは C 案「空の額縁」で、空の色は投稿時刻（日本時間、トップの空の帯と同じ区切り）で決め、日付だけの記事は昼の空にする。生成には開発用の依存 `satori`・`@resvg/resvg-js` を使い、フォント（Noto Sans JP・JetBrains Mono）は Google Fonts から画像に出る文字だけを取る。取れないときは共通の `og.png` で代用する | 本人がデザイン C と依存の追加を選んだ（2026-11-27）。画像はビルド時に作るので配信するページの重さは変わらない。フォントをリポジトリに置かずに済み、取得に失敗してもビルドは止まらない |
 
 ---
 
