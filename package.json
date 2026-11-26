@@ -12,7 +12,8 @@
     "preview": "astro preview",
     "check": "astro check",
     "lint": "eslint",
-    "thumbs": "node scripts/make-thumbs.mjs"
+    "images": "node scripts/make-images.mjs",
+    "thumbs": "node scripts/make-images.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.9",
