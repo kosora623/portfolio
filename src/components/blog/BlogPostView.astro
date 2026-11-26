@@ -45,6 +45,11 @@ const { post, newer, older } = Astro.props;
 </article>
 
 <style>
+  /* 本文の幅（.prose と同じ 36em）の列をページの中央に置く。広い画面で右だけが空かないように */
+  article {
+    max-width: 36em;
+    margin-inline: auto;
+  }
   .crumb {
     padding-top: 16px;
     color: var(--color-muted);
