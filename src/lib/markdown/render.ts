@@ -28,6 +28,8 @@ function getProcessor() {
     gfm: true,
     smartypants: false,
     rehypePlugins: [rehypeContent],
+    // 脚注（[^1]）の見出しと「本文へ戻る」リンクの読み上げを日本語にする
+    remarkRehype: { footnoteLabel: '脚注', footnoteBackLabel: (i: number) => `本文の ${i + 1} 番目の参照へ戻る` },
   });
   return processor;
 }

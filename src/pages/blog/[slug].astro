@@ -4,17 +4,26 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import BlogPostView from '@/components/blog/BlogPostView.astro';
 import { getPostEntries } from '@/lib/blog';
 import { renderEntryBody } from '@/lib/markdown/render';
+import { getAllWorks } from '@/lib/works';
 
 export const getStaticPaths = (async () => {
   const entries = await getPostEntries();
+  // 下書きの作品は公開されないので、リンクも出さない
+  const works = await getAllWorks();
   // entries は新しい順なので、1 つ前が「次の記事（新しい）」、1 つ後が「前の記事（古い）」
   return entries.map(({ entry, post }, i) => ({
     params: { slug: post.slug },
-    props: { entry, post, newer: entries[i - 1]?.post, older: entries[i + 1]?.post },
+    props: {
+      entry,
+      post,
+      works: works.filter(w => post.works.includes(w.slug)),
+      newer: entries[i - 1]?.post,
+      older: entries[i + 1]?.post,
+    },
   }));
 }) satisfies GetStaticPaths;
 
-const { entry, post, newer, older } = Astro.props;
+const { entry, post, works, newer, older } = Astro.props;
 // 作品ページと同じ Markdown の描画（src/lib/markdown）
 const html = await renderEntryBody(entry);
 // 共有したときの画像: frontmatter の image、なければビルド時に作った画像（src/pages/og/blog/[slug].png.ts）
@@ -22,7 +31,7 @@ const image = post.image ?? `/og/blog/${post.slug}.png`;
 ---
 
 <BaseLayout meta={{ title: post.title, description: post.description, type: 'article', publishedTime: post.date, image }}>
-  <BlogPostView post={post} newer={newer} older={older}>
+  <BlogPostView post={post} works={works} newer={newer} older={older}>
     <Fragment set:html={html} />
   </BlogPostView>
 </BaseLayout>

@@ -1,4 +1,4 @@
-import { defineCollection } from 'astro:content';
+import { defineCollection, reference } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { tagInfo } from '@/data/tags';
@@ -44,6 +44,9 @@ const blog = defineCollection({
     date: z.coerce.date().transform(fromFrontmatterDate),
     description: z.string(),
     tags: z.array(z.string()).default([]),
+    // この記事で取り上げた作品（content/works のファイル名）。作品ページに「この作品について書いた記事」として出る。
+    // 存在しない作品を書くとビルド時にエラーになる
+    works: z.array(reference('works')).default([]),
     // 共有したときの OGP 画像（public/ からのパス、または絶対 URL）。省略時は記事ごとに自動生成した画像を使う
     image: z.string().optional(),
     // true の記事は npm run build に含めない（npm run dev では確認用に表示する）

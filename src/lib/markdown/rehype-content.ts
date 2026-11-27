@@ -172,7 +172,8 @@ function walk(parent: Parent, used: Map<string, number>) {
     if (isElement(child)) {
       walk(child, used);
       if (child.tagName === 'a') decorateLink(child);
-      if (headingTags.has(child.tagName)) decorateHeading(child, used);
+      // 脚注の見出し（remark-rehype が作る id="footnote-label"）にはリンクを付けない
+      if (headingTags.has(child.tagName) && child.properties.id !== 'footnote-label') decorateHeading(child, used);
       if (child.tagName === 'img') {
         next.push(imageWrapper(child));
         continue;

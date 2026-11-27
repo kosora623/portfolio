@@ -3,14 +3,17 @@ import type { WorkFromMd } from '@/lib/work-model';
 import { formatYearMonth } from '@/lib/work-model';
 import { tagInfo } from '@/data/tags';
 import LineIcon from '@/components/icons/LineIcon.astro';
+import { formatDate, type BlogPost } from '@/lib/blog-model';
 
 interface Props {
   work: WorkFromMd;
+  /** この作品について書いた記事（新しい順）。記事の frontmatter の works で指定する */
+  posts?: BlogPost[];
   newer?: WorkFromMd;
   older?: WorkFromMd;
 }
 
-const { work, newer, older } = Astro.props;
+const { work, posts = [], newer, older } = Astro.props;
 const published = work.month ? `${work.year}年${work.month}月` : `${work.year}年`;
 ---
 
@@ -40,6 +43,27 @@ const published = work.month ? `${work.year}年${work.month}月` : `${work.year}
           }
         </dd>
       </div>
+      {
+        posts.length > 0 && (
+          <div>
+            <dt class="mono">この作品について書いた記事</dt>
+            <dd>
+              <ul class="posts">
+                {posts.map(post => (
+                  <li>
+                    <a href={`/blog/${post.slug}`}>
+                      <b>{post.title}</b>
+                      <time class="mono" datetime={formatDate(post.date)}>
+                        {formatDate(post.date).replaceAll('-', '.')}
+                      </time>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </dd>
+          </div>
+        )
+      }
     </dl>
   </div>
 
@@ -107,6 +131,20 @@ const published = work.month ? `${work.year}年${work.month}月` : `${work.year}
     display: inline-flex;
     align-items: center;
     gap: 0.45em;
+  }
+  .posts li + li {
+    margin-top: 8px;
+  }
+  .posts b {
+    display: block;
+    font-weight: 400;
+  }
+  .posts time {
+    color: var(--color-muted);
+    font-size: 12.5px;
+  }
+  .posts a:hover b {
+    color: var(--color-link);
   }
   .pn {
     display: grid;

@@ -1,8 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { collectTags, comparePosts, formatDate, fromFrontmatterDate, isVisible, skyFor, tagHref, toJstIso, type BlogPost } from '../src/lib/blog-model.ts';
+import { collectTags, comparePosts, postsAboutWork, formatDate, fromFrontmatterDate, isVisible, skyFor, tagHref, toJstIso, type BlogPost } from '../src/lib/blog-model.ts';
 
-const post = (slug: string, iso: string): BlogPost => ({ slug, title: slug, date: new Date(iso), description: '', tags: [], draft: false });
+const post = (slug: string, iso: string): BlogPost => ({ slug, title: slug, date: new Date(iso), description: '', tags: [], works: [], draft: false });
 
 test('isVisible: 下書きは includeDrafts のときだけ', () => {
   assert.equal(isVisible({ draft: false }, false), true);
@@ -48,4 +48,14 @@ test('collectTags: 件数の多い順、同数なら名前順。1 記事に同�
 test('tagHref: 日本語や記号は URL エンコードする', () => {
   assert.equal(tagHref('diary'), '/blog/tags/diary');
   assert.equal(tagHref('日記'), '/blog/tags/%E6%97%A5%E8%A8%98');
+});
+
+test('postsAboutWork: その作品を取り上げた記事だけを、元の順のまま返す', () => {
+  const posts = [
+    { slug: 'b', works: ['oneday-op'] },
+    { slug: 'a', works: [] },
+    { slug: 'c', works: ['portfolio-site', 'oneday-op'] },
+  ];
+  assert.deepEqual(postsAboutWork(posts, 'oneday-op').map(p => p.slug), ['b', 'c']);
+  assert.deepEqual(postsAboutWork(posts, 'none'), []);
 });
