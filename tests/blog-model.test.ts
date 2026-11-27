@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { comparePosts, formatDate, fromFrontmatterDate, isVisible, skyFor, toJstIso, type BlogPost } from '../src/lib/blog-model.ts';
+import { collectTags, comparePosts, formatDate, fromFrontmatterDate, isVisible, skyFor, tagHref, toJstIso, type BlogPost } from '../src/lib/blog-model.ts';
 
 const post = (slug: string, iso: string): BlogPost => ({ slug, title: slug, date: new Date(iso), description: '', tags: [], draft: false });
 
@@ -34,4 +34,18 @@ test('skyFor: 投稿時刻（日本時間）で空の色を選ぶ。日付だけ
   assert.equal(skyFor(new Date('2026-11-16T17:00:00+09:00')), 'evening');
   assert.equal(skyFor(new Date('2026-11-16T23:15:00+09:00')), 'night');
   assert.equal(skyFor(new Date('2026-11-16T00:30:00+09:00')), 'night');
+});
+
+test('collectTags: 件数の多い順、同数なら名前順。1 記事に同じタグが重複しても 1 件', () => {
+  const posts = [{ tags: ['diary', 'astro'] }, { tags: ['astro', 'astro'] }, { tags: ['code'] }];
+  assert.deepEqual(collectTags(posts), [
+    { tag: 'astro', count: 2 },
+    { tag: 'code', count: 1 },
+    { tag: 'diary', count: 1 },
+  ]);
+});
+
+test('tagHref: 日本語や記号は URL エンコードする', () => {
+  assert.equal(tagHref('diary'), '/blog/tags/diary');
+  assert.equal(tagHref('日記'), '/blog/tags/%E6%97%A5%E8%A8%98');
 });

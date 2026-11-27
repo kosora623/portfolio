@@ -7,6 +7,7 @@
  * - a: 外部リンク（http/https）は新しいタブで開く（見た目は CSS の .prose a）
  * - p: 空白（全角スペースを含む）だけの段落は出力しない。画像だけの段落は <p> を外す。先頭がリンクの段落で、リンク先が動画なら埋め込みに置き換える
  * - 生の HTML（raw ノード）は出力しない（react-markdown は rehype-raw なしでは HTML を描画しなかったため）
+ * - h2〜h4: 見出しの文字から id を付け、見出しへのリンク（#）を末尾に置く（見出し単位で URL を共有できるように）
  */
 import type { Element, ElementContent, Root, RootContent } from 'hast';
 import { resolveEmbed, type EmbedTarget } from '../embed';
@@ -119,7 +120,41 @@ function transformParagraph(p: Element): Child[] | null {
   return null;
 }
 
-function walk(parent: Parent) {
+const headingTags = new Set(['h2', 'h3', 'h4']);
+
+function textOf(node: Element | ElementContent): string {
+  if (node.type === 'text') return node.value;
+  if (node.type === 'element') return node.children.map(textOf).join('');
+  return '';
+}
+
+/**
+ * 見出しの id。GitHub と同じく、小文字にして記号を除き、空白を - にする（日本語はそのまま残る）。
+ * 同じ見出しが続くときは -1、-2 … を付ける
+ */
+export function headingId(text: string, used: Map<string, number>): string {
+  const base =
+    text
+      .trim()
+      .toLowerCase()
+      .replace(/[^\p{L}\p{N}\p{M}\s_-]/gu, '')
+      .replace(/\s/g, '-') || 'section';
+  const n = used.get(base) ?? 0;
+  used.set(base, n + 1);
+  return n === 0 ? base : `${base}-${n}`;
+}
+
+function decorateHeading(h: Element, used: Map<string, number>) {
+  const id = typeof h.properties.id === 'string' ? h.properties.id : headingId(textOf(h), used);
+  h.properties.id = id;
+  h.children.push(
+    el('a', { className: ['heading-anchor'], href: `#${encodeURIComponent(id)}`, ariaLabel: 'この見出しへのリンク' }, [
+      { type: 'text', value: '#' },
+    ]),
+  );
+}
+
+function walk(parent: Parent, used: Map<string, number>) {
   const next: Child[] = [];
   for (const child of parent.children as Child[]) {
     // raw ノードは remark-rehype の allowDangerousHtml で作られる（hast の型定義には含まれない）
@@ -128,15 +163,16 @@ function walk(parent: Parent) {
       const replaced = transformParagraph(child);
       if (replaced) {
         for (const r of replaced) {
-          if (isElement(r)) walk(r);
+          if (isElement(r)) walk(r, used);
           next.push(isElement(r, 'img') ? imageWrapper(r) : r);
         }
         continue;
       }
     }
     if (isElement(child)) {
-      walk(child);
+      walk(child, used);
       if (child.tagName === 'a') decorateLink(child);
+      if (headingTags.has(child.tagName)) decorateHeading(child, used);
       if (child.tagName === 'img') {
         next.push(imageWrapper(child));
         continue;
@@ -149,6 +185,6 @@ function walk(parent: Parent) {
 
 export default function rehypeContent() {
   return (tree: Root) => {
-    walk(tree);
+    walk(tree, new Map());
   };
 }

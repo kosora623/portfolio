@@ -9,12 +9,22 @@ import fs from 'node:fs/promises';
 import { createMarkdownProcessor, parseFrontmatter, type MarkdownRenderer } from '@astrojs/markdown-remark';
 import rehypeContent from './rehype-content';
 
+/**
+ * コードの色。ライト・ダーク両方の色を CSS 変数（--shiki-light / --shiki-dark）で出し、
+ * どちらを使うかは global.css で決める（ダークモードの切り替えボタンにも合わせるため）
+ */
+export const shikiConfig = {
+  themes: { light: 'github-light', dark: 'github-dark-dimmed' },
+  defaultColor: false,
+} as const;
+
 let processor: Promise<MarkdownRenderer> | undefined;
 
 function getProcessor() {
   processor ??= createMarkdownProcessor({
-    // react-markdown + remark-gfm と同じ: GFM あり、コードの装飾なし、引用符の自動変換なし
-    syntaxHighlight: false,
+    // GFM あり、引用符の自動変換なし。コードはビルド時に Shiki で色を付ける（ページに JS は増えない）
+    syntaxHighlight: 'shiki',
+    shikiConfig,
     gfm: true,
     smartypants: false,
     rehypePlugins: [rehypeContent],

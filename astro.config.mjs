@@ -23,7 +23,8 @@ export default defineConfig({
   markdown: {
     // works / blog の本文は src/lib/markdown/render.ts で描画している（同じ設定）。
     // ここは Astro 標準の render() を使う場合のための設定。
-    syntaxHighlight: false,
+    syntaxHighlight: 'shiki',
+    shikiConfig: { themes: { light: 'github-light', dark: 'github-dark-dimmed' }, defaultColor: false },
     processor: unified({ smartypants: false, rehypePlugins: [rehypeContent] }),
   },
 });

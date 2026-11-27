@@ -17,7 +17,7 @@ export const site = {
 export const pageDescriptions = {
   home: 'kosora のポートフォリオサイトです。映像・音楽・プログラミングの制作物とブログを載せています。',
   works: 'kosora の制作物（映像・音楽・プログラミング）の一覧です。',
-  blog: 'kosora のブログです。',
+  blog: '小空のブログです。',
 } as const;
 
 export const navItems = [

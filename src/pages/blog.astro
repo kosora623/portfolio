@@ -2,11 +2,12 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import BlogList from '@/components/blog/BlogList.astro';
 import { getPostEntries } from '@/lib/blog';
+import { collectTags } from '@/lib/blog-model';
 import { pageDescriptions } from '@/data/site';
 
 const posts = (await getPostEntries()).map(p => p.post);
 ---
 
 <BaseLayout meta={{ title: 'Blog', description: pageDescriptions.blog }}>
-  <BlogList posts={posts} />
+  <BlogList posts={posts} tags={collectTags(posts)} />
 </BaseLayout>

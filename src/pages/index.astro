@@ -2,11 +2,14 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import HomePage from '@/components/home/HomePage.astro';
 import { getAllWorks } from '@/lib/works';
+import { getPostEntries } from '@/lib/blog';
 import { site, pageDescriptions } from '@/data/site';
 
 const worksCount = (await getAllWorks()).length;
+// トップには新しい記事を 3 件まで、文字だけで並べる
+const latestPosts = (await getPostEntries()).slice(0, 3).map(p => p.post);
 ---
 
 <BaseLayout meta={{ title: site.title, description: pageDescriptions.home }}>
-  <HomePage worksCount={worksCount} />
+  <HomePage worksCount={worksCount} latestPosts={latestPosts} />
 </BaseLayout>
