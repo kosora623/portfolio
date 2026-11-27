@@ -50,6 +50,35 @@
 :root[data-sky="evening"] { --sky-top: #e9a98e; --sky-bottom: #8e97c6; }
 :root[data-sky="night"] { --sky-top: #18233f; --sky-bottom: #46557f; }
 
+/*
+ * ダークモード。背景はトップの夜の空に寄せた紺色。@theme の色トークンを上書きするので、各コンポーネントは変更不要。
+ * ふだんは端末の設定に合わせ、ヘッダーのボタンで選んだときは <html data-theme> がそれより優先される（D-57）。
+ * 同じ値を 2 か所に書いているので、色を変えるときは両方を直す。
+ */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-paper: #131a26;
+  --color-ink: #dde3ea;
+  --color-muted: #909cac;
+  --color-line: #29334a;
+  --color-link: #8db6e4;
+  --color-thumb: #1b2334;
+  /* 空の帯とロゴのマークが暗い背景でまぶしくならないよう、少し暗くする */
+  --sky-dim: brightness(0.78) saturate(0.85);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --color-paper: #131a26;
+    --color-ink: #dde3ea;
+    --color-muted: #909cac;
+    --color-line: #29334a;
+    --color-link: #8db6e4;
+    --color-thumb: #1b2334;
+    --sky-dim: brightness(0.78) saturate(0.85);
+  }
+}
+
 html {
   -webkit-text-size-adjust: 100%;
   scroll-padding-top: 24px;

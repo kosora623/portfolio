@@ -1,5 +1,6 @@
 ---
 import { navItems, site } from '@/data/site';
+import LineIcon from '@/components/icons/LineIcon.astro';
 
 /** 現在のページ（/works/foo なら Works） */
 const path = Astro.url.pathname.replace(/\.html$/, '').replace(/\/index$/, '/');
@@ -22,7 +23,42 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path === href
       }
     </ul>
   </nav>
+  <!-- ライト/ダークの切り替え（JS が動くときだけ表示。選んだ値は localStorage に保存し、BaseLayout の head で読む） -->
+  <button type="button" class="theme-toggle" aria-label="ダークモード" aria-pressed="false" data-theme-toggle>
+    <LineIcon name="moon" class="icon-moon" />
+    <LineIcon name="sun" class="icon-sun" />
+  </button>
 </header>
+
+<script is:inline>
+  (function () {
+    const button = document.querySelector('[data-theme-toggle]');
+    if (!button) return;
+    const root = document.documentElement;
+    const media = window.matchMedia('(prefers-color-scheme: dark)');
+    const isDark = function () { return root.dataset.theme ? root.dataset.theme === 'dark' : media.matches; };
+    const sync = function () { button.setAttribute('aria-pressed', String(isDark())); };
+    sync();
+    media.addEventListener('change', sync);
+    button.addEventListener('click', function () {
+      const next = isDark() ? 'light' : 'dark';
+      const metas = document.querySelectorAll('meta[name="theme-color"]');
+      // 端末の設定と同じになるなら、選んだ値を消して端末の設定に従う状態へ戻す
+      if ((next === 'dark') === media.matches) {
+        delete root.dataset.theme;
+        metas.forEach(function (m) { m.content = m.media.indexOf('dark') >= 0 ? '#131a26' : '#f5f7f9'; });
+      } else {
+        root.dataset.theme = next;
+        metas.forEach(function (m) { m.content = next === 'dark' ? '#131a26' : '#f5f7f9'; });
+      }
+      try {
+        if (root.dataset.theme) localStorage.setItem('theme', root.dataset.theme);
+        else localStorage.removeItem('theme');
+      } catch (e) {}
+      sync();
+    });
+  })();
+</script>
 
 <style>
   .skip {
@@ -54,6 +90,10 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path === href
     width: 14px;
     height: 14px;
     background: linear-gradient(var(--sky-top), var(--sky-bottom));
+    filter: var(--sky-dim, none);
+  }
+  nav {
+    margin-left: auto;
   }
   ul {
     display: flex;
@@ -70,5 +110,28 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path === href
   }
   nav a[aria-current='page'] {
     border-bottom: 1px solid currentColor;
+  }
+  .theme-toggle {
+    display: none;
+    align-self: center;
+    padding: 4px;
+    margin: -4px -4px -4px 0;
+    color: var(--color-muted);
+    background: none;
+    border: 0;
+    cursor: pointer;
+  }
+  :global(:root[data-js]) .theme-toggle {
+    display: inline-flex;
+  }
+  .theme-toggle:hover {
+    color: var(--color-ink);
+  }
+  .theme-toggle :global(.line-icon) {
+    color: inherit;
+  }
+  .theme-toggle[aria-pressed='true'] :global(.icon-moon),
+  .theme-toggle[aria-pressed='false'] :global(.icon-sun) {
+    display: none;
   }
 </style>
