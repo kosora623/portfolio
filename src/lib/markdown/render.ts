@@ -8,6 +8,7 @@
 import fs from 'node:fs/promises';
 import { createMarkdownProcessor, parseFrontmatter, type MarkdownRenderer } from '@astrojs/markdown-remark';
 import rehypeContent from './rehype-content';
+import type { Heading } from './toc';
 
 /**
  * コードの色。ライト・ダーク両方の色を CSS 変数（--shiki-light / --shiki-dark）で出し、
@@ -35,14 +36,25 @@ function getProcessor() {
 }
 
 export async function renderMarkdown(markdown: string): Promise<string> {
-  const { code } = await (await getProcessor()).render(markdown);
-  return code;
+  return (await renderMarkdownWithHeadings(markdown)).html;
+}
+
+/** HTML と見出しの一覧（目次用）を返す */
+export async function renderMarkdownWithHeadings(markdown: string): Promise<{ html: string; headings: Heading[] }> {
+  const { code, metadata } = await (await getProcessor()).render(markdown);
+  return { html: code, headings: metadata.headings };
 }
 
 /** コンテンツコレクションのエントリ（filePath を持つもの）の本文を、元ファイルから読み直して描画する */
 export async function renderEntryBody(entry: { filePath?: string; body?: string }): Promise<string> {
-  const body = entry.filePath
-    ? parseFrontmatter(await fs.readFile(entry.filePath, 'utf8')).content
-    : (entry.body ?? '');
-  return renderMarkdown(body);
+  return renderMarkdown(await readBody(entry));
+}
+
+/** renderEntryBody と同じく描画し、見出しの一覧も返す（ブログ記事の目次用） */
+export async function renderEntryWithHeadings(entry: { filePath?: string; body?: string }) {
+  return renderMarkdownWithHeadings(await readBody(entry));
+}
+
+async function readBody(entry: { filePath?: string; body?: string }): Promise<string> {
+  return entry.filePath ? parseFrontmatter(await fs.readFile(entry.filePath, 'utf8')).content : (entry.body ?? '');
 }

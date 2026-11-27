@@ -3,7 +3,8 @@ import type { GetStaticPaths } from 'astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import BlogPostView from '@/components/blog/BlogPostView.astro';
 import { getPostEntries } from '@/lib/blog';
-import { renderEntryBody } from '@/lib/markdown/render';
+import { renderEntryWithHeadings } from '@/lib/markdown/render';
+import { buildToc } from '@/lib/markdown/toc';
 import { getAllWorks } from '@/lib/works';
 
 export const getStaticPaths = (async () => {
@@ -25,13 +26,15 @@ export const getStaticPaths = (async () => {
 
 const { entry, post, works, newer, older } = Astro.props;
 // 作品ページと同じ Markdown の描画（src/lib/markdown）
-const html = await renderEntryBody(entry);
+const { html, headings } = await renderEntryWithHeadings(entry);
+// 見出しが 3 つ以上ある記事だけ、本文の前に目次を出す
+const toc = buildToc(headings);
 // 共有したときの画像: frontmatter の image、なければビルド時に作った画像（src/pages/og/blog/[slug].png.ts）
 const image = post.image ?? `/og/blog/${post.slug}.png`;
 ---
 
 <BaseLayout meta={{ title: post.title, description: post.description, type: 'article', publishedTime: post.date, image }}>
-  <BlogPostView post={post} works={works} newer={newer} older={older}>
+  <BlogPostView post={post} toc={toc} works={works} newer={newer} older={older}>
     <Fragment set:html={html} />
   </BlogPostView>
 </BaseLayout>

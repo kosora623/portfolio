@@ -2,10 +2,13 @@
 /** ブログ記事ページ（作品詳細と同じ組み方） */
 import type { BlogPost } from '@/lib/blog-model';
 import type { WorkFromMd } from '@/lib/work-model';
+import type { TocItem } from '@/lib/markdown/toc';
 import PostMeta from './PostMeta.astro';
 
 interface Props {
   post: BlogPost;
+  /** 目次（見出しが少ない記事では空） */
+  toc?: TocItem[];
   /** この記事で取り上げた作品 */
   works?: WorkFromMd[];
   /** 1 つ新しい記事（ない場合は undefined） */
@@ -14,13 +17,27 @@ interface Props {
   older?: BlogPost;
 }
 
-const { post, works = [], newer, older } = Astro.props;
+const { post, toc = [], works = [], newer, older } = Astro.props;
 ---
 
 <article>
   <p class="crumb mono"><a href="/blog" class="link">blog</a></p>
   <h1>{post.title}</h1>
   <PostMeta post={post} linkTags />
+  {
+    toc.length > 0 && (
+      <nav class="toc" aria-labelledby="toc-label">
+        <p id="toc-label" class="mono">目次</p>
+        <ol>
+          {toc.map(item => (
+            <li class={item.depth === 3 ? 'sub' : undefined}>
+              <a href={`#${encodeURIComponent(item.slug)}`}>{item.text}</a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    )
+  }
   <div class="prose body">
     <slot />
   </div>
@@ -82,6 +99,36 @@ const { post, works = [], newer, older } = Astro.props;
     border-top: 1px solid var(--color-line);
     margin-top: 24px;
     padding-top: 36px;
+  }
+  .toc {
+    margin-top: 24px;
+    padding: 14px 0 16px;
+    border-top: 1px solid var(--color-line);
+    font-size: 14.5px;
+    line-height: 1.7;
+  }
+  .toc p {
+    color: var(--color-muted);
+    font-size: 12.5px;
+  }
+  .toc ol {
+    margin-top: 6px;
+  }
+  .toc li + li {
+    margin-top: 4px;
+  }
+  .toc .sub {
+    padding-left: 1.2em;
+    font-size: 13.5px;
+  }
+  .toc a {
+    color: var(--color-muted);
+  }
+  .toc a:hover {
+    color: var(--color-link);
+  }
+  .toc + .body {
+    margin-top: 0;
   }
   .post-end {
     max-width: 36em;
