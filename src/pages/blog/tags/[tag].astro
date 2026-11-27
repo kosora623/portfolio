@@ -1,0 +1,22 @@
+---
+/** タグ別の記事一覧（/blog/tags/<タグ>） */
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import BlogList from '@/components/blog/BlogList.astro';
+import { getPostEntries } from '@/lib/blog';
+import { collectTags } from '@/lib/blog-model';
+
+export const getStaticPaths = (async () => {
+  const posts = (await getPostEntries()).map(p => p.post);
+  return collectTags(posts).map(({ tag }) => ({
+    params: { tag },
+    props: { tag, posts: posts.filter(p => p.tags.includes(tag)) },
+  }));
+}) satisfies GetStaticPaths;
+
+const { tag, posts } = Astro.props;
+---
+
+<BaseLayout meta={{ title: `#${tag}`, description: `「${tag}」のタグが付いた記事の一覧です。` }}>
+  <BlogList posts={posts} heading={`#${tag}`} currentTag={tag} />
+</BaseLayout>

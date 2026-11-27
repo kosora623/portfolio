@@ -69,3 +69,17 @@ export function skyFor(date: Date): Sky {
   if (h >= 16 && h < 19) return 'evening';
   return 'night';
 }
+
+/** タグ別の一覧ページの URL */
+export function tagHref(tag: string): string {
+  return `/blog/tags/${encodeURIComponent(tag)}`;
+}
+
+/** 記事に使われているタグと件数（件数の多い順 → 名前順） */
+export function collectTags(posts: Pick<BlogPost, 'tags'>[]): { tag: string; count: number }[] {
+  const counts = new Map<string, number>();
+  for (const post of posts) for (const tag of new Set(post.tags)) counts.set(tag, (counts.get(tag) ?? 0) + 1);
+  return [...counts]
+    .map(([tag, count]) => ({ tag, count }))
+    .sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag));
+}

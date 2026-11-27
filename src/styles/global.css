@@ -206,6 +206,17 @@ img {
 .prose del { color: var(--color-muted); }
 .prose .content-image { display: block; }
 .prose .content-image img { display: block; width: 100%; border: 1px solid var(--color-line); background: var(--color-thumb); }
+/* 見出しへのリンク（#）。ふだんは薄く、見出しにカーソルを乗せたときだけ少し濃くする */
+.prose .heading-anchor { margin-left: 0.4em; color: var(--color-line); border-bottom: 0; font-weight: 400; text-decoration: none; }
+.prose :is(h2, h3, h4):hover .heading-anchor, .prose .heading-anchor:focus-visible { color: var(--color-muted); }
+.prose .heading-anchor:hover { color: var(--color-link); border-bottom: 0; }
+.prose :is(h2, h3, h4) { scroll-margin-top: 1em; }
+/* コードの色（ビルド時に Shiki が付けた --shiki-light / --shiki-dark を、ライト/ダークに合わせて使う） */
+.prose pre, .prose pre span { color: var(--shiki-light); }
+:root[data-theme="dark"] .prose pre, :root[data-theme="dark"] .prose pre span { color: var(--shiki-dark); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .prose pre, :root:not([data-theme="light"]) .prose pre span { color: var(--shiki-dark); }
+}
 /* 動画の埋め込み（16:9。B-2） */
 .prose .content-embed { aspect-ratio: 16 / 9; max-width: 100%; background: var(--color-ink); }
 .prose .content-embed iframe { display: block; width: 100%; height: 100%; border: 0; }

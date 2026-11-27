@@ -17,7 +17,7 @@ const { post, newer, older } = Astro.props;
 <article>
   <p class="crumb mono"><a href="/blog" class="link">blog</a></p>
   <h1>{post.title}</h1>
-  <PostMeta post={post} />
+  <PostMeta post={post} linkTags />
   <div class="prose body">
     <slot />
   </div>

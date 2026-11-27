@@ -4,13 +4,16 @@ import LineIcon from '@/components/icons/LineIcon.astro';
 import SocialIcon from '@/components/icons/SocialIcon.astro';
 import { socialLinks } from '@/data/site';
 import { hero, about, stack, interests, hobbies } from '@/data/profile';
+import { formatDate, type BlogPost } from '@/lib/blog-model';
 
 interface Props {
   /** 作品の件数（「つくったものを見る」に表示） */
   worksCount: number;
+  /** 新しい記事（3 件まで）。0 件なら欄ごと出さない */
+  latestPosts: BlogPost[];
 }
 
-const { worksCount } = Astro.props;
+const { worksCount, latestPosts } = Astro.props;
 ---
 
 <SkyBand />
@@ -78,6 +81,29 @@ const { worksCount } = Astro.props;
       }
     </ul>
   </section>
+
+  {
+    latestPosts.length > 0 && (
+      <section aria-labelledby="blog">
+        <h2 id="blog" class="label">blog</h2>
+        <div>
+          <ul class="posts">
+            {latestPosts.map(post => (
+              <li>
+                <a href={`/blog/${post.slug}`}>
+                  <time class="mono" datetime={formatDate(post.date)}>
+                    {formatDate(post.date).replaceAll('-', '.')}
+                  </time>
+                  <span>{post.title}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+          <p class="more mono"><a href="/blog" class="link">記事一覧へ</a></p>
+        </div>
+      </section>
+    )
+  }
 
   <section aria-labelledby="contact">
     <h2 id="contact" class="label">contact</h2>
@@ -192,6 +218,29 @@ const { worksCount } = Astro.props;
     color: var(--color-muted);
     font-size: 14.5px;
     line-height: 1.7;
+  }
+
+  .posts a {
+    display: grid;
+    grid-template-columns: 6.5em minmax(0, 1fr);
+    gap: 16px;
+    border-bottom: 1px solid var(--color-line);
+    padding-block: 5px;
+  }
+  .posts li:first-child a {
+    padding-top: 0;
+  }
+  .posts time {
+    color: var(--color-muted);
+    font-size: 14px;
+    padding-top: 0.2em;
+  }
+  .posts a:hover span {
+    color: var(--color-link);
+  }
+  .more {
+    padding-top: 12px;
+    font-size: 14px;
   }
 
   .contact a {

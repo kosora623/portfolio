@@ -1,20 +1,38 @@
 ---
 /** ブログ記事の一覧（作品一覧と同じ組み方） */
-import type { BlogPost } from '@/lib/blog-model';
+import { tagHref, type BlogPost } from '@/lib/blog-model';
 import PostMeta from './PostMeta.astro';
 
 interface Props {
   posts: BlogPost[];
+  /** 見出し（タグ別の一覧では「#タグ」） */
+  heading?: string;
+  /** 見出しの下に並べるタグ（ブログのトップだけ） */
+  tags?: { tag: string; count: number }[];
+  /** 今表示しているタグ（タグ別の一覧のとき） */
+  currentTag?: string;
 }
 
-const { posts } = Astro.props;
+const { posts, heading = 'Blog', tags = [], currentTag } = Astro.props;
 ---
 
+{currentTag && <p class="crumb mono"><a href="/blog" class="link">blog</a></p>}
 <div class="head">
-  <h1>Blog</h1>
+  <h1>{heading}</h1>
   <span class="mono count">{posts.length} 件</span>
   <a href="/rss.xml" class="mono rss">RSS</a>
 </div>
+{
+  tags.length > 0 && (
+    <ul class="tags mono" aria-label="タグ">
+      {tags.map(({ tag, count }) => (
+        <li>
+          <a href={tagHref(tag)}>#{tag}<span>{count}</span></a>
+        </li>
+      ))}
+    </ul>
+  )
+}
 
 {
   posts.length === 0 ? (
@@ -35,6 +53,29 @@ const { posts } = Astro.props;
 }
 
 <style>
+  .crumb {
+    padding-top: 16px;
+    margin-bottom: -16px;
+    color: var(--color-muted);
+    font-size: 14px;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    padding-top: 12px;
+    font-size: 13.5px;
+  }
+  .tags a {
+    color: var(--color-muted);
+  }
+  .tags a:hover {
+    color: var(--color-link);
+  }
+  .tags span {
+    margin-left: 0.3em;
+    font-size: 12px;
+  }
   .head {
     display: flex;
     gap: 8px 28px;
