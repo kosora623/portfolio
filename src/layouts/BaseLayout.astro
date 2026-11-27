@@ -42,13 +42,27 @@ const { title, robots, meta } = Astro.props;
     <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     {!MAINTENANCE_MODE && <link rel="alternate" type="application/rss+xml" title={`${site.title}のブログ`} href="/rss.xml" />}
-    <meta name="theme-color" content="#f5f7f9" />
-    <!-- 見ている人の時刻に合わせて空の色を変える（JS が動かない環境では昼の色） -->
+    <meta name="theme-color" content="#f5f7f9" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#131a26" media="(prefers-color-scheme: dark)" />
+    <!--
+      見ている人の時刻に合わせて空の色を変える（JS が動かない環境では昼の色）。
+      ヘッダーのボタンでライト/ダークを選んでいれば、描画の前に反映する（ちらつかないよう head で行う）。
+    -->
     <script is:inline>
       (function () {
+        const root = document.documentElement;
         const h = new Date().getHours();
-        const sky = h >= 5 && h < 8 ? 'morning' : h >= 8 && h < 16 ? 'day' : h >= 16 && h < 19 ? 'evening' : 'night';
-        document.documentElement.dataset.sky = sky;
+        root.dataset.sky = h >= 5 && h < 8 ? 'morning' : h >= 8 && h < 16 ? 'day' : h >= 16 && h < 19 ? 'evening' : 'night';
+        root.dataset.js = '';
+        let theme = null;
+        try {
+          theme = localStorage.getItem('theme');
+        } catch {}
+        if (theme === 'light' || theme === 'dark') {
+          root.dataset.theme = theme;
+          const color = theme === 'dark' ? '#131a26' : '#f5f7f9';
+          document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) { m.content = color; });
+        }
       })();
     </script>
     {!MAINTENANCE_MODE && <AsciiComment />}
