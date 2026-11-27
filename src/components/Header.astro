@@ -54,7 +54,7 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path === href
       try {
         if (root.dataset.theme) localStorage.setItem('theme', root.dataset.theme);
         else localStorage.removeItem('theme');
-      } catch (e) {}
+      } catch {}
       sync();
     });
   })();

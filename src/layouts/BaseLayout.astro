@@ -57,7 +57,7 @@ const { title, robots, meta } = Astro.props;
         let theme = null;
         try {
           theme = localStorage.getItem('theme');
-        } catch (e) {}
+        } catch {}
         if (theme === 'light' || theme === 'dark') {
           root.dataset.theme = theme;
           const color = theme === 'dark' ? '#131a26' : '#f5f7f9';
