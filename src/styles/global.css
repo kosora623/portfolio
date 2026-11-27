@@ -210,6 +210,19 @@ img {
 .prose .content-embed { aspect-ratio: 16 / 9; max-width: 100%; background: var(--color-ink); }
 .prose .content-embed iframe { display: block; width: 100%; height: 100%; border: 0; }
 
+/*
+ * 控えめな動き。リンクやボタンの色は少しだけゆっくり変える。
+ * ライト/ダークをボタンで切り替えたときは、Header.astro が少しの間 .theme-switching を付けて色をなめらかに変える
+ * （動きを減らす設定のときは付けない）。
+ */
+a, a *, button {
+  transition: color 0.15s, background-color 0.15s, border-color 0.15s;
+}
+.theme-switching,
+.theme-switching * {
+  transition: color 0.2s, background-color 0.2s, border-color 0.2s, filter 0.2s !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     transition: none !important;

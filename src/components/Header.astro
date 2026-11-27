@@ -40,7 +40,14 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path === href
     const sync = function () { button.setAttribute('aria-pressed', String(isDark())); };
     sync();
     media.addEventListener('change', sync);
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let switching;
     button.addEventListener('click', function () {
+      if (!reduceMotion.matches) {
+        root.classList.add('theme-switching');
+        clearTimeout(switching);
+        switching = setTimeout(function () { root.classList.remove('theme-switching'); }, 250);
+      }
       const next = isDark() ? 'light' : 'dark';
       const metas = document.querySelectorAll('meta[name="theme-color"]');
       // 端末の設定と同じになるなら、選んだ値を消して端末の設定に従う状態へ戻す
