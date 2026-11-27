@@ -8,6 +8,8 @@ export interface BlogPost {
   date: Date;
   description: string;
   tags: string[];
+  /** この記事で取り上げた作品の slug（content/works のファイル名） */
+  works: string[];
   /** OGP 画像（public/ からのパス、または絶対 URL）。省略可 */
   image?: string;
   draft: boolean;
@@ -82,4 +84,9 @@ export function collectTags(posts: Pick<BlogPost, 'tags'>[]): { tag: string; cou
   return [...counts]
     .map(([tag, count]) => ({ tag, count }))
     .sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag));
+}
+
+/** 作品を取り上げた記事（新しい順のまま）。作品ページの「この作品について書いた記事」用 */
+export function postsAboutWork<T extends Pick<BlogPost, 'works'>>(posts: T[], workSlug: string): T[] {
+  return posts.filter(p => p.works.includes(workSlug));
 }

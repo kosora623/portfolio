@@ -1,17 +1,20 @@
 ---
 /** ブログ記事ページ（作品詳細と同じ組み方） */
 import type { BlogPost } from '@/lib/blog-model';
+import type { WorkFromMd } from '@/lib/work-model';
 import PostMeta from './PostMeta.astro';
 
 interface Props {
   post: BlogPost;
+  /** この記事で取り上げた作品 */
+  works?: WorkFromMd[];
   /** 1 つ新しい記事（ない場合は undefined） */
   newer?: BlogPost;
   /** 1 つ古い記事（ない場合は undefined） */
   older?: BlogPost;
 }
 
-const { post, newer, older } = Astro.props;
+const { post, works = [], newer, older } = Astro.props;
 ---
 
 <article>
@@ -22,6 +25,20 @@ const { post, newer, older } = Astro.props;
     <slot />
   </div>
   <footer class="post-end">
+    {
+      works.length > 0 && (
+        <ul class="works" aria-label="この記事の作品">
+          {works.map(work => (
+            <li>
+              <a href={`/works/${work.slug}`}>
+                <span class="mono">作品</span>
+                <b>{work.title}</b>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
     {
       (older || newer) && (
         <nav class="post-nav" aria-label="ほかの記事">
@@ -70,6 +87,23 @@ const { post, newer, older } = Astro.props;
     max-width: 36em;
     margin-top: 56px;
     border-top: 1px solid var(--color-line);
+  }
+  .works a {
+    display: block;
+    padding-block: 16px;
+    border-bottom: 1px solid var(--color-line);
+    line-height: 1.6;
+  }
+  .works span {
+    display: block;
+    color: var(--color-muted);
+    font-size: 13px;
+  }
+  .works b {
+    font-weight: 500;
+  }
+  .works a:hover b {
+    color: var(--color-link);
   }
   .post-nav {
     display: grid;

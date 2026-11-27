@@ -5,24 +5,27 @@ import WorkDetail from '@/components/works/WorkDetail.astro';
 import { getAllWorkEntries } from '@/lib/works';
 import { renderEntryBody } from '@/lib/markdown/render';
 import { adjacentWorks } from '@/lib/work-model';
+import { getPostEntries } from '@/lib/blog';
+import { postsAboutWork } from '@/lib/blog-model';
 
 export const getStaticPaths = (async () => {
   const entries = await getAllWorkEntries();
   const works = entries.map(e => e.work);
+  const posts = (await getPostEntries()).map(p => p.post);
   return entries.map(({ entry, work }) => ({
     params: { slug: work.slug },
-    props: { entry, work, ...adjacentWorks(works, work.slug) },
+    props: { entry, work, posts: postsAboutWork(posts, work.slug), ...adjacentWorks(works, work.slug) },
   }));
 }) satisfies GetStaticPaths;
 
-const { entry, work, newer, older } = Astro.props;
+const { entry, work, posts, newer, older } = Astro.props;
 const html = await renderEntryBody(entry);
 ---
 
 <BaseLayout
   meta={{ title: work.title, description: work.summary || undefined, image: work.thumbnailUrl, type: 'article' }}
 >
-  <WorkDetail work={work} newer={newer} older={older}>
+  <WorkDetail work={work} posts={posts} newer={newer} older={older}>
     <Fragment set:html={html} />
   </WorkDetail>
 </BaseLayout>

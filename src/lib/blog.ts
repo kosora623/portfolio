@@ -10,7 +10,7 @@ export type { BlogPost } from './blog-model';
 const includeDrafts = import.meta.env.DEV;
 
 function toPost(entry: CollectionEntry<'blog'>): BlogPost {
-  return { slug: entry.id, ...entry.data };
+  return { slug: entry.id, ...entry.data, works: entry.data.works.map(w => w.id) };
 }
 
 /** 公開する記事を新しい順に（コレクションのエントリと、表示用データの組） */

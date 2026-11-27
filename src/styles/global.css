@@ -217,6 +217,23 @@ img {
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) .prose pre, :root:not([data-theme="light"]) .prose pre span { color: var(--shiki-dark); }
 }
+/* 表。狭い画面では表だけを横にスクロールする */
+.prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-size: 0.94em; line-height: 1.6; }
+.prose th, .prose td { padding: 0.45em 0.9em; border-bottom: 1px solid var(--color-line); text-align: left; vertical-align: top; }
+.prose :is(th, td):first-child { padding-left: 0; }
+.prose :is(th, td):last-child { padding-right: 0; }
+.prose th { border-bottom-color: var(--color-ink); font-weight: 600; white-space: nowrap; }
+.prose :is(th, td)[align="center"] { text-align: center; }
+.prose :is(th, td)[align="right"] { text-align: right; }
+/* 脚注。本文の [1] は小さく上付きにし、末尾にまとめた脚注は少し小さい字で区切り線の下に置く */
+.prose sup { font-size: 0.75em; line-height: 0; }
+.prose [data-footnote-ref] { border-bottom: 0; padding-inline: 0.1em; }
+.prose [data-footnote-ref]::before { content: "["; }
+.prose [data-footnote-ref]::after { content: "]"; }
+.prose .footnotes { margin-top: 3em; padding-top: 1em; border-top: 1px solid var(--color-line); color: var(--color-muted); font-size: 0.88em; }
+.prose .footnotes h2 { margin-top: 0; font-size: 0.85rem; font-weight: 400; font-family: var(--font-mono); }
+.prose .footnotes ol { margin-top: 0.6em; }
+.prose [data-footnote-backref] { border-bottom: 0; margin-left: 0.3em; }
 /* 動画の埋め込み（16:9。B-2） */
 .prose .content-embed { aspect-ratio: 16 / 9; max-width: 100%; background: var(--color-ink); }
 .prose .content-embed iframe { display: block; width: 100%; height: 100%; border: 0; }
