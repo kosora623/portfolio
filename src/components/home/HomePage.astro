@@ -37,10 +37,7 @@ const { latestPosts } = Astro.props;
       {
         stack.map(group => (
           <div>
-            <dt>
-              <LineIcon name={group.icon} />
-              {group.label}
-            </dt>
+            <dt>{group.label}</dt>
             <dd>{group.items.join('、')}</dd>
           </div>
         ))
@@ -50,16 +47,7 @@ const { latestPosts } = Astro.props;
 
   <section aria-labelledby="interests">
     <h2 id="interests" class="label">interests</h2>
-    <ul class="interests">
-      {
-        interests.map(item => (
-          <li>
-            <LineIcon name={item.icon} />
-            {item.title}
-          </li>
-        ))
-      }
-    </ul>
+    <p>{interests.map(item => item.title).join('、')}</p>
   </section>
 
   <section aria-labelledby="hobbies">
@@ -68,10 +56,7 @@ const { latestPosts } = Astro.props;
       {
         hobbies.map(item => (
           <li>
-            <b>
-              <LineIcon name={item.icon} />
-              {item.title}
-            </b>
+            <b>{item.title}</b>
             {item.description && <span>{item.description}</span>}
           </li>
         ))
@@ -171,9 +156,6 @@ const { latestPosts } = Astro.props;
     grid-template-columns: 6.5em minmax(0, 1fr);
     gap: 16px;
   }
-  .stack dt,
-  .interests li,
-  .hobbies b,
   .contact b {
     display: flex;
     align-items: center;
@@ -181,22 +163,9 @@ const { latestPosts } = Astro.props;
   }
   .stack dt {
     color: var(--color-muted);
-    align-items: flex-start;
-    padding-top: 0.45em;
-    line-height: 1.2;
   }
   .stack dd {
     min-width: 0;
-  }
-
-  .interests {
-    columns: 2;
-    column-gap: 36px;
-  }
-  .interests li {
-    break-inside: avoid;
-    border-bottom: 1px solid var(--color-line);
-    padding-block: 5px;
   }
 
   .hobbies li + li {
@@ -207,7 +176,6 @@ const { latestPosts } = Astro.props;
   }
   .hobbies span {
     display: block;
-    padding-left: 1.7em;
     color: var(--color-muted);
     font-size: 14.5px;
     line-height: 1.7;
@@ -267,9 +235,6 @@ const { latestPosts } = Astro.props;
     }
   }
   @media (max-width: 520px) {
-    .interests {
-      columns: 1;
-    }
     .contact a {
       grid-template-columns: 7.5em minmax(0, 1fr) auto;
     }
