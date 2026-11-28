@@ -40,15 +40,15 @@ const filters = [
 </div>
 
 {
-  years.map(({ year, works: list }) => (
+  years.map(({ year, works: list }, yi) => (
     <section class="year" aria-labelledby={`y${year}`} data-year>
       <h2 id={`y${year}`} class="mono">{year}</h2>
       <ul class="grid">
-        {list.map(work => (
+        {list.map((work, i) => (
           <li data-tags={work.tags.join(' ')}>
             <a href={`/works/${work.slug}`} class="card">
               <span class="thumb">
-                {work.thumbnailUrl && <img src={listThumbnailSrc(work.thumbnailUrl)} alt="" loading="lazy" decoding="async" width="384" height="216" />}
+                {work.thumbnailUrl && <img src={listThumbnailSrc(work.thumbnailUrl)} alt="" loading={yi === 0 && i < 4 ? 'eager' : 'lazy'} decoding="async" width="384" height="216" />}
               </span>
               <b>{work.title}</b>
               <span class="meta">
