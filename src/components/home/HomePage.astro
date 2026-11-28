@@ -102,7 +102,7 @@ const { latestPosts } = Astro.props;
     )
   }
 
-  <section aria-labelledby="contact">
+  <section class="wide" aria-labelledby="contact">
     <h2 id="contact" class="label">contact</h2>
     <ul class="contact">
       {
@@ -142,28 +142,37 @@ const { latestPosts } = Astro.props;
 
 <style>
   .hero {
-    padding-block: 44px 56px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    padding-block: 28px 32px;
   }
   .hero h1 {
-    font-size: clamp(2.6rem, 8vw, 5rem);
+    font-size: clamp(2.2rem, 5.5vw, 3.4rem);
     font-weight: 400;
     line-height: 1.15;
     letter-spacing: -0.04em;
-  }
-  .hero .button {
-    margin-top: 28px;
   }
 
   .rows > section {
     display: grid;
     grid-template-columns: 10rem minmax(0, 1fr);
+    align-content: start;
     gap: 8px 32px;
     border-top: 1px solid var(--color-line);
-    padding-block: 30px;
+    padding-block: 26px;
     font-size: 1.06rem;
   }
   .rows > section:last-child {
     border-bottom: 1px solid var(--color-line);
+  }
+  /* 欄の見出しは小さいまま、本文と同じ濃さにする（サイズではなく書体で区別） */
+  .rows > section > .label {
+    color: var(--color-ink);
+    font-size: 14px;
+    letter-spacing: 0.04em;
   }
 
   .stack div {
@@ -189,14 +198,8 @@ const { latestPosts } = Astro.props;
     min-width: 0;
   }
 
-  .interests {
-    columns: 2;
-    column-gap: 36px;
-  }
   .interests li {
-    break-inside: avoid;
-    border-bottom: 1px solid var(--color-line);
-    padding-block: 5px;
+    padding-block: 3px;
   }
 
   .hobbies li + li {
@@ -217,11 +220,7 @@ const { latestPosts } = Astro.props;
     display: grid;
     grid-template-columns: 6.5em minmax(0, 1fr);
     gap: 16px;
-    border-bottom: 1px solid var(--color-line);
-    padding-block: 5px;
-  }
-  .posts li:first-child a {
-    padding-top: 0;
+    padding-block: 3px;
   }
   .posts time {
     color: var(--color-muted);
@@ -232,27 +231,28 @@ const { latestPosts } = Astro.props;
     color: var(--color-link);
   }
   .more {
-    padding-top: 12px;
+    padding-top: 10px;
     font-size: 14px;
   }
 
+  .contact {
+    display: grid;
+    column-gap: 40px;
+  }
   .contact a {
     display: grid;
     grid-template-columns: 8.5em minmax(0, 1fr) auto;
     gap: 12px;
     align-items: center;
-    border-bottom: 1px solid var(--color-line);
-    padding-block: 9px;
+    padding-block: 4px;
     line-height: 1.7;
   }
-  .contact li:first-child a {
-    padding-top: 0;
-  }
   .contact b {
-    font-weight: 500;
+    font-weight: 600;
   }
   .handle {
     color: var(--color-muted);
+    font-size: 0.95rem;
     overflow-wrap: break-word;
   }
   .contact a:hover,
@@ -261,15 +261,30 @@ const { latestPosts } = Astro.props;
     color: var(--color-link);
   }
 
+  /* PC: 欄を 2 列に並べる（contact だけ全幅） */
+  @media (min-width: 900px) {
+    .rows {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 56px;
+    }
+    .rows > section:not(.wide) {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 14px;
+    }
+    .rows > section.wide {
+      grid-column: 1 / -1;
+    }
+    .contact {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
   @media (max-width: 760px) {
     .rows > section {
       grid-template-columns: minmax(0, 1fr);
     }
   }
   @media (max-width: 520px) {
-    .interests {
-      columns: 1;
-    }
     .contact a {
       grid-template-columns: 7.5em minmax(0, 1fr) auto;
     }
