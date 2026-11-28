@@ -7,21 +7,18 @@ import { hero, about, stack, interests, hobbies } from '@/data/profile';
 import { formatDate, type BlogPost } from '@/lib/blog-model';
 
 interface Props {
-  /** 作品の件数（「つくったものを見る」に表示） */
-  worksCount: number;
   /** 新しい記事（3 件まで）。0 件なら欄ごと出さない */
   latestPosts: BlogPost[];
 }
 
-const { worksCount, latestPosts } = Astro.props;
+const { latestPosts } = Astro.props;
 ---
 
 <SkyBand />
 
 <section class="hero">
   <h1 class="mono">{hero.name}</h1>
-  <p>{hero.tagline}</p>
-  <a class="button" href="/works">つくったものを見る（{worksCount}）</a>
+  <a class="button" href="/works">Works</a>
 </section>
 
 <div class="rows">
@@ -153,12 +150,8 @@ const { worksCount, latestPosts } = Astro.props;
     line-height: 1.15;
     letter-spacing: -0.04em;
   }
-  .hero p {
-    margin-top: 14px;
-    font-size: 1.05rem;
-  }
   .hero .button {
-    margin-top: 32px;
+    margin-top: 28px;
   }
 
   .rows > section {

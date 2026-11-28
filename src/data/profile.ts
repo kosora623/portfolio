@@ -7,7 +7,6 @@ import type { LineIconKey } from '@/components/icons/lineIcons';
 
 export const hero = {
   name: 'kosora',
-  tagline: 'いろんなものを作ります。映像、音楽、プログラミング。',
 } as const;
 
 export const about = {
