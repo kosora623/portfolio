@@ -2,11 +2,12 @@
 /**
  * 作品一覧。年ごとにまとめ、サムネイルのカードを PC 4 列・スマホ 2 列で並べる（作品が増えても形が変わらない）。
  * 分野の絞り込みは JS が動くときだけ表示する（JS がなければ全件が見える）。
+ * 件数や日付は出さない（年の見出しで足りる）。線は年の区切りだけ。
  */
 import type { WorkFromMd } from '@/lib/work-model';
 import { tagInfo } from '@/data/tags';
 import LineIcon from '@/components/icons/LineIcon.astro';
-import { formatYearMonth, groupByYear } from '@/lib/work-model';
+import { groupByYear } from '@/lib/work-model';
 import { listThumbnailSrc } from '@/lib/thumbnail';
 
 interface Props {
@@ -16,23 +17,22 @@ interface Props {
 const { works } = Astro.props;
 const years = groupByYear(works);
 const filters = [
-  { key: 'all', name: 'すべて', count: works.length },
-  ...Object.entries(tagInfo).map(([key, t]) => ({ key, name: t.name, count: works.filter(w => w.tags.includes(key)).length })),
+  { key: 'all', name: 'すべて' },
+  ...Object.entries(tagInfo)
+    .filter(([key]) => works.some(w => w.tags.includes(key)))
+    .map(([key, t]) => ({ key, name: t.name })),
 ];
 ---
 
 <div class="head">
   <h1>Works</h1>
-  <span class="mono count" data-works-count>{works.length} 点</span>
   <fieldset class="filters" data-works-filter hidden>
     <legend class="sr-only-focusable">分野で絞り込む</legend>
     {
       filters.map(f => (
         <label>
           <input type="radio" name="works-filter" value={f.key} checked={f.key === 'all'} />
-          <span>
-            {f.name} <span class="mono">{f.count}</span>
-          </span>
+          <span>{f.name}</span>
         </label>
       ))
     }
@@ -42,10 +42,7 @@ const filters = [
 {
   years.map(({ year, works: list }) => (
     <section class="year" aria-labelledby={`y${year}`} data-year>
-      <h2 id={`y${year}`} class="mono">
-        {year}
-        <small data-year-count>{list.length} 点</small>
-      </h2>
+      <h2 id={`y${year}`} class="mono">{year}</h2>
       <ul class="grid">
         {list.map(work => (
           <li data-tags={work.tags.join(' ')}>
@@ -55,7 +52,6 @@ const filters = [
               </span>
               <b>{work.title}</b>
               <span class="meta">
-                <span class="mono">{formatYearMonth(work)}</span>
                 {work.tags.map(t => tagInfo[t] && (
                   <span class="tag">
                     <LineIcon name={tagInfo[t].icon} />
@@ -75,10 +71,8 @@ const filters = [
   const filter = document.querySelector<HTMLFieldSetElement>('[data-works-filter]');
   if (filter) {
     filter.hidden = false;
-    const total = document.querySelector('[data-works-count]');
     filter.addEventListener('change', e => {
       const key = (e.target as HTMLInputElement).value;
-      let shown = 0;
       document.querySelectorAll<HTMLElement>('[data-year]').forEach(section => {
         let n = 0;
         section.querySelectorAll<HTMLElement>('li[data-tags]').forEach(li => {
@@ -87,11 +81,7 @@ const filters = [
           if (hit) n++;
         });
         section.hidden = n === 0;
-        const c = section.querySelector('[data-year-count]');
-        if (c) c.textContent = `${n} 点`;
-        shown += n;
       });
-      if (total) total.textContent = `${shown} 点`;
     });
   }
 </script>
@@ -108,9 +98,6 @@ const filters = [
     font-size: clamp(2rem, 5.6vw, 3rem);
     font-weight: 600;
     line-height: 1.2;
-  }
-  .count {
-    color: var(--color-muted);
   }
   .filters {
     display: flex;
@@ -142,25 +129,24 @@ const filters = [
     outline-offset: 3px;
   }
 
-  .year h2 {
-    display: flex;
-    gap: 12px;
-    align-items: baseline;
-    font-size: 1rem;
-    font-weight: 600;
-    border-bottom: 1px solid var(--color-ink);
-    padding-top: 28px;
+  .year {
+    border-top: 1px solid var(--color-line);
+    margin-top: 40px;
+    padding-top: 14px;
   }
-  .year h2 small {
-    font-size: 13px;
-    font-weight: 400;
-    color: var(--color-muted);
+  .head + .year {
+    margin-top: 8px;
+  }
+  .year h2 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-ink);
   }
   .grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 28px 20px;
-    padding-top: 18px;
+    padding-top: 14px;
   }
   .grid li[hidden] {
     display: none;
