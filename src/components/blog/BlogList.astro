@@ -19,15 +19,14 @@ const { posts, heading = 'Blog', tags = [], currentTag } = Astro.props;
 {currentTag && <p class="crumb mono"><a href="/blog" class="link">blog</a></p>}
 <div class="head">
   <h1>{heading}</h1>
-  <span class="mono count">{posts.length} 件</span>
   <a href="/rss.xml" class="mono rss">RSS</a>
 </div>
 {
   tags.length > 0 && (
     <ul class="tags mono" aria-label="タグ">
-      {tags.map(({ tag, count }) => (
+      {tags.map(({ tag }) => (
         <li>
-          <a href={tagHref(tag)}>#{tag}<span>{count}</span></a>
+          <a href={tagHref(tag)}>#{tag}</a>
         </li>
       ))}
     </ul>
@@ -38,7 +37,7 @@ const { posts, heading = 'Blog', tags = [], currentTag } = Astro.props;
   posts.length === 0 ? (
     <p class="empty">まだ記事はありません。</p>
   ) : (
-    <ul>
+    <ul class="list">
       {posts.map(post => (
         <li>
           <a href={`/blog/${post.slug}`} class="item">
@@ -63,7 +62,8 @@ const { posts, heading = 'Blog', tags = [], currentTag } = Astro.props;
     display: flex;
     flex-wrap: wrap;
     gap: 4px 16px;
-    padding-top: 12px;
+    margin-top: -8px;
+    padding-bottom: 20px;
     font-size: 13.5px;
   }
   .tags a {
@@ -72,16 +72,11 @@ const { posts, heading = 'Blog', tags = [], currentTag } = Astro.props;
   .tags a:hover {
     color: var(--color-link);
   }
-  .tags span {
-    margin-left: 0.3em;
-    font-size: 12px;
-  }
   .head {
     display: flex;
     gap: 8px 28px;
     align-items: baseline;
     padding-block: 32px 20px;
-    border-bottom: 1px solid var(--color-ink);
   }
   h1 {
     font-size: clamp(2rem, 5.6vw, 3rem);
@@ -96,16 +91,19 @@ const { posts, heading = 'Blog', tags = [], currentTag } = Astro.props;
   .rss:hover {
     color: var(--color-link);
   }
-  .count,
   .empty {
     color: var(--color-muted);
   }
   .empty {
     padding-top: 24px;
   }
+  /* 作品一覧と同じく、見出しの下に薄い線を 1 本だけ引く（記事ごとの線は引かない） */
+  .list {
+    border-top: 1px solid var(--color-line);
+    padding-top: 8px;
+  }
   .item {
     display: block;
-    border-bottom: 1px solid var(--color-line);
     padding-block: 18px;
     line-height: 1.6;
   }
